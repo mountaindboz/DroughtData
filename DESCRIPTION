@@ -1,5 +1,5 @@
 Package: DroughtData
-Title: What the Package Does (One Line, Title Case)
+Title: Drought Synthesis Data
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Dave",
@@ -7,7 +7,9 @@ Authors@R:
            role = c("aut", "cre"),
            email = "David.Bosworth@water.ca.gov",
            comment = c(ORCID = "0000-0003-0740-3390"))
-Description: What the package does (one paragraph).
+Description: Contains data sets used in the Drought Synthesis project. This data package also 
+  contains useful metadata describing the data sets and the processing scripts used to derive the
+  data sets.
 License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
     license
 Encoding: UTF-8
