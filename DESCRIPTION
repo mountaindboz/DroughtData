@@ -10,8 +10,7 @@ Authors@R:
 Description: Contains data sets used in the Drought Synthesis project. This data package also 
   contains useful metadata describing the data sets and the processing scripts used to derive the
   data sets.
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+License: Apache License (>= 2)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
