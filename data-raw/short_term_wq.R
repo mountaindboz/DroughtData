@@ -5,12 +5,12 @@
 
 
 
-# Hydrology and LSZ metrics (monthly averages) ----------------------------
+# 1. Hydrology and LSZ metrics (monthly averages) -------------------------
 
 
 
 
-# WQ metrics (monthly averages for each region) ---------------------------
+# 2. WQ metrics (monthly averages for each region) ------------------------
 
 
 
