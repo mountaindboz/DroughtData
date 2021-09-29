@@ -1,6 +1,17 @@
-# Code to prepare `short_term_wq` (short-term water quality) data set:
-  # 2011-2021
-  # Monthly averages for each Region and Year
+# Code to prepare short-term (2011-2021) water quality data sets:
+  # 1) Monthly averages - hydrology and LSZ metrics
+  # 2) Monthly averages for each Region - water quality metrics
+
+
+
+
+# Hydrology and LSZ metrics (monthly averages) ----------------------------
+
+
+
+
+# WQ metrics (monthly averages for each region) ---------------------------
+
 
 
 
