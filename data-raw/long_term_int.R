@@ -100,7 +100,7 @@ for (i in which(df_dayflow_v3$Date == "2020-10-01"):which(df_dayflow_v3$Date == 
 df_dayflow_f <- df_dayflow_v3 %>%
   mutate(
     Month = month(Date),
-    Year_adjusted = if_else(Month == 12, year(Date) + 1, year(Date)),
+    Year = if_else(Month == 12, year(Date) + 1, year(Date)),
     # Seasons: Winter (Dec-Feb), Spring (Mar-May), Summer (Jun-Aug) or fall (Sept-Nov)
     Season = case_when(
       Month %in% c(12,1,2) ~ "Winter",
@@ -110,9 +110,9 @@ df_dayflow_f <- df_dayflow_v3 %>%
     )
   ) %>%
   # Only include years after 1975
-  filter(Year_adjusted >= 1975) %>%
+  filter(Year >= 1975) %>%
   # Calculate seasonal averages
-  group_by(Year_adjusted, Season) %>%
+  group_by(Year, Season) %>%
   summarize(
     Outflow = mean(OUT, na.rm = TRUE),
     X2 = mean(X2, na.rm = TRUE),
