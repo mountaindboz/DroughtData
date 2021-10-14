@@ -31,7 +31,11 @@ devtools::install_github("mountaindboz/DroughtData")
 ## Data Sources
 
 Sacramento Valley Water Year Index:
-<https://cdec.water.ca.gov/reportapp/javareports?name=WSIHIST> Dayflow:
-<https://data.cnra.ca.gov/dataset/dayflow> DTO data from CDEC:
+<https://cdec.water.ca.gov/reportapp/javareports?name=WSIHIST>
+
+Dayflow: <https://data.cnra.ca.gov/dataset/dayflow>
+
+DTO data from CDEC:
 <https://cdec.water.ca.gov/dynamicapp/staMeta?station_id=DTO>
+
 `discretewq` data package: <https://github.com/sbashevkin/discretewq>
