@@ -60,7 +60,7 @@ df_dayflow_v2 <- df_dayflow_v1 %>%
   mutate(X2 = if_else(is.na(X2), X2Hutton, X2)) %>%
   select(-X2Hutton)
 
-# Add future outflow (DTO) and X2 until DAYFLOW is available: https://cdec.water.ca.gov/dynamicapp/wsSensorData
+# Add future outflow (DTO) and X2 until DAYFLOW is available: https://cdec.water.ca.gov/dynamicapp/staMeta?station_id=DTO
 dto_2021 <- read_csv(file.path(fp_hydro, "DTO_23.csv")) %>%
   mutate(Date = ymd(`OBS DATE`)) %>%
   select(Date, OUT = VALUE)
