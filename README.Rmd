@@ -22,7 +22,8 @@ An R data package containing data sets used in the Drought Synthesis project. Th
 
 This package provides the following data tables:
 
-* Nothing final right now since its in early development
+* `lt_seasonal`: long-term (1975-2021) integrated data set containing seasonal averages of various metrics for each year and across the entire Delta
+* `lt_regional`: long-term (1975-2021) integrated data set containing regional averages of various metrics for each year
 
 ## Installation
 
@@ -33,16 +34,10 @@ You can install the latest version from [GitHub](https://github.com/) with:
 devtools::install_github("mountaindboz/DroughtData")
 ```
 
-## Example - needs updating
-
-This is a basic example which shows you how to solve a common problem:
-
-```{r example}
-library(DroughtData)
-## basic example code
-```
-
 ## Data Sources
 
-Nothing yet! In early development.
+Sacramento Valley Water Year Index: <https://cdec.water.ca.gov/reportapp/javareports?name=WSIHIST>
+Dayflow: <https://data.cnra.ca.gov/dataset/dayflow>
+DTO data from CDEC: <https://cdec.water.ca.gov/dynamicapp/staMeta?station_id=DTO>
+`discretewq` data package: <https://github.com/sbashevkin/discretewq>
 
