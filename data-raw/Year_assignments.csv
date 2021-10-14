@@ -1,0 +1,47 @@
+Year,SVIndex,YearType,Drought
+1975,9.35,Wet,W
+1976,5.29,Critical,D
+1977,3.11,Critical,D
+1978,8.65,Above Normal,N
+1979,6.67,Below Normal,N
+1980,9.04,Above Normal,N
+1981,6.21,Dry,N
+1982,12.76,Wet,W
+1983,15.29,Wet,W
+1984,10,Wet,W
+1985,6.47,Dry,N
+1986,9.96,Wet,N
+1987,5.86,Dry,D
+1988,4.65,Critical,D
+1989,6.13,Dry,D
+1990,4.81,Critical,D
+1991,4.21,Critical,D
+1992,4.06,Critical,D
+1993,8.54,Above Normal,N
+1994,5.02,Critical,N
+1995,12.89,Wet,W
+1996,10.26,Wet,W
+1997,10.82,Wet,W
+1998,13.31,Wet,W
+1999,9.8,Wet,W
+2000,8.94,Above Normal,W
+2001,5.76,Dry,D
+2002,6.35,Dry,D
+2003,8.21,Above Normal,N
+2004,7.51,Below Normal,N
+2005,8.49,Above Normal,W
+2006,13.2,Wet,W
+2007,6.19,Dry,D
+2008,5.16,Critical,D
+2009,5.78,Dry,D
+2010,7.08,Below Normal,D
+2011,10.54,Wet,N
+2012,6.89,Below Normal,D
+2013,5.83,Dry,D
+2014,4.07,Critical,D
+2015,4,Critical,D
+2016,6.71,Below Normal,D
+2017,14.14,Wet,N
+2018,7.14,Below Normal,N
+2019,10.34,Wet,N
+2020,6,Dry,D

@@ -283,16 +283,12 @@ vars <- c("Temperature", "Secchi", "Salinity")
 # Seasonal averages for each year - relaxing the requirement of 3 months being present in all years
 lst_wq_season <- map(vars, WQindices, month.na = "relaxed", type = "season")
 
-#yearseasons <- expand_grid(Season = c("Winter", "Spring", "Summer", "Fall"), Year = 1975:2021)
-
 df_wq_season_f <- reduce(lst_wq_season, left_join) %>%
   select(Year, Season, Temperature, Secchi, Salinity) %>%
   arrange(Year, Season)
 
 # Yearly averages for each region - relaxing the requirement of 3 months being present in all years
 lst_wq_region <- map(vars, WQindices, month.na = "relaxed", type = "year")
-
-#yearregion <- expand_grid(Region = unique(df_regions$Region), Year = 1975:2021)
 
 df_wq_region_f <- reduce(lst_wq_region, left_join) %>%
   select(Year, Region, Temperature, Secchi, Salinity) %>%
@@ -317,4 +313,36 @@ rm(df_wq, lst_wq_season, lst_wq_region, vars, WQindices)
 
 
 
-#usethis::use_data(lt_integrated, overwrite = TRUE)
+# 6. Integrate data sets --------------------------------------------------
+
+# Create data frames that contain all possible combinations of year, season, and region
+lt_yrs <- c(1975:2021)
+df_yr <- tibble(Year = lt_yrs)
+df_yr_season <- expand_grid(Year = lt_yrs, Season = c("Winter", "Spring", "Summer", "Fall"))
+df_yr_region <- expand_grid(Year = lt_yrs, Region = unique(df_regions$Region))
+
+# Import year assignments
+df_yr_type <- read_csv("data-raw/Year_assignments.csv")
+
+# Integrate data sets with seasonal averages for each year for the entire Delta
+lst_seasonal <- lst(
+  df_yr_season,
+  df_yr_type,
+  df_dayflow_f,
+  df_wq_season_f
+)
+
+lt_seasonal <- reduce(lst_seasonal, left_join)
+
+# Integrate data sets with regional averages for each year
+lst_regional <- lst(
+  df_yr_region,
+  df_yr_type,
+  df_wq_region_f
+)
+
+lt_regional <- reduce(lst_regional, left_join)
+
+# Save final long-term integrated data sets as objects in the data package
+usethis::use_data(lt_seasonal, lt_regional, overwrite = TRUE)
+
