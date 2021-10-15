@@ -228,7 +228,7 @@ WQindices <- function(variable, type = "season", month.na = "strict") {
     # Use dtplyr to speed up operations
     lazy_dt() %>%
     group_by(Month, Season, Region, Year) %>%
-    # Calculate monthly mean and sample size
+    # Calculate monthly mean for each region and sample size
     summarize(
       var_month_mean = mean(.data[[variable]]),
       N = n()
@@ -246,7 +246,7 @@ WQindices <- function(variable, type = "season", month.na = "strict") {
     # Use dtplyr to speed up operations
     lazy_dt() %>%
     group_by(Season, Region, Year) %>%
-    # Calculate seasonal mean variable and total seasonal sample size
+    # Calculate seasonal mean variable for each region and total seasonal sample size
     summarize(
       var_mean = mean(var_month_mean),
       N = sum(N)
