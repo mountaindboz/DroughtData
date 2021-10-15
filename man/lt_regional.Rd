@@ -32,7 +32,7 @@ package}
 \source{
 \itemize{
 \item Sacramento Valley Water Year Index: \url{https://cdec.water.ca.gov/reportapp/javareports?name=WSIHIST}
-\item \code{discretewq} data package: \url{https://github.com/sbashevkin/discretewq}
+\item \code{discretewq} data package (version 2.0.0): \url{https://github.com/sbashevkin/discretewq/releases/tag/v2.0.0}
 }
 }
 \usage{

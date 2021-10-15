@@ -41,7 +41,7 @@
 #' * Sacramento Valley Water Year Index: <https://cdec.water.ca.gov/reportapp/javareports?name=WSIHIST>
 #' * Dayflow: <https://data.cnra.ca.gov/dataset/dayflow>
 #' * DTO data from CDEC: <https://cdec.water.ca.gov/dynamicapp/staMeta?station_id=DTO>
-#' * `discretewq` data package: <https://github.com/sbashevkin/discretewq>
+#' * `discretewq` data package (version 2.0.0): <https://github.com/sbashevkin/discretewq/releases/tag/v2.0.0>
 "lt_seasonal"
 
 #' @title Long-term regional averages
@@ -75,5 +75,5 @@
 #'
 #' @source
 #' * Sacramento Valley Water Year Index: <https://cdec.water.ca.gov/reportapp/javareports?name=WSIHIST>
-#' * `discretewq` data package: <https://github.com/sbashevkin/discretewq>
+#' * `discretewq` data package (version 2.0.0): <https://github.com/sbashevkin/discretewq/releases/tag/v2.0.0>
 "lt_regional"

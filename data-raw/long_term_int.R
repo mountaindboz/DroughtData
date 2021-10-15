@@ -139,6 +139,7 @@ rm(
 # 2.2 WQ Field measurements -----------------------------------------------
 
 # Load specific packages
+# devtools::install_github("sbashevkin/discretewq", ref = "v2.0.0") # make sure we are using v2.0.0
 library(discretewq) # water quality data https://github.com/sbashevkin/discretewq
 library(rlang)
 library(dtplyr)

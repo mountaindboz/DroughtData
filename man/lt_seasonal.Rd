@@ -44,7 +44,7 @@ package}
 \item Sacramento Valley Water Year Index: \url{https://cdec.water.ca.gov/reportapp/javareports?name=WSIHIST}
 \item Dayflow: \url{https://data.cnra.ca.gov/dataset/dayflow}
 \item DTO data from CDEC: \url{https://cdec.water.ca.gov/dynamicapp/staMeta?station_id=DTO}
-\item \code{discretewq} data package: \url{https://github.com/sbashevkin/discretewq}
+\item \code{discretewq} data package (version 2.0.0): \url{https://github.com/sbashevkin/discretewq/releases/tag/v2.0.0}
 }
 }
 \usage{
