@@ -3,7 +3,7 @@
 \docType{data}
 \name{st_hydro_2021}
 \alias{st_hydro_2021}
-\title{Daily hydrology and LSZ values for 2021}
+\title{Daily hydrology and LSZ values for water year 2021}
 \format{
 data frame with 396 rows and 3 columns
 \describe{

@@ -78,7 +78,7 @@
 #' * `discretewq` data package (version 2.0.0): <https://github.com/sbashevkin/discretewq/releases/tag/v2.0.0>
 "lt_regional"
 
-#' @title Daily hydrology and LSZ values for 2021
+#' @title Daily hydrology and LSZ values for water year 2021
 #' @description Daily values for the hydrology and Low Salinity Zone (LSZ)
 #'   metrics for 2021 (Oct 2020 - Oct 2021). Used in the analyses for the
 #'   Drought Synthesis. **NOTE:** `Export` does not exist in this data set since
