@@ -77,3 +77,55 @@
 #' * Sacramento Valley Water Year Index: <https://cdec.water.ca.gov/reportapp/javareports?name=WSIHIST>
 #' * `discretewq` data package (version 2.0.0): <https://github.com/sbashevkin/discretewq/releases/tag/v2.0.0>
 "lt_regional"
+
+#' @title Daily hydrology and LSZ values for 2021
+#' @description Daily values for the hydrology and Low Salinity Zone (LSZ)
+#'   metrics for 2021 (Oct 2020 - Oct 2021). Used in the analyses for the
+#'   Drought Synthesis. **NOTE:** `Export` does not exist in this data set since
+#'   DAYFLOW data isn't published for WY 2021 at this point.
+#'
+#' @format data frame with 396 rows and 3 columns
+#' \describe{
+#'   \item{Date}{Calendar date}
+#'   \item{Outflow}{Estimated net Delta outflow in cubic feet per second (cfs)
+#'     from the DTO station on CDEC.}
+#'   \item{X2}{The distance from the Golden Gate Bridge to the point where daily
+#'     average salinity is 2 parts per thousand at a depth of 1 meter off the
+#'     bottom, expressed in kilometers. Estimated using the Autoregressive Lag
+#'     Model from Dayflow and Outflow from the DTO station on CDEC.}
+#' }
+#'
+#' @source
+#' * Dayflow: <https://data.cnra.ca.gov/dataset/dayflow>
+#' * DTO data from CDEC: <https://cdec.water.ca.gov/dynamicapp/staMeta?station_id=DTO>
+"st_hydro_2021"
+
+#' @title Short-term monthly averages for hydrology and LSZ metrics
+#' @description A short-term (2011-2021) data set containing monthly averages of
+#'   the hydrology and Low Salinity Zone (LSZ) metrics. Used in the analyses for
+#'   the Drought Synthesis.
+#'
+#' @format data frame with 131 rows and 5 columns
+#' \describe{
+#'   \item{Year}{Adjusted calendar year - December-November, with December of
+#'     the previous calendar year included with the following year. For example,
+#'     December of 2019 is assigned year "2020" in this data set.}
+#'   \item{Month}{Calendar month}
+#'   \item{Outflow}{Net Delta outflow in cubic feet per second (cfs) at Chipps
+#'     Island from Dayflow. The values for water years 2021 and 2022 are estimated
+#'     by data from the DTO station on CDEC.}
+#'   \item{Export}{Total amount of water diverted from the Delta by the Federal
+#'     and State governments to meet water agreements and contracts, expressed in
+#'     cubic feet per second (cfs). From Dayflow. No data available for WY 2021
+#'     and 2022 at this point.}
+#'   \item{X2}{The distance from the Golden Gate Bridge to the point where daily
+#'     average salinity is 2 parts per thousand at a depth of 1 meter off the
+#'     bottom, expressed in kilometers. From Dayflow for WY 2011-2020. Estimated
+#'     using the Autoregressive Lag Model from Dayflow and Outflow from the DTO
+#'     station on CDEC for WY 2021.}
+#' }
+#'
+#' @source
+#' * Dayflow: <https://data.cnra.ca.gov/dataset/dayflow>
+#' * DTO data from CDEC: <https://cdec.water.ca.gov/dynamicapp/staMeta?station_id=DTO>
+"st_hydro_month"
