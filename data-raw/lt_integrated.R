@@ -355,8 +355,8 @@ lst_regional <- lst(
 lt_regional <- reduce(lst_regional, left_join)
 
 # Save final long-term integrated data sets as csv files for easier diffing
-write_csv(lt_seasonal, "data-raw/lt_seasonal.csv")
-write_csv(lt_regional, "data-raw/lt_regional.csv")
+write_csv(lt_seasonal, "data-raw/Final/lt_seasonal.csv")
+write_csv(lt_regional, "data-raw/Final/lt_regional.csv")
 
 # Save final long-term integrated data sets as objects in the data package
 usethis::use_data(lt_seasonal, lt_regional, overwrite = TRUE)
