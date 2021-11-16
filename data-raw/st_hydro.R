@@ -7,7 +7,6 @@
 library(tidyverse)
 library(lubridate)
 
-
 # 1. Import data ----------------------------------------------------------
 
 # If it hasn't been done already, download and save local copies of the DAYFLOW data from
@@ -24,21 +23,21 @@ if (download) {source("data-raw/download_hydro.R")}
 fp_hydro <- "data-raw/Hydrology/"
 
 # Import DAYFLOW data for 1997-2020
-df_dayflow <- read_csv(file.path(fp_hydro, "dayflow_1997-2020.csv"))
+df_dayflow_1997_2020 <- read_csv(file.path(fp_hydro, "dayflow_1997-2020.csv"))
 
-# Import Delta Outflow (DTO) from CDEC for WY2021 until DAYFLOW data is available
-df_dto <- read_csv(file.path(fp_hydro, "dto_2021.csv"))
+# Import Delta Outflow (DTO) from CDEC for WY 2021 until DAYFLOW data is available
+df_dto_2021 <- read_csv(file.path(fp_hydro, "dto_2021.csv"))
 
 
 # 2. Clean and Combine data -----------------------------------------------
 
 # Prepare DAYFLOW and DTO data to be combined
-df_dayflow_clean <- df_dayflow %>%
+df_dayflow_clean <- df_dayflow_1997_2020 %>%
   select(Date, Outflow = OUT, Export = EXPORTS, X2) %>%
   # convert date column to date
   mutate(Date = mdy(Date))
 
-df_dto_clean <- df_dto %>%
+df_dto_clean <- df_dto_2021 %>%
   mutate(Date = date(DateTime)) %>%
   select(Date, Outflow = Value)
 
