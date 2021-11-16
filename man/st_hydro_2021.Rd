@@ -3,7 +3,7 @@
 \docType{data}
 \name{st_hydro_2021}
 \alias{st_hydro_2021}
-\title{Daily hydrology and LSZ values for water year 2021}
+\title{Daily Delta outflow and X2 values for water year 2021}
 \format{
 data frame with 396 rows and 3 columns
 \describe{
@@ -26,9 +26,7 @@ Model from Dayflow and Outflow from the DTO station on CDEC.}
 st_hydro_2021
 }
 \description{
-Daily values for the hydrology and Low Salinity Zone (LSZ)
-metrics for 2021 (Oct 2020 - Oct 2021). Used in the analyses for the
-Drought Synthesis. \strong{NOTE:} \code{Export} does not exist in this data set since
-DAYFLOW data isn't published for WY 2021 at this point.
+Daily values for Delta outflow and X2 for water year 2021 (Oct
+2020 - Oct 2021). Used in the analyses for the Drought Synthesis.
 }
 \keyword{datasets}

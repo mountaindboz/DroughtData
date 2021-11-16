@@ -24,7 +24,7 @@ This package provides the following data tables:
 
 * `lt_seasonal`: long-term (1975-2021) integrated data set containing seasonal averages of various metrics for each year and across the entire Delta
 * `lt_regional`: long-term (1975-2021) integrated data set containing regional averages of various metrics for each year
-* `st_hydro_2021`: daily hydrology and Low Salinity Zone (LSZ) values for water year 2021 (Oct 2020 - Oct 2021)
+* `st_hydro_2021`: daily Delta outflow and X2 values for water year 2021 (Oct 2020 - Oct 2021)
 * `st_hydro_month`: short-term (2011-2021) monthly averages for the hydrology and LSZ metrics
 
 ## Installation
