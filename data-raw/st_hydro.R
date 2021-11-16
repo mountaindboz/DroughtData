@@ -44,7 +44,7 @@ df_dto_clean <- df_dto_2021 %>%
 # Combine DAYFLOW and DTO data
 df_hydro <- bind_rows(df_dayflow_clean, df_dto_clean)
 
-# Calculate X2 for WY2021 based on DAYFLOW documentation:
+# Calculate X2 for WY 2021 based on DAYFLOW documentation:
   # The 1994 Bay-Delta agreement established standards for salinity in the estuary.
   # Specifically, the standards determine the degree to which salinity is allowed
   # to penetrate up-estuary, with salinity to be controlled through delta outflow.
@@ -79,6 +79,9 @@ st_hydro_month <- df_hydro %>%
     Month = month(Date, label = TRUE, abbr = TRUE),
     Year = if_else(Month == "Dec", year(Date) + 1, year(Date))
   ) %>%
+  # Only include 2011-2021
+  filter(Year >= 2011) %>%
+  # Calculate monthly averages
   group_by(Year, Month) %>%
   summarize(across(c("Outflow", "Export", "X2"), mean, na.rm = TRUE)) %>%
   ungroup() %>%
@@ -86,8 +89,6 @@ st_hydro_month <- df_hydro %>%
   mutate(across(c("Outflow", "Export", "X2"), ~if_else(is.nan(.x), NA_real_, .x))) %>%
   # Don't include Sept 2021 for X2 since data only available for 9/1/2021
   mutate(X2 = if_else(Year == 2021 & Month == "Sep", NA_real_, X2)) %>%
-  # Only include 2011-2021
-  filter(Year >= 2011) %>%
   # Rearrange factor order for month so that December is first to correspond with adjusted calendar year
   mutate(Month = fct_shift(Month, -1)) %>%
   # Arrange by Year and Month
