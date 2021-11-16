@@ -52,7 +52,7 @@ df_dayflow_1997_2020 %<>% rename(EXPORT = EXPORTS)
 # Combine DAYFLOW data and start with some basic cleaning
 df_dayflow_v1 <-
   bind_rows(df_dayflow_1970_1983, df_dayflow_1984_1996, df_dayflow_1997_2020) %>%
-  select(Date, OUT, EXPORT, X2) %>%
+  select(Date, Outflow = OUT, Export = EXPORT, X2) %>%
   # convert date column to date
   mutate(Date = mdy(Date))
 
@@ -73,37 +73,36 @@ df_dayflow_v2 <- df_dayflow_v1 %>%
 # Import Delta Outflow (DTO) from CDEC for WY 2021 until DAYFLOW data is available
 df_dto_2021 <- read_csv(file.path(fp_hydro, "dto_2021.csv")) %>%
   mutate(Date = date(DateTime)) %>%
-  select(Date, OUT = Value)
+  select(Date, Outflow = Value)
 
 # Add DTO data to the dayflow data
 df_dayflow_v3 <- bind_rows(df_dayflow_v2, df_dto_2021)
 
-##################### Calculate future X2 based on DAYFLOW documentation:
-###
-# The 1994 Bay-Delta agreement established standards for salinity in the estuary.
-# Specifically, the standards determine the degree to which salinity is allowed
-# to penetrate up-estuary, with salinity to be controlled through delta outflow.
-# The basis for the standards is a series of relationships between the salinity
-# pattern and the abundance or survival of various species of fish and
-# invertebrates. These relationships have been expressed in terms of X2,
-# the distance from the Golden Gate to the point where daily average salinity is
-# 2 parts per thousand at 1 meter off the bottom (Jassby et. al. 1995).
-# In Dayflow, X2 is estimated using the Autoregressive Lag Model:
+# Calculate X2 for WY 2021 based on DAYFLOW documentation:
+  # The 1994 Bay-Delta agreement established standards for salinity in the estuary.
+  # Specifically, the standards determine the degree to which salinity is allowed
+  # to penetrate up-estuary, with salinity to be controlled through delta outflow.
+  # The basis for the standards is a series of relationships between the salinity
+  # pattern and the abundance or survival of various species of fish and
+  # invertebrates. These relationships have been expressed in terms of X2,
+  # the distance from the Golden Gate to the point where daily average salinity is
+  # 2 parts per thousand at 1 meter off the bottom (Jassby et. al. 1995).
+  # In Dayflow, X2 is estimated using the Autoregressive Lag Model:
 
-# X2(t) = 10.16 + 0.945*X2(t-1) - 1.487log(QOUT(t))
-# NOTE: It seems like the log in the DAYFLOW notation is referring to Log10 (i.e., not ln)
+  # X2(t) = 10.16 + 0.945*X2(t-1) - 1.487log(QOUT(t))
+  # NOTE: It seems like the log in the DAYFLOW notation is referring to Log10 (i.e., not ln)
 
-# >>>>> On 7/22/2021 DTO outflow was a negative number which won't work in the equation to
-# calculate X2 (the log of a negative number is not defined); therefore, we will only use
-# the equation to fill in X2 from 10/1/2020 - 7/21/2021. We will need to wait until the
-# DAYFLOW program publishes their WY 2021 results to have X2 values past this point.
+# >>>>> On 9/2/2021 DTO outflow was a negative number which won't work in the equation to
+  # calculate X2 (the log of a negative number is not defined); therefore, we will only use
+  # the equation to fill in X2 from 10/1/2020 - 9/1/2021. We will need to wait until the
+  # DAYFLOW program publishes their WY 2021 results to have X2 values past this point.
 
-# Fill in X2 data for most current WY data (from 10/1/2020 to 7/21/2021)
-for (i in which(df_dayflow_v3$Date == "2020-10-01"):which(df_dayflow_v3$Date == "2021-07-21")) {
-  df_dayflow_v3$X2[i] = 10.16 + 0.945*df_dayflow_v3$X2[i-1] - 1.487*log10(df_dayflow_v3$OUT[i])
+# Fill in X2 data for most current WY data (from 10/1/2020 to 9/1/2021)
+for (i in which(df_dayflow_v3$Date == "2020-10-01"):which(df_dayflow_v3$Date == "2021-09-01")) {
+  df_dayflow_v3$X2[i] = 10.16 + 0.945*df_dayflow_v3$X2[i-1] - 1.487*log10(df_dayflow_v3$Outflow[i])
 }
 
-##################### Summarize per Rosemary's instructions
+# Summarize per Rosemary's instructions:
 # Adjusted calendar year, December-November, with December of the previous calendar year included
 # with the following year (so December of 2019 is the first month of “2020” in our data set)
 
@@ -123,12 +122,12 @@ df_dayflow_f <- df_dayflow_v3 %>%
   filter(Year >= 1975) %>%
   # Calculate seasonal averages
   group_by(Year, Season) %>%
-  summarize(
-    Outflow = mean(OUT, na.rm = TRUE),
-    X2 = mean(X2, na.rm = TRUE),
-    Export = mean(EXPORT, na.rm = TRUE)
-  ) %>%
-  ungroup()
+  summarize(across(c("Outflow", "Export", "X2"), mean, na.rm = TRUE)) %>%
+  ungroup() %>%
+  # Convert NaN values to NA values
+  mutate(across(c("Outflow", "Export", "X2"), ~if_else(is.nan(.x), NA_real_, .x))) %>%
+  # Don't include Fall 2021 for X2 since data only available for 9/1/2021
+  mutate(X2 = if_else(Year == 2021 & Season == "Fall", NA_real_, X2))
 
 ## WARNING!: Hutton et al. had missing X2 data and summarized seasonal X2 may be skewed as a result.
 
