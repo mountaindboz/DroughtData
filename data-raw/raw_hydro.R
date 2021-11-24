@@ -2,13 +2,14 @@
   # `raw_hydro_1975_2021` - raw daily values for hydrology and LSZ metrics (Delta Outflow,
     # Delta Exports, X2) for 1975-2021
 
-
 # Load packages
 library(tidyverse)
 library(lubridate)
 library(cder)
+library(readxl)
 
-# 1. Import data ----------------------------------------------------------
+
+# 1. Import Data ----------------------------------------------------------
 
 # If it hasn't been done already, download and save local copies of the DAYFLOW data from
   # the CNRA data portal and Delta Outflow data (DTO) from CDEC since the DAYFLOW files may
@@ -47,27 +48,52 @@ if (download) {
 # Define file path for raw hydrology data
 fp_hydro <- "data-raw/Hydrology/"
 
-# Import DAYFLOW data for 1997-2020
+# Import DAYFLOW data for 1970-2020
+df_dayflow_1970_1983 <- read_csv(file.path(fp_hydro, "dayflow_1970-1983.csv"))
+df_dayflow_1984_1996 <- read_csv(file.path(fp_hydro, "dayflow_1984-1996.csv"))
 df_dayflow_1997_2020 <- read_csv(file.path(fp_hydro, "dayflow_1997-2020.csv"))
 
 # Import Delta Outflow (DTO) from CDEC for WY 2021 until DAYFLOW data is available
 df_dto_2021 <- read_csv(file.path(fp_hydro, "dto_2021.csv"))
 
+# Import estimated X2 values for earlier years based on Hutton et al. paper
+df_hutton_x2 <-
+  read_excel(
+    file.path(fp_hydro, "supplemental_data_wr.1943-5452.0000617_hutton3.xlsx"),
+    sheet = "Daily"
+  )
 
-# 2. Clean and Combine data -----------------------------------------------
 
-# Prepare DAYFLOW and DTO data to be combined
-df_dayflow_clean <- df_dayflow_1997_2020 %>%
-  select(Date, Outflow = OUT, Export = EXPORTS, X2) %>%
+# 2. Clean and Combine Data -----------------------------------------------
+
+# Rename "EXPORTS" to "EXPORT" in the 1997-2020 data to match other data sets
+df_dayflow_1997_2020_c <- df_dayflow_1997_2020 %>% rename(EXPORT = EXPORTS)
+
+# Combine DAYFLOW data and start with some basic cleaning
+df_dayflow_v1 <-
+  bind_rows(df_dayflow_1970_1983, df_dayflow_1984_1996, df_dayflow_1997_2020_c) %>%
+  select(Date, Outflow = OUT, Export = EXPORT, X2) %>%
   # convert date column to date
   mutate(Date = mdy(Date))
 
-df_dto_clean <- df_dto_2021 %>%
+# Prepare X2 data from Hutton et al. paper to be joined with DAYFLOW data
+df_hutton_x2_c <- df_hutton_x2 %>%
+  mutate(Date = as_date(Date)) %>%
+  select(Date, X2Hutton = SacX2)
+
+# Add X2 for earlier years based on Hutton et al. paper
+df_dayflow_v2 <- df_dayflow_v1 %>%
+  left_join(df_hutton_x2_c, by = "Date") %>%
+  mutate(X2 = if_else(is.na(X2), X2Hutton, X2)) %>%
+  select(-X2Hutton)
+
+# Prepare DTO data to be combined with DAYFLOW data
+df_dto_2021_c <- df_dto_2021 %>%
   mutate(Date = date(DateTime)) %>%
   select(Date, Outflow = Value)
 
-# Combine DAYFLOW and DTO data
-df_hydro <- bind_rows(df_dayflow_clean, df_dto_clean)
+# Add DTO data to the DAYFLOW data
+df_dayflow_v3 <- bind_rows(df_dayflow_v2, df_dto_2021_c)
 
 # Calculate X2 for WY 2021 based on DAYFLOW documentation:
   # The 1994 Bay-Delta agreement established standards for salinity in the estuary.
@@ -89,49 +115,26 @@ df_hydro <- bind_rows(df_dayflow_clean, df_dto_clean)
   # DAYFLOW program publishes their WY 2021 results to have X2 values past this point.
 
 # Fill in X2 data for most current WY data (from 10/1/2020 to 9/1/2021)
-for (i in which(df_hydro$Date == "2020-10-01"):which(df_hydro$Date == "2021-09-01")) {
-  df_hydro$X2[i] = 10.16 + 0.945*df_hydro$X2[i-1] - 1.487*log10(df_hydro$Outflow[i])
+for (i in which(df_dayflow_v3$Date == "2020-10-01"):which(df_dayflow_v3$Date == "2021-09-01")) {
+  df_dayflow_v3$X2[i] = 10.16 + 0.945*df_dayflow_v3$X2[i-1] - 1.487*log10(df_dayflow_v3$Outflow[i])
 }
 
-
-# 3. Summarize and Export data --------------------------------------------
-
-# Calculate monthly averages for 2011-2021 (using adjusted calendar year - December-November, with
-  # December of the previous calendar year included with the following year)
-st_hydro_month <- df_hydro %>%
-  # Add month and adjusted calendar year variables
-  mutate(
-    Month = month(Date, label = TRUE, abbr = TRUE),
-    Year = if_else(Month == "Dec", year(Date) + 1, year(Date))
+# Add a variable for adjusted calendar year and restrict data to 1975-2021
+  # Adjusted calendar year: December-November, with December of the previous calendar year
+  # included with the following year
+raw_hydro_1975_2021 <- df_dayflow_v3 %>%
+  mutate(YearAdj = if_else(month(Date) == 12, year(Date) + 1, year(Date))
   ) %>%
-  # Only include 2011-2021
-  filter(Year >= 2011) %>%
-  # Calculate monthly averages
-  group_by(Year, Month) %>%
-  summarize(across(c("Outflow", "Export", "X2"), mean, na.rm = TRUE)) %>%
-  ungroup() %>%
-  # Convert NaN values to NA values
-  mutate(across(c("Outflow", "Export", "X2"), ~if_else(is.nan(.x), NA_real_, .x))) %>%
-  # Don't include Sept 2021 for X2 since data only available for 9/1/2021
-  mutate(X2 = if_else(Year == 2021 & Month == "Sep", NA_real_, X2)) %>%
-  # Rearrange factor order for month so that December is first to correspond with adjusted calendar year
-  mutate(Month = fct_shift(Month, -1)) %>%
-  # Arrange by Year and Month
-  arrange(Year, Month) %>%
-  # Convert Month to a character vector
-  mutate(Month = as.character(Month))
+  # Restrict data to 1975-2021
+  filter(YearAdj >= 1975) %>%
+  relocate(YearAdj)
 
-# Prepare daily hydrology data for 2021
-st_hydro_2021 <- df_hydro %>%
-  # Only include Oct 2020 - Oct 2021 for daily hydrology data
-  filter(Date >= "2020-10-01") %>%
-  # Remove Export variable since it is all NA values
-  select(-Export)
 
-# Save final short-term hydrology and LSZ data sets as csv files for easier diffing
-write_csv(st_hydro_2021, "data-raw/Final/st_hydro_2021.csv")
-write_csv(st_hydro_month, "data-raw/Final/st_hydro_month.csv")
+# 3. Save and Export Data -------------------------------------------------
 
-# Save final short-term hydrology and LSZ data sets as objects in the data package
-usethis::use_data(st_hydro_2021, st_hydro_month, overwrite = TRUE)
+# Save final raw hydrology and LSZ data set as csv file for easier diffing
+write_csv(raw_hydro_1975_2021, "data-raw/Final/raw_hydro_1975_2021.csv")
+
+# Save final raw hydrology and LSZ data set as object in the data package
+usethis::use_data(raw_hydro_1975_2021, overwrite = TRUE)
 
