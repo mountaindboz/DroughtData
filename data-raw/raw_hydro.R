@@ -1,6 +1,6 @@
-# Code to prepare short-term (2011-2021) hydrology and LSZ data sets:
-  # 1) `st_hydro_2021` - daily values for hydrology and LSZ metrics for Oct 2020 - Oct 2021
-  # 1) `st_hydro_month` - monthly averages of hydrology and LSZ metrics for 2011-2021
+# Code to prepare data set of raw hydrology and LSZ metrics:
+  # `raw_hydro_1975_2021` - raw daily values for hydrology and LSZ metrics (Delta Outflow,
+    # Delta Exports, X2) for 1975-2021
 
 
 # Load packages
