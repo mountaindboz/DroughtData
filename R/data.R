@@ -78,26 +78,6 @@
 #' * `discretewq` data package (version 2.0.0): <https://github.com/sbashevkin/discretewq/releases/tag/v2.0.0>
 "lt_regional"
 
-#' @title Daily Delta outflow and X2 values for water year 2021
-#' @description Daily values for Delta outflow and X2 for water year 2021 (Oct
-#'   2020 - Oct 2021). Used in the analyses for the Drought Synthesis.
-#'
-#' @format data frame with 396 rows and 3 columns
-#' \describe{
-#'   \item{Date}{Calendar date}
-#'   \item{Outflow}{Estimated net Delta outflow in cubic feet per second (cfs)
-#'     from the DTO station on CDEC.}
-#'   \item{X2}{The distance from the Golden Gate Bridge to the point where daily
-#'     average salinity is 2 parts per thousand at a depth of 1 meter off the
-#'     bottom, expressed in kilometers. Estimated using the Autoregressive Lag
-#'     Model from Dayflow and Outflow from the DTO station on CDEC.}
-#' }
-#'
-#' @source
-#' * Dayflow: <https://data.cnra.ca.gov/dataset/dayflow>
-#' * DTO data from CDEC: <https://cdec.water.ca.gov/dynamicapp/staMeta?station_id=DTO>
-"st_hydro_2021"
-
 #' @title Short-term monthly averages for hydrology and LSZ metrics
 #' @description A short-term (2011-2021) data set containing monthly averages of
 #'   the hydrology and Low Salinity Zone (LSZ) metrics. Used in the analyses for
