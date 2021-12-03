@@ -19,7 +19,7 @@ library(readxl)
 download <- FALSE
 
 # Download and save DAYFLOW and DTO data if necessary
-if (download) {
+if (download == TRUE) {
   # Define directory for raw hydrology data
   dir_hydro <- "data-raw/Hydrology/"
 
@@ -49,12 +49,30 @@ if (download) {
 fp_hydro <- "data-raw/Hydrology/"
 
 # Import DAYFLOW data for 1970-2020
-df_dayflow_1970_1983 <- read_csv(file.path(fp_hydro, "dayflow_1970-1983.csv"))
-df_dayflow_1984_1996 <- read_csv(file.path(fp_hydro, "dayflow_1984-1996.csv"))
-df_dayflow_1997_2020 <- read_csv(file.path(fp_hydro, "dayflow_1997-2020.csv"))
+df_dayflow_1970_1983 <-
+  read_csv(
+    file.path(fp_hydro, "dayflow_1970-1983.csv"),
+    col_types = cols_only(Date = "c", EXPORT = "d", OUT = "d")
+  )
+
+df_dayflow_1984_1996 <-
+  read_csv(
+    file.path(fp_hydro, "dayflow_1984-1996.csv"),
+    col_types = cols_only(Date = "c", EXPORT = "d", OUT = "d")
+  )
+
+df_dayflow_1997_2020 <-
+  read_csv(
+    file.path(fp_hydro, "dayflow_1997-2020.csv"),
+    col_types = cols_only(Date = "c", EXPORTS = "d", OUT = "d", X2 = "d")
+  )
 
 # Import Delta Outflow (DTO) from CDEC for WY 2021 until DAYFLOW data is available
-df_dto_2021 <- read_csv(file.path(fp_hydro, "dto_2021.csv"))
+df_dto_2021 <-
+  read_csv(
+    file.path(fp_hydro, "dto_2021.csv"),
+    col_types = cols_only(DateTime = "T", Value = "d")
+  )
 
 # Import estimated X2 values for earlier years based on Hutton et al. paper
 df_hutton_x2 <-
@@ -78,7 +96,7 @@ df_dayflow_v1 <-
 
 # Prepare X2 data from Hutton et al. paper to be joined with DAYFLOW data
 df_hutton_x2_c <- df_hutton_x2 %>%
-  mutate(Date = as_date(Date)) %>%
+  mutate(Date = date(Date)) %>%
   select(Date, X2Hutton = SacX2)
 
 # Add X2 for earlier years based on Hutton et al. paper
@@ -123,11 +141,10 @@ for (i in which(df_dayflow_v3$Date == "2020-10-01"):which(df_dayflow_v3$Date == 
   # Adjusted calendar year: December-November, with December of the previous calendar year
   # included with the following year
 raw_hydro_1975_2021 <- df_dayflow_v3 %>%
-  mutate(YearAdj = if_else(month(Date) == 12, year(Date) + 1, year(Date))
-  ) %>%
-  # Restrict data to 1975-2021
-  filter(YearAdj >= 1975) %>%
-  relocate(YearAdj)
+  mutate(YearAdj = if_else(month(Date) == 12, year(Date) + 1, year(Date))) %>%
+  filter(YearAdj %in% 1975:2021) %>%
+  relocate(YearAdj) %>%
+  arrange(Date)
 
 
 # 3. Save and Export Data -------------------------------------------------
