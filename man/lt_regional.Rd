@@ -7,7 +7,7 @@
 \format{
 data frame with 235 rows and 8 columns
 \describe{
-\item{Year}{Adjusted calendar year - December-November, with December of
+\item{YearAdj}{Adjusted calendar year - December-November, with December of
 the previous calendar year included with the following year. For example,
 December of 2019 is the first month of 2020 in this data set.}
 \item{Region}{Region designation within the larger Delta and Suisun
@@ -22,17 +22,22 @@ and Below Normal years in a row are a drought (D), multiple Wet or Above
 Normal years in a row are a wet period (W), and years that are not on a
 streak are neutral (N).}
 \item{Temperature}{Water temperature in degrees Celsius from the
-\code{discretewq} data package}
-\item{Secchi}{Secchi depth in centimeters from the \code{discretewq} data
-package}
+\code{discretewq} data package. Data from EMP and FMWT collected in 2021 were
+provided directly from staff who collected the data and should be
+considered provisional.}
 \item{Salinity}{Salinity value on the Practical Salinity Scale from the
-\code{discretewq} data package}
+\code{discretewq} data package. Data from EMP and FMWT collected in 2021 were
+provided directly from staff who collected the data and should be
+considered provisional.}
+\item{Secchi}{Secchi depth in centimeters from the \code{discretewq} data
+package. Data from EMP and FMWT collected in 2021 were provided directly
+from staff who collected the data and should be considered provisional.}
 }
 }
 \source{
 \itemize{
 \item Sacramento Valley Water Year Index: \url{https://cdec.water.ca.gov/reportapp/javareports?name=WSIHIST}
-\item \code{discretewq} data package (version 2.0.0): \url{https://github.com/sbashevkin/discretewq/releases/tag/v2.0.0}
+\item \code{discretewq} data package (version 2.1.0): \url{https://github.com/sbashevkin/discretewq/tree/1af04438c961c6d51f46cc777cbb6a142c1e3b30}
 }
 }
 \usage{

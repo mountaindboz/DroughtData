@@ -7,7 +7,7 @@
 \format{
 data frame with 188 rows and 11 columns
 \describe{
-\item{Year}{Adjusted calendar year - December-November, with December of
+\item{YearAdj}{Adjusted calendar year - December-November, with December of
 the previous calendar year included with the following year. For example,
 December of 2019 is the first month of 2020 in this data set.}
 \item{Season}{Winter (Dec-Feb), Spring (Mar-May), Summer (Jun-Aug), or Fall
@@ -22,21 +22,29 @@ and Below Normal years in a row are a drought (D), multiple Wet or Above
 Normal years in a row are a wet period (W), and years that are not on a
 streak are neutral (N).}
 \item{Outflow}{Net Delta outflow in cubic feet per second (cfs) at Chipps
-Island from Dayflow. The values for water year 2021 are estimated by data
-from the DTO station on CDEC.}
-\item{X2}{The distance from the Golden Gate Bridge to the point where daily
-average salinity is 2 parts per thousand at a depth of 1 meter off the
-bottom, expressed in kilometers. From Dayflow for recent years (WY
-1997-2020), Hutton et. al. for earlier years.}
+Island from Dayflow. The values for October 2020 through October 2021 are
+estimated by data from the DTO station on CDEC.}
 \item{Export}{Total amount of water diverted from the Delta by the Federal
 and State governments to meet water agreements and contracts, expressed in
-cubic feet per second (cfs). From Dayflow.}
+cubic feet per second (cfs). From Dayflow. No data available for October
+2020 through October 2021 at this point.}
+\item{X2}{The distance from the Golden Gate Bridge to the point where daily
+average salinity is 2 parts per thousand at a depth of 1 meter off the
+bottom, expressed in kilometers. From Hutton et. al. for WY 1975-1996, from
+Dayflow for WY 1997-2020, and estimated using the Autoregressive Lag Model
+from Dayflow and Outflow from the DTO station on CDEC for October 2020
+through August 2021.}
 \item{Temperature}{Water temperature in degrees Celsius from the
-\code{discretewq} data package}
-\item{Secchi}{Secchi depth in centimeters from the \code{discretewq} data
-package}
+\code{discretewq} data package. Data from EMP and FMWT collected in 2021 were
+provided directly from staff who collected the data and should be
+considered provisional.}
 \item{Salinity}{Salinity value on the Practical Salinity Scale from the
-\code{discretewq} data package}
+\code{discretewq} data package. Data from EMP and FMWT collected in 2021 were
+provided directly from staff who collected the data and should be
+considered provisional.}
+\item{Secchi}{Secchi depth in centimeters from the \code{discretewq} data
+package. Data from EMP and FMWT collected in 2021 were provided directly
+from staff who collected the data and should be considered provisional.}
 }
 }
 \source{
@@ -44,7 +52,7 @@ package}
 \item Sacramento Valley Water Year Index: \url{https://cdec.water.ca.gov/reportapp/javareports?name=WSIHIST}
 \item Dayflow: \url{https://data.cnra.ca.gov/dataset/dayflow}
 \item DTO data from CDEC: \url{https://cdec.water.ca.gov/dynamicapp/staMeta?station_id=DTO}
-\item \code{discretewq} data package (version 2.0.0): \url{https://github.com/sbashevkin/discretewq/releases/tag/v2.0.0}
+\item \code{discretewq} data package (version 2.1.0): \url{https://github.com/sbashevkin/discretewq/tree/1af04438c961c6d51f46cc777cbb6a142c1e3b30}
 }
 }
 \usage{

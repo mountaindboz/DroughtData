@@ -5,7 +5,7 @@
 #'
 #' @format data frame with 188 rows and 11 columns
 #' \describe{
-#'   \item{Year}{Adjusted calendar year - December-November, with December of
+#'   \item{YearAdj}{Adjusted calendar year - December-November, with December of
 #'     the previous calendar year included with the following year. For example,
 #'     December of 2019 is the first month of 2020 in this data set.}
 #'   \item{Season}{Winter (Dec-Feb), Spring (Mar-May), Summer (Jun-Aug), or Fall
@@ -20,21 +20,29 @@
 #'     Normal years in a row are a wet period (W), and years that are not on a
 #'     streak are neutral (N).}
 #'   \item{Outflow}{Net Delta outflow in cubic feet per second (cfs) at Chipps
-#'     Island from Dayflow. The values for water year 2021 are estimated by data
-#'     from the DTO station on CDEC.}
-#'   \item{X2}{The distance from the Golden Gate Bridge to the point where daily
-#'     average salinity is 2 parts per thousand at a depth of 1 meter off the
-#'     bottom, expressed in kilometers. From Dayflow for recent years (WY
-#'     1997-2020), Hutton et. al. for earlier years.}
+#'     Island from Dayflow. The values for October 2020 through October 2021 are
+#'     estimated by data from the DTO station on CDEC.}
 #'   \item{Export}{Total amount of water diverted from the Delta by the Federal
 #'     and State governments to meet water agreements and contracts, expressed in
-#'     cubic feet per second (cfs). From Dayflow.}
+#'     cubic feet per second (cfs). From Dayflow. No data available for October
+#'     2020 through October 2021 at this point.}
+#'   \item{X2}{The distance from the Golden Gate Bridge to the point where daily
+#'     average salinity is 2 parts per thousand at a depth of 1 meter off the
+#'     bottom, expressed in kilometers. From Hutton et. al. for WY 1975-1996, from
+#'     Dayflow for WY 1997-2020, and estimated using the Autoregressive Lag Model
+#'     from Dayflow and Outflow from the DTO station on CDEC for October 2020
+#'     through August 2021.}
 #'   \item{Temperature}{Water temperature in degrees Celsius from the
-#'     `discretewq` data package}
-#'   \item{Secchi}{Secchi depth in centimeters from the `discretewq` data
-#'     package}
+#'     `discretewq` data package. Data from EMP and FMWT collected in 2021 were
+#'     provided directly from staff who collected the data and should be
+#'     considered provisional.}
 #'   \item{Salinity}{Salinity value on the Practical Salinity Scale from the
-#'     `discretewq` data package}
+#'     `discretewq` data package. Data from EMP and FMWT collected in 2021 were
+#'     provided directly from staff who collected the data and should be
+#'     considered provisional.}
+#'   \item{Secchi}{Secchi depth in centimeters from the `discretewq` data
+#'     package. Data from EMP and FMWT collected in 2021 were provided directly
+#'     from staff who collected the data and should be considered provisional.}
 #' }
 #'
 #' @source
@@ -51,7 +59,7 @@
 #'
 #' @format data frame with 235 rows and 8 columns
 #' \describe{
-#'   \item{Year}{Adjusted calendar year - December-November, with December of
+#'   \item{YearAdj}{Adjusted calendar year - December-November, with December of
 #'     the previous calendar year included with the following year. For example,
 #'     December of 2019 is the first month of 2020 in this data set.}
 #'   \item{Region}{Region designation within the larger Delta and Suisun
@@ -66,11 +74,16 @@
 #'     Normal years in a row are a wet period (W), and years that are not on a
 #'     streak are neutral (N).}
 #'   \item{Temperature}{Water temperature in degrees Celsius from the
-#'     `discretewq` data package}
-#'   \item{Secchi}{Secchi depth in centimeters from the `discretewq` data
-#'     package}
+#'     `discretewq` data package. Data from EMP and FMWT collected in 2021 were
+#'     provided directly from staff who collected the data and should be
+#'     considered provisional.}
 #'   \item{Salinity}{Salinity value on the Practical Salinity Scale from the
-#'     `discretewq` data package}
+#'     `discretewq` data package. Data from EMP and FMWT collected in 2021 were
+#'     provided directly from staff who collected the data and should be
+#'     considered provisional.}
+#'   \item{Secchi}{Secchi depth in centimeters from the `discretewq` data
+#'     package. Data from EMP and FMWT collected in 2021 were provided directly
+#'     from staff who collected the data and should be considered provisional.}
 #' }
 #'
 #' @source
@@ -129,10 +142,11 @@
 #'   \item{Station}{Location where measurement was collected}
 #'   \item{Latitude}{Latitude of `Station` in Decimal Degrees (WGS 84 Datum)}
 #'   \item{Longitude}{Longitude of `Station` in Decimal Degrees (WGS 84 Datum)}
-#'   \item{Region}{Region designation of `Station` as [defined by the Drought
-#'     Synthesis
-#'     team](https://github.com/mountaindboz/DroughtData/blob/master/data-raw/Rosies_regions.csv).
-#'     }
+#'   \item{Region}{Region designation of `Station` within the larger Delta and
+#'     Suisun Marsh/Bay (Confluence, North, SouthCentral, Suisun Bay, Suisun
+#'     Marsh). The Drought Synthesis team categorized `SubRegion`s into broader
+#'     `Region`s using [this crosswalk](https://github.com/mountaindboz/DroughtData/blob/master/data-raw/Rosies_regions.csv)
+#'     .}
 #'   \item{SubRegion}{Subregion designation of `Station` as defined by the
 #'     `R_EDSM_Subregions_Mahardja_FLOAT` shapefile from the
 #'     [`deltamapr`](https://github.com/InteragencyEcologicalProgram/deltamapr)
@@ -148,15 +162,15 @@
 #'     measurements.}
 #'   \item{Temperature}{Water temperature in degrees Celsius from the
 #'     `discretewq` data package. Data from EMP and FMWT collected in 2021 were
-#'     provided directly from data collectors and should be considered
-#'     provisional.}
+#'     provided directly from staff who collected the data and should be
+#'     considered provisional.}
 #'   \item{Salinity}{Salinity value on the Practical Salinity Scale from the
 #'     `discretewq` data package. Data from EMP and FMWT collected in 2021 were
-#'     provided directly from data collectors and should be considered
-#'     provisional.}
+#'     provided directly from staff who collected the data and should be
+#'     considered provisional.}
 #'   \item{Secchi}{Secchi depth in centimeters from the `discretewq` data
 #'     package. Data from EMP and FMWT collected in 2021 were provided directly
-#'     from data collectors and should be considered provisional.}
+#'     from staff who collected the data and should be considered provisional.}
 #' }
 #'
 #' @source

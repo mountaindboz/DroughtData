@@ -13,8 +13,11 @@ Monitoring Program), FMWT (CDFW's Fall Midwater Trawl survey), or STN
 \item{Station}{Location where measurement was collected}
 \item{Latitude}{Latitude of \code{Station} in Decimal Degrees (WGS 84 Datum)}
 \item{Longitude}{Longitude of \code{Station} in Decimal Degrees (WGS 84 Datum)}
-\item{Region}{Region designation of \code{Station} as \href{https://github.com/mountaindboz/DroughtData/blob/master/data-raw/Rosies_regions.csv}{defined by the Drought Synthesis team}.
-}
+\item{Region}{Region designation of \code{Station} within the larger Delta and
+Suisun Marsh/Bay (Confluence, North, SouthCentral, Suisun Bay, Suisun
+Marsh). The Drought Synthesis team categorized \code{SubRegion}s into broader
+\code{Region}s using \href{https://github.com/mountaindboz/DroughtData/blob/master/data-raw/Rosies_regions.csv}{this crosswalk}
+.}
 \item{SubRegion}{Subregion designation of \code{Station} as defined by the
 \code{R_EDSM_Subregions_Mahardja_FLOAT} shapefile from the
 \href{https://github.com/InteragencyEcologicalProgram/deltamapr}{\code{deltamapr}}
@@ -30,15 +33,15 @@ December of 1974 is assigned year "1975" in this data set.}
 measurements.}
 \item{Temperature}{Water temperature in degrees Celsius from the
 \code{discretewq} data package. Data from EMP and FMWT collected in 2021 were
-provided directly from data collectors and should be considered
-provisional.}
+provided directly from staff who collected the data and should be
+considered provisional.}
 \item{Salinity}{Salinity value on the Practical Salinity Scale from the
 \code{discretewq} data package. Data from EMP and FMWT collected in 2021 were
-provided directly from data collectors and should be considered
-provisional.}
+provided directly from staff who collected the data and should be
+considered provisional.}
 \item{Secchi}{Secchi depth in centimeters from the \code{discretewq} data
 package. Data from EMP and FMWT collected in 2021 were provided directly
-from data collectors and should be considered provisional.}
+from staff who collected the data and should be considered provisional.}
 }
 }
 \source{
