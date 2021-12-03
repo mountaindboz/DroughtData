@@ -41,7 +41,7 @@
 #' * Sacramento Valley Water Year Index: <https://cdec.water.ca.gov/reportapp/javareports?name=WSIHIST>
 #' * Dayflow: <https://data.cnra.ca.gov/dataset/dayflow>
 #' * DTO data from CDEC: <https://cdec.water.ca.gov/dynamicapp/staMeta?station_id=DTO>
-#' * `discretewq` data package (version 2.0.0): <https://github.com/sbashevkin/discretewq/releases/tag/v2.0.0>
+#' * `discretewq` data package (version 2.1.0): <https://github.com/sbashevkin/discretewq/tree/1af04438c961c6d51f46cc777cbb6a142c1e3b30>
 "lt_seasonal"
 
 #' @title Long-term regional averages
@@ -75,19 +75,22 @@
 #'
 #' @source
 #' * Sacramento Valley Water Year Index: <https://cdec.water.ca.gov/reportapp/javareports?name=WSIHIST>
-#' * `discretewq` data package (version 2.0.0): <https://github.com/sbashevkin/discretewq/releases/tag/v2.0.0>
+#' * `discretewq` data package (version 2.1.0): <https://github.com/sbashevkin/discretewq/tree/1af04438c961c6d51f46cc777cbb6a142c1e3b30>
 "lt_regional"
 
 #' @title Raw daily values for hydrology and LSZ metrics for 1975-2021
 #' @description A data set containing raw daily values of the hydrology and Low
-#'   Salinity Zone (LSZ) metrics for 1975-2021. Used in the analyses for the
-#'   Drought Synthesis.
+#'   Salinity Zone (LSZ) metrics for 1975-2021. Seasonal averages of this data
+#'   are in the `lt_seasonal` data set. Used in the analyses for the Drought
+#'   Synthesis.
 #'
-#' @format data frame with 17,137 rows and 5 columns
+#' @format data frame with 17,137 rows and 6 columns
 #' \describe{
 #'   \item{YearAdj}{Adjusted calendar year - December-November, with December of
 #'     the previous calendar year included with the following year. For example,
 #'     December of 1974 is assigned year "1975" in this data set.}
+#'   \item{Season}{Winter (Dec-Feb), Spring (Mar-May), Summer (Jun-Aug), or Fall
+#'     (Sept-Nov)}
 #'   \item{Date}{Calendar date}
 #'   \item{Outflow}{Net Delta outflow in cubic feet per second (cfs) at Chipps
 #'     Island from Dayflow. The values for October 2020 through October 2021 are

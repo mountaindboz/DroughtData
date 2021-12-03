@@ -5,11 +5,13 @@
 \alias{raw_hydro_1975_2021}
 \title{Raw daily values for hydrology and LSZ metrics for 1975-2021}
 \format{
-data frame with 17,137 rows and 5 columns
+data frame with 17,137 rows and 6 columns
 \describe{
 \item{YearAdj}{Adjusted calendar year - December-November, with December of
 the previous calendar year included with the following year. For example,
 December of 1974 is assigned year "1975" in this data set.}
+\item{Season}{Winter (Dec-Feb), Spring (Mar-May), Summer (Jun-Aug), or Fall
+(Sept-Nov)}
 \item{Date}{Calendar date}
 \item{Outflow}{Net Delta outflow in cubic feet per second (cfs) at Chipps
 Island from Dayflow. The values for October 2020 through October 2021 are
@@ -37,7 +39,8 @@ raw_hydro_1975_2021
 }
 \description{
 A data set containing raw daily values of the hydrology and Low
-Salinity Zone (LSZ) metrics for 1975-2021. Used in the analyses for the
-Drought Synthesis.
+Salinity Zone (LSZ) metrics for 1975-2021. Seasonal averages of this data
+are in the \code{lt_seasonal} data set. Used in the analyses for the Drought
+Synthesis.
 }
 \keyword{datasets}

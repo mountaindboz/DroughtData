@@ -137,13 +137,32 @@ for (i in which(df_dayflow_v3$Date == "2020-10-01"):which(df_dayflow_v3$Date == 
   df_dayflow_v3$X2[i] = 10.16 + 0.945*df_dayflow_v3$X2[i-1] - 1.487*log10(df_dayflow_v3$Outflow[i])
 }
 
-# Add a variable for adjusted calendar year and restrict data to 1975-2021
+# Finish cleaning raw data
+raw_hydro_1975_2021 <- df_dayflow_v3 %>%
+# Add variables for adjusted calendar year and season
   # Adjusted calendar year: December-November, with December of the previous calendar year
   # included with the following year
-raw_hydro_1975_2021 <- df_dayflow_v3 %>%
-  mutate(YearAdj = if_else(month(Date) == 12, year(Date) + 1, year(Date))) %>%
+  mutate(
+    Month = month(Date),
+    YearAdj = if_else(Month == 12, year(Date) + 1, year(Date)),
+    Season = case_when(
+      Month %in% 3:5 ~ "Spring",
+      Month %in% 6:8 ~ "Summer",
+      Month %in% 9:11 ~ "Fall",
+      Month %in% c(12, 1, 2) ~ "Winter"
+    )
+  ) %>%
+  # Restrict data to 1975-2021
   filter(YearAdj %in% 1975:2021) %>%
-  relocate(YearAdj) %>%
+  # Select variables to keep
+  select(
+    YearAdj,
+    Season,
+    Date,
+    Outflow,
+    Export,
+    X2
+  ) %>%
   arrange(Date)
 
 
