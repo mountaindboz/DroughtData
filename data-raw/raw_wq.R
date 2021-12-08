@@ -217,6 +217,8 @@ df_wq_all_c1 <- df_wq_all_c %>%
   ungroup() %>%
   filter(ValueExceed < 10) %>%
   select(-ValueExceed) %>%
+  # Remove one temperature outlier collected at S42 (EMP) on 5/3/1983
+  filter(!(Source == "EMP" & Station == "S42" & Date == "1983-05-03" & Parameter == "Temperature")) %>%
   pivot_wider(names_from = Parameter, values_from = Value) %>%
   filter(!if_all(c(Temperature, Salinity, Secchi), is.na))
 
