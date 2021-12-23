@@ -2,5 +2,6 @@
 
 export(drt_avg_data)
 importFrom(magrittr,"%>%")
+importFrom(rlang,":=")
 importFrom(rlang,.data)
 importFrom(tibble,tibble)
