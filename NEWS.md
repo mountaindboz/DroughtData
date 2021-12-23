@@ -1,3 +1,5 @@
+# DroughtData 0.2.0
+
 # DroughtData 0.1.1
 
 * Removed a single temperature outlier collected at S42 (EMP) on 5/3/1983 from all related data sets including `raw_wq_1975_2021`, `lt_seasonal`, and `lt_regional`.
