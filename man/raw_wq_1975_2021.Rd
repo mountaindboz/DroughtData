@@ -3,7 +3,7 @@
 \docType{data}
 \name{raw_wq_1975_2021}
 \alias{raw_wq_1975_2021}
-\title{Raw values for water quality measurements for 1975-2021}
+\title{Raw values of water quality measurements for 1975-2021}
 \format{
 data frame with 34,523 rows and 14 columns
 \describe{
@@ -24,24 +24,16 @@ Marsh). The Drought Synthesis team categorized \code{SubRegion}s into broader
 package.}
 \item{YearAdj}{Adjusted calendar year - December-November, with December of
 the previous calendar year included with the following year. For example,
-December of 1974 is assigned year "1975" in this data set.}
+December of 2020 is assigned year "2021" in this data set.}
 \item{Season}{Winter (Dec-Feb), Spring (Mar-May), Summer (Jun-Aug), or Fall
 (Sept-Nov)}
 \item{Month}{Integer representing the month}
 \item{Date}{Calendar date of the measurement}
 \item{Datetime}{Date and time of the measurement. Not available for all
 measurements.}
-\item{Temperature}{Water temperature in degrees Celsius from the
-\code{discretewq} data package. Data from EMP and FMWT collected in 2021 were
-provided directly from staff who collected the data and should be
-considered provisional.}
-\item{Salinity}{Salinity value on the Practical Salinity Scale from the
-\code{discretewq} data package. Data from EMP and FMWT collected in 2021 were
-provided directly from staff who collected the data and should be
-considered provisional.}
-\item{Secchi}{Secchi depth in centimeters from the \code{discretewq} data
-package. Data from EMP and FMWT collected in 2021 were provided directly
-from staff who collected the data and should be considered provisional.}
+\item{Temperature}{Water temperature in degrees Celsius}
+\item{Salinity}{Salinity value on the Practical Salinity Scale}
+\item{Secchi}{Secchi depth in centimeters}
 }
 }
 \source{
@@ -51,12 +43,18 @@ from staff who collected the data and should be considered provisional.}
 raw_wq_1975_2021
 }
 \description{
-A data set containing raw values of the water quality parameters
-(water temperature, salinity, secchi depth) for 1975-2021. Seasonal and
-Regional averages of this data are in the \code{lt_seasonal} and \code{lt_regional}
-data sets, respectively. This data set contains only one data point per
-\code{Station} and \code{Date} and excludes any data points that are more than 10
-standard deviations away from the mean of each \code{SubRegion}. Used in the
-analyses for the Drought Synthesis.
+A data set containing raw values of three water quality
+parameters (water temperature, salinity, and secchi depth) for 1975-2021.
+Seasonal and Regional averages of this data are in the \code{lt_seasonal} and
+\code{lt_regional} data sets, respectively. Used in the analyses for the Drought
+Synthesis.
+
+Data from 1975-2020 are from the \code{discretewq} data package. Data collected
+in 2021 were provided directly from staff who collected the data and should
+be considered provisional.
+
+This data set contains only one data point per \code{Station} and \code{Date} and
+excludes any data points that are more than 10 standard deviations away
+from the mean of each \code{SubRegion}.
 }
 \keyword{datasets}
