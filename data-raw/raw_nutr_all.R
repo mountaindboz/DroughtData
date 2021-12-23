@@ -2,7 +2,7 @@
   # 1) `raw_nutr_1975_2021` - raw values of long-term nutrient concentrations (DissAmmonia,
     # DissNitrateNitrite, and DissOrthophos) for 1975-2021 from the EMP, USGS-SFBP, and
     # USGS-CAWSC (only SR at Freeport) surveys
-  # 2) raw_nutr_2013_2021` - raw values of short-term nutrient concentrations (DissAmmonia,
+  # 2) `raw_nutr_2013_2021` - raw values of short-term nutrient concentrations (DissAmmonia,
     # DissNitrateNitrite, and DissOrthophos) for 2013-2021 from the EMP, USGS-SFBP, and
     # USGS-CAWSC surveys
 
@@ -17,6 +17,8 @@ library(discretewq)
 library(dataRetrieval)
 library(deltamapr)
 library(sf)
+library(rlang)
+library(glue)
 
 
 # 1. Import Data ----------------------------------------------------------
@@ -121,25 +123,26 @@ sf_delta <- R_EDSM_Subregions_Mahardja_FLOAT %>%
 
 # 2. Clean and Combine Data -----------------------------------------------
 
-# Create functions to clean up and standardize values below the detection limit and their reporting limits
-# EMP data from the discretewq` package
-fill_miss_rl_emp <- function(df, value_var, sign_var, rl_val) {
+# 2.1 discretewq Data -----------------------------------------------------
+
+# Create function to fill in missing reporting limits in the data from the discretewq` package
+fill_miss_rl <- function(df, value_var, sign_var, rl_val) {
   df %>%
     mutate(
       # replace the _Sign variable with "< (estimated)" for the records below the detection limit
-      # and unknown reporting limits
+        # and unknown reporting limits
       "{{sign_var}}" := if_else(
         {{ sign_var }} == "<" & is.na({{ value_var }}),
         "< (estimated)",
         {{ sign_var }}
       ),
       # fill in reporting limits for values that are non-detect and the reporting limits are unknown
-      # fill with value in rl_val
+        # fill with value in rl_val
       "{{value_var}}" := if_else({{ sign_var }} == "< (estimated)", rl_val, {{ value_var }})
     )
 }
 
-# Prepare nutrient data from the discretewq package to be combined with EMP data from 2021
+# Prepare nutrient data from the discretewq package to be combined with EMP data from 2021 and USGS-CAWSC data
 df_nutr_package_c <- df_nutr_package %>%
   mutate(
     # Convert Date variable to date object
@@ -152,11 +155,11 @@ df_nutr_package_c <- df_nutr_package %>%
   # Fill in "=" for the _Sign variables for the USGS-SFBP data for now
     # this assumes all provided values are above the RL
   mutate(across(ends_with("_Sign"), ~if_else(is.na(.x), "=", .x))) %>%
-  # Fill in reporting limits for values that are non-detect and the reporting limits are unknown
-    # We will use 0.01 for all of these for now
-  fill_miss_rl_emp(DissOrthophos, DissOrthophos_Sign, 0.01) %>%
-  fill_miss_rl_emp(DissAmmonia, DissAmmonia_Sign, 0.01) %>%
-  fill_miss_rl_emp(DissNitrateNitrite, DissNitrateNitrite_Sign, 0.01) %>%
+  # Fill in reporting limits for values that are non-detect and the reporting limits are unknown in the EMP
+    # data set- We will use 0.01 for all of these for now
+  fill_miss_rl(DissAmmonia, DissAmmonia_Sign, 0.01) %>%
+  fill_miss_rl(DissNitrateNitrite, DissNitrateNitrite_Sign, 0.01) %>%
+  fill_miss_rl(DissOrthophos, DissOrthophos_Sign, 0.01) %>%
   # Select variables to keep
   select(
     Source,
@@ -169,6 +172,29 @@ df_nutr_package_c <- df_nutr_package %>%
     starts_with("DissNitrateNitrite"),
     starts_with("DissOrthophos")
   )
+
+# For the USGS-SFBP, if at least one of the nutrient parameters has a value reported, then we
+  # will assume that the other parameters were below the reporting limit for that station and day
+df_nutr_usgs_blw_rl <- df_nutr_package_c %>%
+  filter(Source == "USGS-SFBP") %>%
+  filter(!if_all(c(DissAmmonia, DissNitrateNitrite, DissOrthophos), is.na)) %>%
+  filter(if_any(c(DissAmmonia, DissNitrateNitrite, DissOrthophos), is.na)) %>%
+  mutate(
+    DissAmmonia_Sign = if_else(is.na(DissAmmonia), "<", DissAmmonia_Sign),
+    DissNitrateNitrite_Sign = if_else(is.na(DissNitrateNitrite), "<", DissNitrateNitrite_Sign),
+    DissOrthophos_Sign = if_else(is.na(DissOrthophos), "<", DissOrthophos_Sign)
+  ) %>%
+  # These RL values were provided by USGS for 2006-present. We assumed these were constant throughout the
+    # entire monitoring program including in years earlier than 2006.
+  fill_miss_rl(DissAmmonia, DissAmmonia_Sign, 0.0007) %>%
+  fill_miss_rl(DissNitrateNitrite, DissNitrateNitrite_Sign, 0.0007) %>%
+  fill_miss_rl(DissOrthophos, DissOrthophos_Sign, 0.0015)
+
+df_nutr_package_c1 <- df_nutr_package_c %>%
+  anti_join(df_nutr_usgs_blw_rl, by = c("Source", "Station", "Datetime")) %>%
+  bind_rows(df_nutr_usgs_blw_rl)
+
+# 2.2 2021 EMP Data -------------------------------------------------------
 
 # Prepare EMP station coordinates to be joined to 2021 EMP data
 df_coord_emp_c <- df_coord_emp %>%
@@ -223,6 +249,8 @@ df_nutr_2021_emp_c <- df_nutr_2021_emp %>%
     starts_with("DissNitrateNitrite"),
     starts_with("DissOrthophos")
   )
+
+# 2.3 USGS-CAWSC Data -----------------------------------------------------
 
 # Prepare USGS-CAWSC station coordinates to be joined to USGS-CAWSC data
 df_coord_cawsc_c <- df_coord_cawsc %>%
@@ -318,28 +346,188 @@ df_nutr_cawsc_c <- df_nutr_cawsc %>%
     starts_with("DissOrthophos")
   )
 
+# 2.4 Combine All Data ----------------------------------------------------
+
 # Combine EMP data from 2021 and USGS-CAWSC data to discretewq data
-df_nutr_all <- bind_rows(df_nutr_package_c, df_nutr_2021_emp_c, df_nutr_cawsc_c)
+df_nutr_all <- bind_rows(df_nutr_package_c1, df_nutr_2021_emp_c, df_nutr_cawsc_c)
 
 
 # 3. Clean All Raw Data ---------------------------------------------------
 
 # Begin to clean all raw data
+df_nutr_all_c <- df_nutr_all %>%
+  # Remove records where all three nutrient variables are NA
+  filter(!if_all(c(DissAmmonia, DissNitrateNitrite, DissOrthophos), is.na)) %>%
+  # Remove records without latitude-longitude coordinates
+  filter(!if_any(c(Latitude, Longitude), is.na)) %>%
+  # Convert to sf object
+  st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326, remove = FALSE) %>%
+  # Change to crs of sf_delta
+  st_transform(crs = st_crs(sf_delta)) %>%
+  # Add subregions
+  st_join(sf_delta, join = st_intersects) %>%
+  # Remove any data outside our subregions of interest
+  filter(!is.na(SubRegion)) %>%
+  # Drop sf geometry column since it's no longer needed
+  st_drop_geometry() %>%
+  # Remove one DissAmmonia value equal to zero
+  mutate(DissAmmonia = if_else(DissAmmonia == 0, NA_real_, DissAmmonia))
 
 # Run a couple of QC checks:
-# Are there cases where multiple samples were collected at the same station in one day?
+# Create a vector of nutrient parameter names to check
+vars_nutr <- str_subset(names(df_nutr_all_c), "^Diss.+[^_Sign]$")
 
-# Remove data points that are more than 10 SDs away from the mean of each subregion
+# Are there cases where multiple samples were collected at the same station in one day?
+for (var in vars_nutr) {
+  print(var)
+  df_nutr_all_c %>%
+    filter(!is.na(.data[[var]])) %>%
+    count(Source, Station, Date) %>%
+    filter(n > 1) %>%
+    print()
+}
+# NO- no need to filter out duplicates
+
+# Look for and remove outliers from the data set:
+# Create function to flag data points with modified z-scores greater than a specified threshold
+flag_modzscore <- function(df, data_var, threshold) {
+  mod_zscore_sym <- sym(glue("{as_name(enquo(data_var))}_mod_zscore"))
+  mod_zscore_enquo <- enquo(mod_zscore_sym)
+
+  df %>%
+    mutate(
+      tmp_median = median({{ data_var }}, na.rm = TRUE),
+      tmp_mad = mad({{ data_var }}, na.rm = TRUE),
+      !!mod_zscore_sym := if_else(
+        tmp_mad == 0,
+        NA_real_,
+        abs(0.6745 * ({{ data_var }} - tmp_median) / tmp_mad)
+      ),
+      "{{data_var}}_mod_zscore_flag" := case_when(
+        is.na(!!mod_zscore_enquo) ~ FALSE,
+        !!mod_zscore_enquo > threshold ~ TRUE,
+        TRUE ~ FALSE
+      )
+    ) %>%
+    select(!starts_with("tmp_"))
+}
+
+# Create function to remove flagged data points and modify value in related _Sign variable to "= (unreliable)"
+rm_flagged <- function(df, data_var) {
+  sign_sym <- sym(glue("{as_name(enquo(data_var))}_Sign"))
+  sign_enquo <- enquo(sign_sym)
+  flag_sym <- sym(glue("{as_name(enquo(data_var))}_mod_zscore_flag"))
+  flag_enquo <- enquo(flag_sym)
+
+  df %>%
+    mutate(
+      !!sign_sym := if_else(!!flag_enquo == TRUE, "= (unreliable)", !!sign_enquo),
+      "{{data_var}}" := if_else(!!flag_enquo == TRUE, NA_real_, {{ data_var }})
+    )
+}
+
+# Flag data points that have modified z-scores greater than 15 grouped by subregion
+df_nutr_all_c1 <- df_nutr_all_c %>%
+  group_by(SubRegion) %>%
+  flag_modzscore(DissAmmonia, 15) %>%
+  flag_modzscore(DissNitrateNitrite, 15) %>%
+  flag_modzscore(DissOrthophos, 15) %>%
+  ungroup() %>%
+  # Remove flags from all data points in the Lower Mokelumne River subregion since these probably
+    # shouldn't be considered outliers
+  mutate(
+    DissAmmonia_mod_zscore_flag = if_else(
+      SubRegion == "Lower Mokelumne River" & DissAmmonia_mod_zscore_flag == TRUE,
+      FALSE,
+      DissAmmonia_mod_zscore_flag
+    ),
+    DissNitrateNitrite_mod_zscore_flag = if_else(
+      SubRegion == "Lower Mokelumne River" & DissNitrateNitrite_mod_zscore_flag == TRUE,
+      FALSE,
+      DissNitrateNitrite_mod_zscore_flag
+    ),
+    DissOrthophos_mod_zscore_flag = if_else(
+      SubRegion == "Lower Mokelumne River" & DissOrthophos_mod_zscore_flag == TRUE,
+      FALSE,
+      DissOrthophos_mod_zscore_flag
+    )
+  ) %>%
+  # Exclude remaining flagged data points
+  rm_flagged(DissAmmonia) %>%
+  rm_flagged(DissNitrateNitrite) %>%
+  rm_flagged(DissOrthophos) %>%
+  # Remove mod z-score variables
+  select(!contains("_mod_zscore"))
 
 # Finish cleaning all raw data
+df_nutr_all_c2 <- df_nutr_all_c1 %>%
+  # Add variables for adjusted calendar year, month, and season
+    # Adjusted calendar year: December-November, with December of the previous calendar year
+    # included with the following year
+  mutate(
+    Month = month(Date),
+    YearAdj = if_else(Month == 12, year(Date) + 1, year(Date)),
+    Season = case_when(
+      Month %in% 3:5 ~ "Spring",
+      Month %in% 6:8 ~ "Summer",
+      Month %in% 9:11 ~ "Fall",
+      Month %in% c(12, 1, 2) ~ "Winter"
+    )
+  ) %>%
+  # Restrict data to 1975-2021
+  filter(YearAdj %in% 1975:2021) %>%
+  # Add region designations
+  left_join(df_regions, by = c("Season", "SubRegion")) %>%
+  # Select variables to keep
+  select(
+    Source,
+    Station,
+    Latitude,
+    Longitude,
+    Region,
+    SubRegion,
+    YearAdj,
+    Season,
+    Month,
+    Date,
+    Datetime,
+    starts_with("DissAmmonia"),
+    starts_with("DissNitrateNitrite"),
+    starts_with("DissOrthophos"),
+    Long_term
+  ) %>%
+  # Arrange data
+  arrange(Date, Source, Station)
 
 
 # 4. Process Long-term Data -----------------------------------------------
 
+raw_nutr_1975_2021 <- df_nutr_all_c2 %>%
+  # Remove any data not chosen for the long-term analysis
+  filter(Long_term) %>%
+  # Only include data from the SR @ Freeport station (11447650) for the USGS-CAWSC survey
+  filter(!(Source == "USGS-CAWSC" & Station != "11447650")) %>%
+  # Remove data collected within the Suisun Marsh region since there is a large gap in the long-term record
+  filter(Region != "Suisun Marsh") %>%
+  # Remove the Long_term variable
+  select(-Long_term)
+
 
 # 5. Process Short-term Data ----------------------------------------------
+
+raw_nutr_2013_2021 <- df_nutr_all_c2 %>%
+  # Remove the Long_term variable
+  select(-Long_term) %>%
+  # Only include data from 2013-2021
+  filter(YearAdj %in% 2013:2021)
 
 
 # 6. Save and Export Data -------------------------------------------------
 
+# Save final data sets of raw nutrient concentrations as csv files for easier diffing
+write_csv(raw_nutr_1975_2021, "data-raw/Final/raw_nutr_1975_2021.csv")
+write_csv(raw_nutr_2013_2021, "data-raw/Final/raw_nutr_2013_2021.csv")
+
+# Save final data sets of raw nutrient concentrations as objects in the data package
+usethis::use_data(raw_nutr_1975_2021, raw_nutr_2013_2021, overwrite = TRUE)
 
