@@ -174,8 +174,8 @@
 "raw_wq_1975_2021"
 
 #' @title Raw values of nutrient concentrations for 1975-2021
-#' @description A data set containing raw values of three nutrient parameters
-#'   (Dissolved Ammonia, Dissolved Nitrate + Nitrite, and Dissolved
+#' @description A long-term data set containing raw values of three nutrient
+#'   parameters (Dissolved Ammonia, Dissolved Nitrate + Nitrite, and Dissolved
 #'   Ortho-phosphate) for 1975-2021. Used in the analyses for the Drought
 #'   Synthesis.
 #'
@@ -256,8 +256,8 @@
 "raw_nutr_1975_2021"
 
 #' @title Raw values of nutrient concentrations for 2013-2021
-#' @description A data set containing raw values of three nutrient parameters
-#'   (Dissolved Ammonia, Dissolved Nitrate + Nitrite, and Dissolved
+#' @description A short-term data set containing raw values of three nutrient
+#'   parameters (Dissolved Ammonia, Dissolved Nitrate + Nitrite, and Dissolved
 #'   Ortho-phosphate) for 2013-2021. Used in the analyses for the Drought
 #'   Synthesis.
 #'
