@@ -9,7 +9,7 @@ data frame with 235 rows and 8 columns
 \describe{
 \item{YearAdj}{Adjusted calendar year - December-November, with December of
 the previous calendar year included with the following year. For example,
-December of 2019 is the first month of 2020 in this data set.}
+December of 2020 is assigned year "2021" in this data set.}
 \item{Region}{Region designation within the larger Delta and Suisun
 Marsh/Bay (Confluence, North, SouthCentral, Suisun Bay, Suisun Marsh).}
 \item{SVIndex}{Sacramento Valley Water Year Index}
@@ -22,16 +22,14 @@ and Below Normal years in a row are a drought (D), multiple Wet or Above
 Normal years in a row are a wet period (W), and years that are not on a
 streak are neutral (N).}
 \item{Temperature}{Water temperature in degrees Celsius from the
-\code{discretewq} data package. Data from EMP and FMWT collected in 2021 were
-provided directly from staff who collected the data and should be
-considered provisional.}
-\item{Salinity}{Salinity value on the Practical Salinity Scale from the
-\code{discretewq} data package. Data from EMP and FMWT collected in 2021 were
-provided directly from staff who collected the data and should be
-considered provisional.}
-\item{Secchi}{Secchi depth in centimeters from the \code{discretewq} data
-package. Data from EMP and FMWT collected in 2021 were provided directly
+\code{discretewq} data package. Data collected in 2021 were provided directly
 from staff who collected the data and should be considered provisional.}
+\item{Salinity}{Salinity value on the Practical Salinity Scale from the
+\code{discretewq} data package. Data collected in 2021 were provided directly
+from staff who collected the data and should be considered provisional.}
+\item{Secchi}{Secchi depth in centimeters from the \code{discretewq} data
+package. Data collected in 2021 were provided directly from staff who
+collected the data and should be considered provisional.}
 }
 }
 \source{

@@ -1,6 +1,6 @@
 Package: DroughtData
 Title: Drought Synthesis Data
-Version: 0.1.1
+Version: 0.2.0
 Authors@R: 
     person(given = "Dave",
            family = "Bosworth",
@@ -16,7 +16,11 @@ BugReports: https://github.com/mountaindboz/DroughtData/issues
 Depends: 
     R (>= 2.10)
 Imports: 
-    tibble
+    magrittr,
+    dplyr,
+    tibble,
+    tidyr,
+    rlang
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

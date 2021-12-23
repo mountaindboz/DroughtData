@@ -3,13 +3,13 @@
 \docType{data}
 \name{raw_hydro_1975_2021}
 \alias{raw_hydro_1975_2021}
-\title{Raw daily values for hydrology and LSZ metrics for 1975-2021}
+\title{Raw daily values of hydrology and LSZ metrics for 1975-2021}
 \format{
 data frame with 17,137 rows and 6 columns
 \describe{
 \item{YearAdj}{Adjusted calendar year - December-November, with December of
 the previous calendar year included with the following year. For example,
-December of 1974 is assigned year "1975" in this data set.}
+December of 2020 is assigned year "2021" in this data set.}
 \item{Season}{Winter (Dec-Feb), Spring (Mar-May), Summer (Jun-Aug), or Fall
 (Sept-Nov)}
 \item{Date}{Calendar date}
@@ -18,8 +18,8 @@ Island from Dayflow. The values for October 2020 through October 2021 are
 estimated by data from the DTO station on CDEC.}
 \item{Export}{Total amount of water diverted from the Delta by the Federal
 and State governments to meet water agreements and contracts, expressed in
-cubic feet per second (cfs). From Dayflow. No data available for October
-2020 through October 2021 at this point.}
+cubic feet per second (cfs). All data is from Dayflow. No data available
+for October 2020 through October 2021 at this point.}
 \item{X2}{The distance from the Golden Gate Bridge to the point where daily
 average salinity is 2 parts per thousand at a depth of 1 meter off the
 bottom, expressed in kilometers. From Hutton et. al. for WY 1975-1996, from

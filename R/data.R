@@ -7,7 +7,7 @@
 #' \describe{
 #'   \item{YearAdj}{Adjusted calendar year - December-November, with December of
 #'     the previous calendar year included with the following year. For example,
-#'     December of 2019 is the first month of 2020 in this data set.}
+#'     December of 2020 is assigned year "2021" in this data set.}
 #'   \item{Season}{Winter (Dec-Feb), Spring (Mar-May), Summer (Jun-Aug), or Fall
 #'     (Sept-Nov)}
 #'   \item{SVIndex}{Sacramento Valley Water Year Index}
@@ -24,8 +24,8 @@
 #'     estimated by data from the DTO station on CDEC.}
 #'   \item{Export}{Total amount of water diverted from the Delta by the Federal
 #'     and State governments to meet water agreements and contracts, expressed in
-#'     cubic feet per second (cfs). From Dayflow. No data available for October
-#'     2020 through October 2021 at this point.}
+#'     cubic feet per second (cfs). All data is from Dayflow. No data available
+#'     for October 2020 through October 2021 at this point.}
 #'   \item{X2}{The distance from the Golden Gate Bridge to the point where daily
 #'     average salinity is 2 parts per thousand at a depth of 1 meter off the
 #'     bottom, expressed in kilometers. From Hutton et. al. for WY 1975-1996, from
@@ -61,7 +61,7 @@
 #' \describe{
 #'   \item{YearAdj}{Adjusted calendar year - December-November, with December of
 #'     the previous calendar year included with the following year. For example,
-#'     December of 2019 is the first month of 2020 in this data set.}
+#'     December of 2020 is assigned year "2021" in this data set.}
 #'   \item{Region}{Region designation within the larger Delta and Suisun
 #'     Marsh/Bay (Confluence, North, SouthCentral, Suisun Bay, Suisun Marsh).}
 #'   \item{SVIndex}{Sacramento Valley Water Year Index}
@@ -74,16 +74,14 @@
 #'     Normal years in a row are a wet period (W), and years that are not on a
 #'     streak are neutral (N).}
 #'   \item{Temperature}{Water temperature in degrees Celsius from the
-#'     `discretewq` data package. Data from EMP and FMWT collected in 2021 were
-#'     provided directly from staff who collected the data and should be
-#'     considered provisional.}
-#'   \item{Salinity}{Salinity value on the Practical Salinity Scale from the
-#'     `discretewq` data package. Data from EMP and FMWT collected in 2021 were
-#'     provided directly from staff who collected the data and should be
-#'     considered provisional.}
-#'   \item{Secchi}{Secchi depth in centimeters from the `discretewq` data
-#'     package. Data from EMP and FMWT collected in 2021 were provided directly
+#'     `discretewq` data package. Data collected in 2021 were provided directly
 #'     from staff who collected the data and should be considered provisional.}
+#'   \item{Salinity}{Salinity value on the Practical Salinity Scale from the
+#'     `discretewq` data package. Data collected in 2021 were provided directly
+#'     from staff who collected the data and should be considered provisional.}
+#'   \item{Secchi}{Secchi depth in centimeters from the `discretewq` data
+#'     package. Data collected in 2021 were provided directly from staff who
+#'     collected the data and should be considered provisional.}
 #' }
 #'
 #' @source
@@ -91,7 +89,7 @@
 #' * `discretewq` data package (version 2.1.0): <https://github.com/sbashevkin/discretewq/tree/1af04438c961c6d51f46cc777cbb6a142c1e3b30>
 "lt_regional"
 
-#' @title Raw daily values for hydrology and LSZ metrics for 1975-2021
+#' @title Raw daily values of hydrology and LSZ metrics for 1975-2021
 #' @description A data set containing raw daily values of the hydrology and Low
 #'   Salinity Zone (LSZ) metrics for 1975-2021. Seasonal averages of this data
 #'   are in the `lt_seasonal` data set. Used in the analyses for the Drought
@@ -101,7 +99,7 @@
 #' \describe{
 #'   \item{YearAdj}{Adjusted calendar year - December-November, with December of
 #'     the previous calendar year included with the following year. For example,
-#'     December of 1974 is assigned year "1975" in this data set.}
+#'     December of 2020 is assigned year "2021" in this data set.}
 #'   \item{Season}{Winter (Dec-Feb), Spring (Mar-May), Summer (Jun-Aug), or Fall
 #'     (Sept-Nov)}
 #'   \item{Date}{Calendar date}
@@ -110,8 +108,8 @@
 #'     estimated by data from the DTO station on CDEC.}
 #'   \item{Export}{Total amount of water diverted from the Delta by the Federal
 #'     and State governments to meet water agreements and contracts, expressed in
-#'     cubic feet per second (cfs). From Dayflow. No data available for October
-#'     2020 through October 2021 at this point.}
+#'     cubic feet per second (cfs). All data is from Dayflow. No data available
+#'     for October 2020 through October 2021 at this point.}
 #'   \item{X2}{The distance from the Golden Gate Bridge to the point where daily
 #'     average salinity is 2 parts per thousand at a depth of 1 meter off the
 #'     bottom, expressed in kilometers. From Hutton et. al. for WY 1975-1996, from
@@ -125,14 +123,20 @@
 #' * DTO data from CDEC: <https://cdec.water.ca.gov/dynamicapp/staMeta?station_id=DTO>
 "raw_hydro_1975_2021"
 
-#' @title Raw values for water quality measurements for 1975-2021
-#' @description A data set containing raw values of the water quality parameters
-#'   (water temperature, salinity, secchi depth) for 1975-2021. Seasonal and
-#'   Regional averages of this data are in the `lt_seasonal` and `lt_regional`
-#'   data sets, respectively. This data set contains only one data point per
-#'   `Station` and `Date` and excludes any data points that are more than 10
-#'   standard deviations away from the mean of each `SubRegion`. Used in the
-#'   analyses for the Drought Synthesis.
+#' @title Raw values of water quality measurements for 1975-2021
+#' @description A data set containing raw values of three water quality
+#'   parameters (water temperature, salinity, and secchi depth) for 1975-2021.
+#'   Seasonal and Regional averages of this data are in the `lt_seasonal` and
+#'   `lt_regional` data sets, respectively. Used in the analyses for the Drought
+#'   Synthesis.
+#'
+#'   Data from 1975-2020 are from the `discretewq` data package. Data collected
+#'   in 2021 were provided directly from staff who collected the data and should
+#'   be considered provisional.
+#'
+#'   This data set contains only one data point per `Station` and `Date` and
+#'   excludes any data points that are more than 10 standard deviations away
+#'   from the mean of each `SubRegion`.
 #'
 #' @format data frame with 34,523 rows and 14 columns
 #' \describe{
@@ -153,26 +157,179 @@
 #'     package.}
 #'   \item{YearAdj}{Adjusted calendar year - December-November, with December of
 #'     the previous calendar year included with the following year. For example,
-#'     December of 1974 is assigned year "1975" in this data set.}
+#'     December of 2020 is assigned year "2021" in this data set.}
 #'   \item{Season}{Winter (Dec-Feb), Spring (Mar-May), Summer (Jun-Aug), or Fall
 #'     (Sept-Nov)}
 #'   \item{Month}{Integer representing the month}
 #'   \item{Date}{Calendar date of the measurement}
 #'   \item{Datetime}{Date and time of the measurement. Not available for all
 #'     measurements.}
-#'   \item{Temperature}{Water temperature in degrees Celsius from the
-#'     `discretewq` data package. Data from EMP and FMWT collected in 2021 were
-#'     provided directly from staff who collected the data and should be
-#'     considered provisional.}
-#'   \item{Salinity}{Salinity value on the Practical Salinity Scale from the
-#'     `discretewq` data package. Data from EMP and FMWT collected in 2021 were
-#'     provided directly from staff who collected the data and should be
-#'     considered provisional.}
-#'   \item{Secchi}{Secchi depth in centimeters from the `discretewq` data
-#'     package. Data from EMP and FMWT collected in 2021 were provided directly
-#'     from staff who collected the data and should be considered provisional.}
+#'   \item{Temperature}{Water temperature in degrees Celsius}
+#'   \item{Salinity}{Salinity value on the Practical Salinity Scale}
+#'   \item{Secchi}{Secchi depth in centimeters}
 #' }
 #'
 #' @source
 #' `discretewq` data package (version 2.1.0): <https://github.com/sbashevkin/discretewq/tree/1af04438c961c6d51f46cc777cbb6a142c1e3b30>
 "raw_wq_1975_2021"
+
+#' @title Raw values of nutrient concentrations for 1975-2021
+#' @description A long-term data set containing raw values of three nutrient
+#'   parameters (Dissolved Ammonia, Dissolved Nitrate + Nitrite, and Dissolved
+#'   Ortho-phosphate) for 1975-2021. Used in the analyses for the Drought
+#'   Synthesis.
+#'
+#'   Most of the nutrient data from EMP (DWR's Environmental Monitoring Program)
+#'   and all of the nutrient data from USGS-SFBP (USGS's San Francisco Bay
+#'   Project) are from the `discretewq` data package. Data from EMP collected in
+#'   2021 was provided directly from staff who collected the data and should be
+#'   considered provisional. Data from USGS-CASWC were downloaded directly from
+#'   the Water Quality Portal using the `dataRetrieval` R package. Some of the
+#'   data from USGS-CASWC is also considered provisional.
+#'
+#'   This data set contains only one data point per `Station` and `Date` and
+#'   excludes any data points that have modified z-scores greater than 15
+#'   grouped by `SubRegion`. Additionally, samples collected in the Suisun Marsh
+#'   `Region` were excluded from this data set due to a large gap in the
+#'   long-term record.
+#'
+#' @format data frame with 13,397 rows and 17 columns
+#' \describe{
+#'   \item{Source}{Name of the source dataset. Either EMP (DWR's Environmental
+#'     Monitoring Program), USGS-SFBP (USGS's San Francisco Bay Project), or
+#'     USGS-CAWSC (USGS's California Water Science Center)}
+#'   \item{Station}{Location where measurement was collected}
+#'   \item{Latitude}{Latitude of `Station` in Decimal Degrees (WGS 84 Datum)}
+#'   \item{Longitude}{Longitude of `Station` in Decimal Degrees (WGS 84 Datum)}
+#'   \item{Region}{Region designation of `Station` within the larger Delta and
+#'     Suisun Marsh/Bay (Confluence, North, SouthCentral, Suisun Bay, Suisun
+#'     Marsh). The Drought Synthesis team categorized `SubRegion`s into broader
+#'     `Region`s using [this crosswalk](https://github.com/mountaindboz/DroughtData/blob/master/data-raw/Rosies_regions.csv)
+#'     .}
+#'   \item{SubRegion}{Subregion designation of `Station` as defined by the
+#'     `R_EDSM_Subregions_Mahardja_FLOAT` shapefile from the
+#'     [`deltamapr`](https://github.com/InteragencyEcologicalProgram/deltamapr)
+#'     package.}
+#'   \item{YearAdj}{Adjusted calendar year - December-November, with December of
+#'     the previous calendar year included with the following year. For example,
+#'     December of 2020 is assigned year "2021" in this data set.}
+#'   \item{Season}{Winter (Dec-Feb), Spring (Mar-May), Summer (Jun-Aug), or Fall
+#'     (Sept-Nov)}
+#'   \item{Month}{Integer representing the month}
+#'   \item{Date}{Calendar date of the measurement}
+#'   \item{Datetime}{Date and time of the measurement}
+#'   \item{DissAmmonia_Sign}{A symbol representing whether the Dissolved Ammonia
+#'     value is below the reporting limit or above it. Contains one of four
+#'     symbols: "<", "< (estimated)", "=", or "= (unreliable)". See the section
+#'     below for more information about what these symbols represent.}
+#'   \item{DissAmmonia}{Dissolved Ammonia value in mg/L as N}
+#'   \item{DissNitrateNitrite_Sign}{A symbol representing whether the Dissolved
+#'     Nitrate + Nitrite value is below the reporting limit or above it. Contains
+#'     one of four symbols: "<", "< (estimated)", "=", or "= (unreliable)". See
+#'     the section below for more information about what these symbols represent.}
+#'   \item{DissNitrateNitrite}{Dissolved Nitrate + Nitrite value in mg/L as N}
+#'   \item{DissOrthophos_Sign}{A symbol representing whether the Dissolved
+#'     Ortho-phosphate value is below the reporting limit or above it. Contains
+#'     one of four symbols: "<", "< (estimated)", "=", or "= (unreliable)". See
+#'     the section below for more information about what these symbols represent.}
+#'   \item{DissOrthophos}{Dissolved Ortho-phosphate value in mg/L as P}
+#' }
+#'
+#' @section More information about the `_Sign` variables:
+#' For the variables that have the _Sign suffix, the symbols in these variables
+#' represent four conditions of the value contained in its corresponding result
+#' variable.
+#' * "<" - The value is below the Reporting Limit (RL) with the value in the
+#' corresponding result variable equal to the RL.
+#' * "< (estimated)" - The value is below the RL, but the RL is unknown. The
+#' value in the corresponding result variable is the estimated RL value.
+#' * "=" - The value is above the RL with the value in the corresponding result
+#' variable equal to the actual value measured by the laboratory. An `NA` value
+#' in the corresponding result variable indicates that the value is missing or
+#' wasn't collected.
+#' * "= (unreliable)" - The value in the corresponding result variable was
+#' determined to be an outlier and is excluded from the data set.
+#'
+#' @source
+#' * `discretewq` data package (version 2.1.0): <https://github.com/sbashevkin/discretewq/tree/78232cec30df1e2606431eeae3710ca25cf0c7f7>
+#' * Water Quality Portal hosted by the National Water Quality Monitoring Council: <https://www.waterqualitydata.us/>
+"raw_nutr_1975_2021"
+
+#' @title Raw values of nutrient concentrations for 2013-2021
+#' @description A short-term data set containing raw values of three nutrient
+#'   parameters (Dissolved Ammonia, Dissolved Nitrate + Nitrite, and Dissolved
+#'   Ortho-phosphate) for 2013-2021. Used in the analyses for the Drought
+#'   Synthesis.
+#'
+#'   Most of the nutrient data from EMP (DWR's Environmental Monitoring Program)
+#'   and all of the nutrient data from USGS-SFBP (USGS's San Francisco Bay
+#'   Project) are from the `discretewq` data package. Data from EMP collected in
+#'   2021 was provided directly from staff who collected the data and should be
+#'   considered provisional. Data from USGS-CASWC were downloaded directly from
+#'   the Water Quality Portal using the `dataRetrieval` R package. Some of the
+#'   data from USGS-CASWC is also considered provisional.
+#'
+#'   This data set contains only one data point per `Station` and `Date` and
+#'   excludes any data points that have modified z-scores greater than 15
+#'   grouped by `SubRegion`.
+#'
+#' @format data frame with 3,316 rows and 17 columns
+#' \describe{
+#'   \item{Source}{Name of the source dataset. Either EMP (DWR's Environmental
+#'     Monitoring Program), USGS-SFBP (USGS's San Francisco Bay Project), or
+#'     USGS-CAWSC (USGS's California Water Science Center)}
+#'   \item{Station}{Location where measurement was collected}
+#'   \item{Latitude}{Latitude of `Station` in Decimal Degrees (WGS 84 Datum)}
+#'   \item{Longitude}{Longitude of `Station` in Decimal Degrees (WGS 84 Datum)}
+#'   \item{Region}{Region designation of `Station` within the larger Delta and
+#'     Suisun Marsh/Bay (Confluence, North, SouthCentral, Suisun Bay, Suisun
+#'     Marsh). The Drought Synthesis team categorized `SubRegion`s into broader
+#'     `Region`s using [this crosswalk](https://github.com/mountaindboz/DroughtData/blob/master/data-raw/Rosies_regions.csv)
+#'     .}
+#'   \item{SubRegion}{Subregion designation of `Station` as defined by the
+#'     `R_EDSM_Subregions_Mahardja_FLOAT` shapefile from the
+#'     [`deltamapr`](https://github.com/InteragencyEcologicalProgram/deltamapr)
+#'     package.}
+#'   \item{YearAdj}{Adjusted calendar year - December-November, with December of
+#'     the previous calendar year included with the following year. For example,
+#'     December of 2020 is assigned year "2021" in this data set.}
+#'   \item{Season}{Winter (Dec-Feb), Spring (Mar-May), Summer (Jun-Aug), or Fall
+#'     (Sept-Nov)}
+#'   \item{Month}{Integer representing the month}
+#'   \item{Date}{Calendar date of the measurement}
+#'   \item{Datetime}{Date and time of the measurement}
+#'   \item{DissAmmonia_Sign}{A symbol representing whether the Dissolved Ammonia
+#'     value is below the reporting limit or above it. Contains one of four
+#'     symbols: "<", "< (estimated)", "=", or "= (unreliable)". See the section
+#'     below for more information about what these symbols represent.}
+#'   \item{DissAmmonia}{Dissolved Ammonia value in mg/L as N}
+#'   \item{DissNitrateNitrite_Sign}{A symbol representing whether the Dissolved
+#'     Nitrate + Nitrite value is below the reporting limit or above it. Contains
+#'     one of four symbols: "<", "< (estimated)", "=", or "= (unreliable)". See
+#'     the section below for more information about what these symbols represent.}
+#'   \item{DissNitrateNitrite}{Dissolved Nitrate + Nitrite value in mg/L as N}
+#'   \item{DissOrthophos_Sign}{A symbol representing whether the Dissolved
+#'     Ortho-phosphate value is below the reporting limit or above it. Contains
+#'     one of four symbols: "<", "< (estimated)", "=", or "= (unreliable)". See
+#'     the section below for more information about what these symbols represent.}
+#'   \item{DissOrthophos}{Dissolved Ortho-phosphate value in mg/L as P}
+#' }
+#'
+#' @section More information about the `_Sign` variables:
+#' For the variables that have the _Sign suffix, the symbols in these variables
+#' represent four conditions of the value contained in its corresponding result
+#' variable.
+#' * "<" - The value is below the Reporting Limit (RL) with the value in the
+#' corresponding result variable equal to the RL.
+#' * "< (estimated)" - The value is below the RL, but the RL is unknown. The
+#' value in the corresponding result variable is the estimated RL value.
+#' * "=" - The value is above the RL with the value in the corresponding result
+#' variable equal to the actual value measured by the laboratory. An `NA` value
+#' in the corresponding result variable indicates that the value is missing or
+#' wasn't collected.
+#' * "= (unreliable)" - The value in the corresponding result variable was
+#' determined to be an outlier and is excluded from the data set.
+#'
+#' @inherit raw_nutr_1975_2021 return source
+"raw_nutr_2013_2021"
+

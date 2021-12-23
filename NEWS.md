@@ -1,3 +1,10 @@
+# DroughtData 0.2.0
+
+* Added two raw nutrient data sets to the package: 
+  * `raw_nutr_1975_2021` which contains long-term data from 1975-2021
+  * `raw_nutr_2013_2021` which contains short-term data from 2013-2021
+* Added a helper function `drt_avg_data` which calculates either seasonal or regional averages of the raw drought data
+
 # DroughtData 0.1.1
 
 * Removed a single temperature outlier collected at S42 (EMP) on 5/3/1983 from all related data sets including `raw_wq_1975_2021`, `lt_seasonal`, and `lt_regional`.
