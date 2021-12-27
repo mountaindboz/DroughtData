@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 # DroughtData
 
 <!-- badges: start -->
+[![R-CMD-check](https://github.com/mountaindboz/DroughtData/workflows/R-CMD-check/badge.svg)](https://github.com/mountaindboz/DroughtData/actions)
 <!-- badges: end -->
 
 An R data package containing data sets used in the Drought Synthesis project. This data package also contains useful metadata describing the data sets, the processing scripts used to derive the data, and a couple helper functions. 
