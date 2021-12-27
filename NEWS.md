@@ -1,5 +1,7 @@
 # DroughtData 0.2.1
 
+* Added an additional helper function `drt_add_yr_assign` which adds year assignment information to a data frame. The year assignment information is used in the analyses for the Drought Synthesis.
+
 # DroughtData 0.2.0
 
 * Added two raw nutrient data sets to the package: 
