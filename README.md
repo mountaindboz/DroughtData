@@ -8,8 +8,8 @@
 
 An R data package containing data sets used in the Drought Synthesis
 project. This data package also contains useful metadata describing the
-data sets, the processing scripts used to derive the data, and a helper
-function to calculate seasonal and regional averages.
+data sets, the processing scripts used to derive the data, and a couple
+helper functions.
 
 This package provides the following data tables:
 
@@ -29,6 +29,14 @@ This package provides the following data tables:
 -   `raw_nutr_2013_2021`: a short-term data set containing raw values of
     three nutrient parameters (Dissolved Ammonia, Dissolved Nitrate +
     Nitrite, and Dissolved Ortho-phosphate) for 2013-2021
+
+This package also contains the following helper functions specific to
+the Drought Synthesis project:
+
+-   `drt_avg_data`: Calculates seasonal and regional averages
+-   `drt_add_yr_assign`: Adds year assignment information to a data
+    frame. The year assignment information is used in the analyses for
+    the Drought Synthesis.
 
 ## Installation
 
