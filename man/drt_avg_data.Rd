@@ -13,7 +13,8 @@ drt_avg_data(
 )
 }
 \arguments{
-\item{df}{A data frame or tibble containing the raw data to average}
+\item{df}{A data frame or tibble containing the raw data to average. Must
+contain variables for \code{Month}, \code{Season}, \code{Region}, and \code{YearAdj}.}
 
 \item{data_var}{The variable name in \code{df} containing the values to be
 averaged. Supports tidy or non-standard evaluation as default. Place the

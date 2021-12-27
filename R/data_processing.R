@@ -2,7 +2,8 @@
 #' @description Calculates either the seasonal or regional averages of raw data
 #'   used for the Drought Synthesis
 #'
-#' @param df A data frame or tibble containing the raw data to average
+#' @param df A data frame or tibble containing the raw data to average. Must
+#'   contain variables for `Month`, `Season`, `Region`, and `YearAdj`.
 #' @param data_var The variable name in `df` containing the values to be
 #'   averaged. Supports tidy or non-standard evaluation as default. Place the
 #'   variable name in quotes if the `.quote` argument is `TRUE`.
@@ -79,3 +80,29 @@ drt_avg_data <- function(df,
 
   return(df_avg_f)
 }
+
+#' @title Add year assignment information
+#' @description Adds year assignment information to a data frame or tibble. The
+#'   information added includes the following variables for each year in the
+#'   data frame. This information is used in the analyses for the Drought
+#'   Synthesis.
+#' * `SVIndex` - Sacramento Valley Water Year Index
+#' * `YearType` - Water year type based on Sacramento Valley Water Year Index
+#'   (Critical, Dry, Below Normal, Above Normal, or Wet)
+#' * `Drought` - Drought/Wet/Neutral classification. Multiple Dry, Critical, and
+#'   Below Normal years in a row are a drought (D), multiple Wet or Above Normal
+#'   years in a row are a wet period (W), and years that are not on a streak are
+#'   neutral (N).
+#'
+#' @param df A data frame or tibble containing the data to add the year
+#'   assignment information to. Must contain a variable for `YearAdj`, which is
+#'   the adjusted calendar year (December-November, with December of the
+#'   previous calendar year included with the following year).
+#'
+#' @return A tibble containing the original data with the addition of the year
+#'   assignment information
+#' @export
+drt_add_yr_assign <- function(df) {
+  df %>% dplyr::left_join(df_yr_type, by = "YearAdj")
+}
+

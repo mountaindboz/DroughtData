@@ -1,6 +1,6 @@
 Package: DroughtData
 Title: Drought Synthesis Data
-Version: 0.2.0
+Version: 0.2.1
 Authors@R: 
     person(given = "Dave",
            family = "Bosworth",
