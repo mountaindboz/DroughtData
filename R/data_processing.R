@@ -2,7 +2,8 @@
 #' @description Calculates either the seasonal or regional averages of raw data
 #'   used for the Drought Synthesis
 #'
-#' @param df A data frame or tibble containing the raw data to average
+#' @param df A data frame or tibble containing the raw data to average. Must
+#'   contain variables for `Month`, `Season`, `Region`, and `YearAdj`.
 #' @param data_var The variable name in `df` containing the values to be
 #'   averaged. Supports tidy or non-standard evaluation as default. Place the
 #'   variable name in quotes if the `.quote` argument is `TRUE`.
