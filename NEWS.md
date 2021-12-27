@@ -1,3 +1,5 @@
+# DroughtData 0.2.1
+
 # DroughtData 0.2.0
 
 * Added two raw nutrient data sets to the package: 
