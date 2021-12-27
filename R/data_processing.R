@@ -103,7 +103,6 @@ drt_avg_data <- function(df,
 #'   assignment information
 #' @export
 drt_add_yr_assign <- function(df) {
-  load("R/sysdata.rda")
   df %>% dplyr::left_join(df_yr_type, by = "YearAdj")
 }
 
