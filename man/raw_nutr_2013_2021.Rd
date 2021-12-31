@@ -49,8 +49,10 @@ the section below for more information about what these symbols represent.}
 }
 \source{
 \itemize{
-\item \code{discretewq} data package (version 2.1.0): \url{https://github.com/sbashevkin/discretewq/tree/78232cec30df1e2606431eeae3710ca25cf0c7f7}
-\item Water Quality Portal hosted by the National Water Quality Monitoring Council: \url{https://www.waterqualitydata.us/}
+\item \code{discretewq} data package (version 2.1.0):
+\url{https://github.com/sbashevkin/discretewq/tree/78232cec30df1e2606431eeae3710ca25cf0c7f7}
+\item Water Quality Portal hosted by the National Water Quality Monitoring
+Council: \url{https://www.waterqualitydata.us/}
 }
 }
 \usage{
