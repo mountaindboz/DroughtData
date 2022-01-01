@@ -5,21 +5,21 @@
 # Load packages
 library(tidyverse)
 library(lubridate)
-library(cder)
 library(readxl)
+library(pdftools)
+library(glue)
 
 
 # 1. Import Data ----------------------------------------------------------
 
-# If it hasn't been done already, download and save local copies of the DAYFLOW data from
-  # the CNRA data portal and Delta Outflow data (DTO) from CDEC since the DAYFLOW files may
-  # change and the DTO data is provisional
+# If it hasn't been done already, download and save local copies of the DAYFLOW
+  # data from the CNRA data portal since the DAYFLOW files may change
 
-# Set download to TRUE if need to download and save DAYFLOW and DTO data
-download <- FALSE
+# Set download_dayflow to TRUE if need to download and save DAYFLOW data
+download_dayflow <- FALSE
 
-# Download and save DAYFLOW and DTO data if necessary
-if (download == TRUE) {
+# Download and save DAYFLOW data if necessary
+if (download_dayflow == TRUE) {
   # Define directory for raw hydrology data
   dir_hydro <- "data-raw/Hydrology/"
 
@@ -28,21 +28,93 @@ if (download == TRUE) {
   dayflow_1984_1996 <- read_csv("https://data.cnra.ca.gov/dataset/06ee2016-b138-47d7-9e85-f46fae674536/resource/cb04e626-9729-4105-af81-f6e5a37f116a/download/dayflow-results-1984-1996.csv")
   dayflow_1997_2020 <- read_csv("https://data.cnra.ca.gov/dataset/06ee2016-b138-47d7-9e85-f46fae674536/resource/21c377fe-53b8-4bd6-9e1f-2025221be095/download/dayflow-results-1997-2020.csv")
 
-  # Download and save Delta Outflow (DTO) from CDEC for WY 2021 until DAYFLOW data is available
-  dto_2021 <-
-    cdec_query(
-      stations = "DTO",
-      sensors = 23,
-      durations = "D",
-      start.date = "2020-10-01",
-      end.date = "2021-10-31"
-    )
-
   # Save data as .csv files in the "data-raw/Hydrology" folder
   dayflow_1970_1983 %>% write_csv(file.path(dir_hydro, "dayflow_1970-1983.csv"))
   dayflow_1984_1996 %>% write_csv(file.path(dir_hydro, "dayflow_1984-1996.csv"))
   dayflow_1997_2020 %>% write_csv(file.path(dir_hydro, "dayflow_1997-2020.csv"))
-  dto_2021 %>% write_csv(file.path(dir_hydro, "dto_2021.csv"))
+
+  # Clean up
+  rm(dir_hydro, dayflow_1970_1983, dayflow_1984_1996, dayflow_1997_2020)
+}
+
+# If it hasn't been done already, download and save local copies of the Total
+  # Delta Exports and NDOI daily Outflow Index for Oct 2020 - Nov 2021 from the
+  # USBR Delta Outflow Computation reports since some of this data is preliminary
+
+# Set download_usbr to TRUE if need to download and save USBR data
+download_usbr <- FALSE
+
+# Download and save Delta Export and Outflow data from the USBR Delta Outflow
+  # Computation reports if necessary
+if (download_usbr == TRUE) {
+  # Function to download Delta Outflow Computation reports from the USBR website
+    # to the temporary R directory
+    # USBR website: https://www.usbr.gov/mp/cvo/pmdoc.html
+  dnld_usbr_rpt <- function(month_year) {
+    usbr_rpt_url <- glue("https://www.usbr.gov/mp/cvo/vungvari/dout{month_year}.pdf")
+    saved_file <- file.path(tempdir(), glue("Delta_Outflow{month_year}.pdf"))
+    download.file(usbr_rpt_url, saved_file, mode = "wb")
+  }
+
+  # Create vector of months-years for the URL's of the pdf files
+  vec_mo_yr <-
+    c(
+      "1020",
+      "1120",
+      "1220",
+      "0121",
+      "0221",
+      "0321",
+      "0421",
+      "0521",
+      "0621",
+      "0721",
+      "0821",
+      "0921",
+      "1021",
+      "1121"
+    )
+
+  # Download Delta Outflow Computation reports for Oct 2020 - Nov 2021
+  for (i in vec_mo_yr) {dnld_usbr_rpt(i)}
+
+  # Create a vector of all file paths for the Delta Outflow Computation reports
+  fp_usbr_rpt <- dir(path = tempdir(), pattern = "\\.pdf$", full.names = TRUE)
+
+  # Function to convert pdf_text for the Delta Outflow Computation reports to a
+  # tibble with the daily Total Exports and Outflows
+  conv_pdf2tibb <- function(pdf_txt) {
+    vec_pdf_txt <- read_lines(pdf_txt)
+
+    # Keep "rows" 12-42 in the data and convert to a matrix with 23 columns
+    mat_pdf_txt <- vec_pdf_txt[12:42] %>%
+      str_squish() %>%
+      str_split_fixed(pattern = " ", n = 23)
+
+    # Keep the columns for Date, Export, and Outflow and rename them
+    mat_pdf_txt2 <- mat_pdf_txt[,c(1, 16, 18)]
+    colnames(mat_pdf_txt2) <- c("Date", "Export", "Outflow")
+
+    # Convert matrix to a tibble
+    as_tibble(mat_pdf_txt2)
+  }
+
+  # Import the Delta Outflow Computation reports and convert data to a tibble with
+    # the daily Total Exports and Outflows
+  df_usbr_rpt <-
+    map(fp_usbr_rpt, pdf_text) %>%
+    map(conv_pdf2tibb) %>%
+    bind_rows() %>%
+    # Remove blank rows
+    filter(Date != "-") %>%
+    # Remove commas from Export and Outflow data
+    mutate(across(c(Export, Outflow), ~str_remove(.x, ",")))
+
+  # Save data as a .csv file in the "data-raw/Hydrology" folder
+  df_usbr_rpt %>% write_csv("data-raw/Hydrology/usbr_export_outflow_2021.csv")
+
+  # Clean up
+  rm(dnld_usbr_rpt, vec_mo_yr, i, fp_usbr_rpt, conv_pdf2tibb, df_usbr_rpt)
 }
 
 # Define file path for raw hydrology data
@@ -67,12 +139,9 @@ df_dayflow_1997_2020 <-
     col_types = cols_only(Date = "c", EXPORTS = "d", OUT = "d", X2 = "d")
   )
 
-# Import Delta Outflow (DTO) from CDEC for WY 2021 until DAYFLOW data is available
-df_dto_2021 <-
-  read_csv(
-    file.path(fp_hydro, "dto_2021.csv"),
-    col_types = cols_only(DateTime = "T", Value = "d")
-  )
+# Import Delta Export and Outflow data from the USBR Delta Outflow Computation
+  # reports for Oct 2020 - Nov 2021 until DAYFLOW data is available
+df_usbr_2021 <- read_csv(file.path(fp_hydro, "usbr_export_outflow_2021.csv"), col_types = "cdd")
 
 # Import estimated X2 values for earlier years based on Hutton et al. paper
 df_hutton_x2 <-
@@ -105,13 +174,11 @@ df_dayflow_v2 <- df_dayflow_v1 %>%
   mutate(X2 = if_else(is.na(X2), X2Hutton, X2)) %>%
   select(-X2Hutton)
 
-# Prepare DTO data to be combined with DAYFLOW data
-df_dto_2021_c <- df_dto_2021 %>%
-  mutate(Date = date(DateTime)) %>%
-  select(Date, Outflow = Value)
+# Prepare USBR Delta Export and Outflow data to be combined with DAYFLOW data
+df_usbr_2021_c <- df_usbr_2021 %>% mutate(Date = mdy(Date))
 
-# Add DTO data to the DAYFLOW data
-df_dayflow_v3 <- bind_rows(df_dayflow_v2, df_dto_2021_c)
+# Add USBR data to the DAYFLOW data
+df_dayflow_v3 <- bind_rows(df_dayflow_v2, df_usbr_2021_c) %>% arrange(Date)
 
 # Calculate X2 for WY 2021 based on DAYFLOW documentation:
   # The 1994 Bay-Delta agreement established standards for salinity in the estuary.
@@ -127,13 +194,8 @@ df_dayflow_v3 <- bind_rows(df_dayflow_v2, df_dto_2021_c)
   # X2(t) = 10.16 + 0.945*X2(t-1) - 1.487log(QOUT(t))
   # NOTE: It seems like the log in the DAYFLOW notation is referring to Log10 (i.e., not ln)
 
-# >>>>> On 9/2/2021 DTO outflow was a negative number which won't work in the equation to
-  # calculate X2 (the log of a negative number is not defined); therefore, we will only use
-  # the equation to fill in X2 from 10/1/2020 - 9/1/2021. We will need to wait until the
-  # DAYFLOW program publishes their WY 2021 results to have X2 values past this point.
-
-# Fill in X2 data for most current WY data (from 10/1/2020 to 9/1/2021)
-for (i in which(df_dayflow_v3$Date == "2020-10-01"):which(df_dayflow_v3$Date == "2021-09-01")) {
+# Fill in X2 data for most current WY data (from 10/1/2020 to 11/30/2021)
+for (i in which(df_dayflow_v3$Date == "2020-10-01"):which(df_dayflow_v3$Date == "2021-11-30")) {
   df_dayflow_v3$X2[i] = 10.16 + 0.945*df_dayflow_v3$X2[i-1] - 1.487*log10(df_dayflow_v3$Outflow[i])
 }
 
