@@ -22,10 +22,8 @@ df_hydro_season <- raw_hydro_1975_2021 %>%
   group_by(YearAdj, Season) %>%
   summarize(across(c("Outflow", "Export", "X2"), mean, na.rm = TRUE)) %>%
   ungroup() %>%
-  # Convert NaN values to NA values
-  mutate(across(c("Outflow", "Export", "X2"), ~if_else(is.nan(.x), NA_real_, .x))) %>%
-  # Don't include Fall 2021 for X2 since data only available for 9/1/2021
-  mutate(X2 = if_else(YearAdj == 2021 & Season == "Fall", NA_real_, X2))
+  # Convert any NaN values to NA values
+  mutate(across(c("Outflow", "Export", "X2"), ~if_else(is.nan(.x), NA_real_, .x)))
 
 ## WARNING!: Hutton et al. had missing X2 data and summarized seasonal X2 may be skewed as a result.
 
@@ -141,22 +139,16 @@ df_wq_region <-
 
 # 6. Integrate data sets --------------------------------------------------
 
-# Import region assignments
-df_regions <- read_csv("data-raw/Rosies_regions.csv")
-
 # Create data frames that contain all possible combinations of year, season, and region
 lt_yrs <- c(1975:2021)
 df_yr <- tibble(Year = lt_yrs)
 df_yr_season <- expand_grid(YearAdj = lt_yrs, Season = c("Winter", "Spring", "Summer", "Fall"))
-df_yr_region <- expand_grid(YearAdj = lt_yrs, Region = unique(df_regions$Region))
-
-# Import year assignments
-df_yr_type <- read_csv("data-raw/Year_assignments.csv") %>% rename(YearAdj = Year)
+df_yr_region <- expand_grid(YearAdj = lt_yrs, Region = unique(DroughtData:::df_regions$Region))
 
 # Integrate data sets with seasonal averages for each year for the entire Delta
 lst_seasonal <- lst(
   df_yr_season,
-  df_yr_type,
+  DroughtData:::df_yr_type,
   df_hydro_season,
   df_wq_season
 )
@@ -166,7 +158,7 @@ lt_seasonal <- reduce(lst_seasonal, left_join)
 # Integrate data sets with regional averages for each year
 lst_regional <- lst(
   df_yr_region,
-  df_yr_type,
+  DroughtData:::df_yr_type,
   df_wq_region
 )
 
