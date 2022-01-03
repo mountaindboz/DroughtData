@@ -1,5 +1,7 @@
 # DroughtData 0.3.0
 
+* Updated the hydrology parameters (Delta Outflow, Delta Exports, and X2) in the raw and long-term integrated data sets with data from the USBR Delta Outflow Computation reports for October 2020 - November 2021
+
 # DroughtData 0.2.1
 
 * Added an additional helper function `drt_add_yr_assign` which adds year assignment information to a data frame. The year assignment information is used in the analyses for the Drought Synthesis.
