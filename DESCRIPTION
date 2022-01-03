@@ -1,6 +1,6 @@
 Package: DroughtData
 Title: Drought Synthesis Data
-Version: 0.2.1.9000
+Version: 0.3.0
 Authors@R: 
     person(given = "Dave",
            family = "Bosworth",
@@ -8,8 +8,8 @@ Authors@R:
            email = "David.Bosworth@water.ca.gov",
            comment = c(ORCID = "0000-0003-0740-3390"))
 Description: Contains data sets used in the Drought Synthesis project. This data package also 
-  contains useful metadata describing the data sets and the processing scripts used to derive the
-  data sets.
+  contains useful metadata describing the data sets, the processing scripts used to derive the 
+  data, and a couple helper functions.
 License: Apache License (>= 2)
 URL: https://github.com/mountaindboz/DroughtData
 BugReports: https://github.com/mountaindboz/DroughtData/issues
