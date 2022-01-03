@@ -20,18 +20,20 @@
 #'     Normal years in a row are a wet period (W), and years that are not on a
 #'     streak are neutral (N).}
 #'   \item{Outflow}{Net Delta outflow in cubic feet per second (cfs) at Chipps
-#'     Island from Dayflow. The values for October 2020 through October 2021 are
-#'     estimated by data from the DTO station on CDEC.}
+#'     Island. Data from WY 1975-2020 is from Dayflow. The values for October 2020
+#'     through November 2021 are estimated by data from the USBR Delta Outflow
+#'     Computation reports.}
 #'   \item{Export}{Total amount of water diverted from the Delta by the Federal
 #'     and State governments to meet water agreements and contracts, expressed in
-#'     cubic feet per second (cfs). All data is from Dayflow. No data available
-#'     for October 2020 through October 2021 at this point.}
+#'     cubic feet per second (cfs). Data from WY 1975-2020 is from Dayflow. The
+#'     values for October 2020 through November 2021 are estimated by data from
+#'     the USBR Delta Outflow Computation reports.}
 #'   \item{X2}{The distance from the Golden Gate Bridge to the point where daily
 #'     average salinity is 2 parts per thousand at a depth of 1 meter off the
 #'     bottom, expressed in kilometers. From Hutton et al. (2017) for WY
 #'     1975-1996, from Dayflow for WY 1997-2020, and estimated using the
-#'     Autoregressive Lag Model from Dayflow and Outflow from the DTO station on
-#'     CDEC for October 2020 through August 2021.}
+#'     Autoregressive Lag Model from Dayflow and Outflow from the USBR Delta
+#'     Outflow Computation reports for October 2020 through November 2021.}
 #'   \item{Temperature}{Water temperature in degrees Celsius from the
 #'     `discretewq` data package. Data from EMP and FMWT collected in 2021 were
 #'     provided directly from staff who collected the data and should be
@@ -49,7 +51,8 @@
 #' * Sacramento Valley Water Year Index:
 #'   <https://cdec.water.ca.gov/reportapp/javareports?name=WSIHIST>
 #' * Dayflow: <https://data.cnra.ca.gov/dataset/dayflow>
-#' * DTO data from CDEC: <https://cdec.water.ca.gov/dynamicapp/staMeta?station_id=DTO>
+#' * USBR Delta Outflow Computation reports:
+#'   <https://www.usbr.gov/mp/cvo/pmdoc.html>
 #' * Hutton, P. H., J. S. Rath, and S. B Roy. 2017. Freshwater flow to the San
 #'   Francisco Bay-Delta estuary over nine decades (Part 1): Trend evaluation.
 #'   Hydrological Processes **31**(14): 2500-2515. <https://doi.org/10.1002/hyp.11201>.
@@ -102,7 +105,7 @@
 #'   are in the `lt_seasonal` data set. Used in the analyses for the Drought
 #'   Synthesis.
 #'
-#' @format data frame with 17,137 rows and 6 columns
+#' @format data frame with 17,167 rows and 6 columns
 #' \describe{
 #'   \item{YearAdj}{Adjusted calendar year - December-November, with December of
 #'     the previous calendar year included with the following year. For example,
@@ -111,23 +114,26 @@
 #'     (Sept-Nov)}
 #'   \item{Date}{Calendar date}
 #'   \item{Outflow}{Net Delta outflow in cubic feet per second (cfs) at Chipps
-#'     Island from Dayflow. The values for October 2020 through October 2021 are
-#'     estimated by data from the DTO station on CDEC.}
+#'     Island. Data from WY 1975-2020 is from Dayflow. The values for October 2020
+#'     through November 2021 are estimated by data from the USBR Delta Outflow
+#'     Computation reports.}
 #'   \item{Export}{Total amount of water diverted from the Delta by the Federal
 #'     and State governments to meet water agreements and contracts, expressed in
-#'     cubic feet per second (cfs). All data is from Dayflow. No data available
-#'     for October 2020 through October 2021 at this point.}
+#'     cubic feet per second (cfs). Data from WY 1975-2020 is from Dayflow. The
+#'     values for October 2020 through November 2021 are estimated by data from
+#'     the USBR Delta Outflow Computation reports.}
 #'   \item{X2}{The distance from the Golden Gate Bridge to the point where daily
 #'     average salinity is 2 parts per thousand at a depth of 1 meter off the
 #'     bottom, expressed in kilometers. From Hutton et al. (2017) for WY
 #'     1975-1996, from Dayflow for WY 1997-2020, and estimated using the
-#'     Autoregressive Lag Model from Dayflow and Outflow from the DTO station on
-#'     CDEC for October 2020 through August 2021.}
+#'     Autoregressive Lag Model from Dayflow and Outflow from the USBR Delta
+#'     Outflow Computation reports for October 2020 through November 2021.}
 #' }
 #'
 #' @source
 #' * Dayflow: <https://data.cnra.ca.gov/dataset/dayflow>
-#' * DTO data from CDEC: <https://cdec.water.ca.gov/dynamicapp/staMeta?station_id=DTO>
+#' * USBR Delta Outflow Computation reports:
+#'   <https://www.usbr.gov/mp/cvo/pmdoc.html>
 #' * Hutton, P. H., J. S. Rath, and S. B Roy. 2017. Freshwater flow to the San
 #'   Francisco Bay-Delta estuary over nine decades (Part 1): Trend evaluation.
 #'   Hydrological Processes **31**(14): 2500-2515. <https://doi.org/10.1002/hyp.11201>.
