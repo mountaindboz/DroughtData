@@ -1,4 +1,4 @@
-# DroughtData (development version)
+# DroughtData 0.3.0
 
 # DroughtData 0.2.1
 
