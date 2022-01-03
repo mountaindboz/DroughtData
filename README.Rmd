@@ -50,7 +50,7 @@ Sacramento Valley Water Year Index: <https://cdec.water.ca.gov/reportapp/javarep
 
 Dayflow: <https://data.cnra.ca.gov/dataset/dayflow>
 
-DTO data from CDEC: <https://cdec.water.ca.gov/dynamicapp/staMeta?station_id=DTO>
+USBR Delta Outflow Computation reports: <https://www.usbr.gov/mp/cvo/pmdoc.html>
 
 Hutton, P. H., J. S. Rath, and S. B Roy. 2017. Freshwater flow to the San Francisco Bay-Delta estuary over nine decades (Part 1): Trend evaluation. Hydrological Processes **31**(14): 2500-2515. <https://doi.org/10.1002/hyp.11201>.
 
