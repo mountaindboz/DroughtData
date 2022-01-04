@@ -2,6 +2,8 @@
 
 export(drt_add_yr_assign)
 export(drt_avg_data)
+export(drt_color_pal_drought)
+export(drt_color_pal_yrtype)
 importFrom(magrittr,"%>%")
 importFrom(rlang,":=")
 importFrom(rlang,.data)
