@@ -35,10 +35,12 @@ This package provides the following data tables:
 This package also contains the following helper functions specific to
 the Drought Synthesis project:
 
--   `drt_avg_data`: Calculates seasonal and regional averages
--   `drt_add_yr_assign`: Adds year assignment information to a data
+-   `drt_avg_data()`: Calculates seasonal and regional averages
+-   `drt_add_yr_assign()`: Adds year assignment information to a data
     frame. The year assignment information is used in the analyses for
     the Drought Synthesis.
+-   `drt_color_pal_drought()` and `drt_color_pal_yrtype()`: Apply custom
+    color palettes to the figures used in the Drought Synthesis report
 
 ## Installation
 

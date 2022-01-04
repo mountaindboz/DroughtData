@@ -1,6 +1,6 @@
 Package: DroughtData
 Title: Drought Synthesis Data
-Version: 0.3.0
+Version: 0.4.0
 Authors@R: 
     person(given = "Dave",
            family = "Bosworth",
@@ -20,7 +20,8 @@ Imports:
     dplyr,
     tibble,
     tidyr,
-    rlang
+    rlang,
+    ggplot2
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

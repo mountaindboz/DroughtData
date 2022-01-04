@@ -6,7 +6,7 @@
 \alias{DroughtData-package}
 \title{DroughtData: Drought Synthesis Data}
 \description{
-Contains data sets used in the Drought Synthesis project. This data package also contains useful metadata describing the data sets and the processing scripts used to derive the data sets.
+Contains data sets used in the Drought Synthesis project. This data package also contains useful metadata describing the data sets, the processing scripts used to derive the data, and a couple helper functions.
 }
 \seealso{
 Useful links:
