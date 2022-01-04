@@ -1,19 +1,21 @@
 # DroughtData 0.4.0
 
+* Added two new functions that define custom color palettes for the figures in the Drought Synthesis report - `drt_color_pal_drought()` and `drt_color_pal_yrtype()`
+
 # DroughtData 0.3.0
 
 * Updated the hydrology parameters (Delta Outflow, Delta Exports, and X2) in the raw and long-term integrated data sets with data from the USBR Delta Outflow Computation reports for October 2020 - November 2021
 
 # DroughtData 0.2.1
 
-* Added an additional helper function `drt_add_yr_assign` which adds year assignment information to a data frame. The year assignment information is used in the analyses for the Drought Synthesis.
+* Added an additional helper function `drt_add_yr_assign()` which adds year assignment information to a data frame. The year assignment information is used in the analyses for the Drought Synthesis.
 
 # DroughtData 0.2.0
 
 * Added two raw nutrient data sets to the package: 
   * `raw_nutr_1975_2021` which contains long-term data from 1975-2021
   * `raw_nutr_2013_2021` which contains short-term data from 2013-2021
-* Added a helper function `drt_avg_data` which calculates either seasonal or regional averages of the raw drought data
+* Added a helper function `drt_avg_data()` which calculates either seasonal or regional averages of the raw drought data
 
 # DroughtData 0.1.1
 
