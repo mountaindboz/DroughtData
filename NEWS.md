@@ -1,3 +1,5 @@
+# DroughtData 0.4.0
+
 # DroughtData 0.3.0
 
 * Updated the hydrology parameters (Delta Outflow, Delta Exports, and X2) in the raw and long-term integrated data sets with data from the USBR Delta Outflow Computation reports for October 2020 - November 2021
