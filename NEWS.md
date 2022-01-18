@@ -1,3 +1,5 @@
+# DroughtData (development version)
+
 # DroughtData 0.4.0
 
 * Added two new functions that define custom color palettes for the figures in the Drought Synthesis report - `drt_color_pal_drought()` and `drt_color_pal_yrtype()`
