@@ -1,5 +1,7 @@
 # DroughtData (development version)
 
+* Fixed code for cleaning raw data to refer to internal data for the region shapefile and assignments
+
 # DroughtData 0.4.0
 
 * Added two new functions that define custom color palettes for the figures in the Drought Synthesis report - `drt_color_pal_drought()` and `drt_color_pal_yrtype()`

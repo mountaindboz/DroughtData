@@ -111,15 +111,6 @@ df_nutr_cawsc <-
     )
   )
 
-# Import region assignments
-df_regions <- read_csv("data-raw/Rosies_regions.csv")
-
-# Load Delta regions shapefile from Brian
-sf_delta <- R_EDSM_Subregions_Mahardja_FLOAT %>%
-  # Filter to regions of interest
-  filter(SubRegion %in% unique(df_regions$SubRegion)) %>%
-  select(SubRegion)
-
 
 # 2. Clean and Combine Data -----------------------------------------------
 
@@ -363,9 +354,9 @@ df_nutr_all_c <- df_nutr_all %>%
   # Convert to sf object
   st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326, remove = FALSE) %>%
   # Change to crs of sf_delta
-  st_transform(crs = st_crs(sf_delta)) %>%
+  st_transform(crs = st_crs(DroughtData:::sf_delta)) %>%
   # Add subregions
-  st_join(sf_delta, join = st_intersects) %>%
+  st_join(DroughtData:::sf_delta, join = st_intersects) %>%
   # Remove any data outside our subregions of interest
   filter(!is.na(SubRegion)) %>%
   # Drop sf geometry column since it's no longer needed
@@ -477,7 +468,7 @@ df_nutr_all_c2 <- df_nutr_all_c1 %>%
   # Restrict data to 1975-2021
   filter(YearAdj %in% 1975:2021) %>%
   # Add region designations
-  left_join(df_regions, by = c("Season", "SubRegion")) %>%
+  left_join(DroughtData:::df_regions, by = c("Season", "SubRegion")) %>%
   # Select variables to keep
   select(
     Source,
