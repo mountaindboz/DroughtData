@@ -56,8 +56,8 @@
 #' * Hutton, P. H., J. S. Rath, and S. B Roy. 2017. Freshwater flow to the San
 #'   Francisco Bay-Delta estuary over nine decades (Part 1): Trend evaluation.
 #'   Hydrological Processes **31**(14): 2500-2515. <https://doi.org/10.1002/hyp.11201>.
-#' * `discretewq` data package (version 2.1.0):
-#'   <https://github.com/sbashevkin/discretewq/tree/1af04438c961c6d51f46cc777cbb6a142c1e3b30>
+#' * `discretewq` data package (version 2.3.1):
+#'   <https://github.com/sbashevkin/discretewq/tree/v2.3.1>
 "lt_seasonal"
 
 #' @title Long-term regional averages
@@ -95,8 +95,8 @@
 #' @source
 #' * Sacramento Valley Water Year Index:
 #'   <https://cdec.water.ca.gov/reportapp/javareports?name=WSIHIST>
-#' * `discretewq` data package (version 2.1.0):
-#'   <https://github.com/sbashevkin/discretewq/tree/1af04438c961c6d51f46cc777cbb6a142c1e3b30>
+#' * `discretewq` data package (version 2.3.1):
+#'   <https://github.com/sbashevkin/discretewq/tree/v2.3.1>
 "lt_regional"
 
 #' @title Raw daily values of hydrology and LSZ metrics for 1975-2021
@@ -186,8 +186,8 @@
 #' }
 #'
 #' @source
-#' `discretewq` data package (version 2.1.0):
-#'   <https://github.com/sbashevkin/discretewq/tree/1af04438c961c6d51f46cc777cbb6a142c1e3b30>
+#' `discretewq` data package (version 2.3.1):
+#'   <https://github.com/sbashevkin/discretewq/tree/v2.3.1>
 "raw_wq_1975_2021"
 
 #' @title Raw values of nutrient concentrations for 1975-2021
@@ -197,12 +197,12 @@
 #'   Synthesis.
 #'
 #'   Most of the nutrient data from EMP (DWR's Environmental Monitoring Program)
-#'   and all of the nutrient data from USGS-SFBP (USGS's San Francisco Bay
-#'   Project) are from the `discretewq` data package. Data from EMP collected in
-#'   2021 was provided directly from staff who collected the data and should be
-#'   considered provisional. Data from USGS-CASWC were downloaded directly from
-#'   the Water Quality Portal using the `dataRetrieval` R package. Some of the
-#'   data from USGS-CASWC is also considered provisional.
+#'   and all of the nutrient data from USGS_SFBS (USGS's San Francisco Bay Water
+#'   Quality Survey) are from the `discretewq` data package. Data from EMP
+#'   collected in 2021 was provided directly from staff who collected the data
+#'   and should be considered provisional. Data from USGS_CAWSC were downloaded
+#'   directly from the Water Quality Portal using the `dataRetrieval` R package.
+#'   Some of the data from USGS_CAWSC is also considered provisional.
 #'
 #'   This data set contains only one data point per `Station` and `Date` and
 #'   excludes any data points that have modified z-scores greater than 15
@@ -213,8 +213,8 @@
 #' @format data frame with 13,397 rows and 17 columns
 #' \describe{
 #'   \item{Source}{Name of the source dataset. Either EMP (DWR's Environmental
-#'     Monitoring Program), USGS-SFBP (USGS's San Francisco Bay Project), or
-#'     USGS-CAWSC (USGS's California Water Science Center)}
+#'     Monitoring Program), USGS_SFBS (USGS's San Francisco Bay Water Quality
+#'     Survey), or USGS_CAWSC (USGS's California Water Science Center)}
 #'   \item{Station}{Location where measurement was collected}
 #'   \item{Latitude}{Latitude of `Station` in Decimal Degrees (WGS 84 Datum)}
 #'   \item{Longitude}{Longitude of `Station` in Decimal Degrees (WGS 84 Datum)}
@@ -268,8 +268,8 @@
 #' determined to be an outlier and is excluded from the data set.
 #'
 #' @source
-#' * `discretewq` data package (version 2.1.0):
-#'   <https://github.com/sbashevkin/discretewq/tree/78232cec30df1e2606431eeae3710ca25cf0c7f7>
+#' * `discretewq` data package (version 2.3.1):
+#'   <https://github.com/sbashevkin/discretewq/tree/v2.3.1>
 #' * Water Quality Portal hosted by the National Water Quality Monitoring
 #'   Council: <https://www.waterqualitydata.us/>
 "raw_nutr_1975_2021"
@@ -281,12 +281,12 @@
 #'   Synthesis.
 #'
 #'   Most of the nutrient data from EMP (DWR's Environmental Monitoring Program)
-#'   and all of the nutrient data from USGS-SFBP (USGS's San Francisco Bay
-#'   Project) are from the `discretewq` data package. Data from EMP collected in
-#'   2021 was provided directly from staff who collected the data and should be
-#'   considered provisional. Data from USGS-CASWC were downloaded directly from
-#'   the Water Quality Portal using the `dataRetrieval` R package. Some of the
-#'   data from USGS-CASWC is also considered provisional.
+#'   and all of the nutrient data from USGS_SFBS (USGS's San Francisco Bay Water
+#'   Quality Survey) are from the `discretewq` data package. Data from EMP
+#'   collected in 2021 was provided directly from staff who collected the data
+#'   and should be considered provisional. Data from USGS_CAWSC were downloaded
+#'   directly from the Water Quality Portal using the `dataRetrieval` R package.
+#'   Some of the data from USGS_CAWSC is also considered provisional.
 #'
 #'   This data set contains only one data point per `Station` and `Date` and
 #'   excludes any data points that have modified z-scores greater than 15
@@ -295,8 +295,8 @@
 #' @format data frame with 3,316 rows and 17 columns
 #' \describe{
 #'   \item{Source}{Name of the source dataset. Either EMP (DWR's Environmental
-#'     Monitoring Program), USGS-SFBP (USGS's San Francisco Bay Project), or
-#'     USGS-CAWSC (USGS's California Water Science Center)}
+#'     Monitoring Program), USGS_SFBS (USGS's San Francisco Bay Water Quality
+#'     Survey), or USGS_CAWSC (USGS's California Water Science Center)}
 #'   \item{Station}{Location where measurement was collected}
 #'   \item{Latitude}{Latitude of `Station` in Decimal Degrees (WGS 84 Datum)}
 #'   \item{Longitude}{Longitude of `Station` in Decimal Degrees (WGS 84 Datum)}

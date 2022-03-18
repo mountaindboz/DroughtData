@@ -36,8 +36,8 @@ collected the data and should be considered provisional.}
 \itemize{
 \item Sacramento Valley Water Year Index:
 \url{https://cdec.water.ca.gov/reportapp/javareports?name=WSIHIST}
-\item \code{discretewq} data package (version 2.1.0):
-\url{https://github.com/sbashevkin/discretewq/tree/1af04438c961c6d51f46cc777cbb6a142c1e3b30}
+\item \code{discretewq} data package (version 2.3.1):
+\url{https://github.com/sbashevkin/discretewq/tree/v2.3.1}
 }
 }
 \usage{

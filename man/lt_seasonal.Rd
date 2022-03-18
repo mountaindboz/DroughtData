@@ -59,8 +59,8 @@ from staff who collected the data and should be considered provisional.}
 \item Hutton, P. H., J. S. Rath, and S. B Roy. 2017. Freshwater flow to the San
 Francisco Bay-Delta estuary over nine decades (Part 1): Trend evaluation.
 Hydrological Processes \strong{31}(14): 2500-2515. \url{https://doi.org/10.1002/hyp.11201}.
-\item \code{discretewq} data package (version 2.1.0):
-\url{https://github.com/sbashevkin/discretewq/tree/1af04438c961c6d51f46cc777cbb6a142c1e3b30}
+\item \code{discretewq} data package (version 2.3.1):
+\url{https://github.com/sbashevkin/discretewq/tree/v2.3.1}
 }
 }
 \usage{

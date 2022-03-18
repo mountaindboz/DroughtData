@@ -1,6 +1,7 @@
 # DroughtData (development version)
 
 * Fixed code for cleaning raw data to refer to internal data for the region shapefile and assignments
+* Updated to use version 2.3.1 of the `discretewq` data package
 
 # DroughtData 0.4.0
 

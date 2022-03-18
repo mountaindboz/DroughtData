@@ -1,20 +1,23 @@
 # Code to prepare data sets of raw nutrient data:
   # 1) `raw_nutr_1975_2021` - raw values of long-term nutrient concentrations (DissAmmonia,
-    # DissNitrateNitrite, and DissOrthophos) for 1975-2021 from the EMP, USGS-SFBP, and
-    # USGS-CAWSC (only SR at Freeport) surveys
+    # DissNitrateNitrite, and DissOrthophos) for 1975-2021 from the EMP, USGS_SFBS, and
+    # USGS_CAWSC (only SR at Freeport) surveys
   # 2) `raw_nutr_2013_2021` - raw values of short-term nutrient concentrations (DissAmmonia,
-    # DissNitrateNitrite, and DissOrthophos) for 2013-2021 from the EMP, USGS-SFBP, and
-    # USGS-CAWSC surveys
+    # DissNitrateNitrite, and DissOrthophos) for 2013-2021 from the EMP, USGS_SFBS, and
+    # USGS_CAWSC surveys
 
 # Load packages
 library(tidyverse)
 library(lubridate)
 library(hms)
 library(readxl)
-# Make sure we are using `discretewq` version 2.1.0, commit 78232cec30df1e2606431eeae3710ca25cf0c7f7
-# devtools::install_github("sbashevkin/discretewq", ref = "78232cec30df1e2606431eeae3710ca25cf0c7f7")
+# Make sure we are using `discretewq` version 2.3.1
+# install.packages("devtools")
+# devtools::install_github("sbashevkin/discretewq", ref = "v2.3.1")
 library(discretewq)
 library(dataRetrieval)
+# Make sure we are using `deltamapr` version 1.0.0, commit d0a6f9c22aa074f906176e99a0ed70f97f26fffd
+# devtools::install_github("InteragencyEcologicalProgram/deltamapr", ref = "d0a6f9c22aa074f906176e99a0ed70f97f26fffd")
 library(deltamapr)
 library(sf)
 library(rlang)
@@ -26,9 +29,13 @@ library(glue)
 # Define file path for raw nutrient data
 fp_nutr <- "data-raw/Nutrients/"
 
-# Import nutrient data from the discretewq package
-# Select EMP and USGS since these are the only surveys that have collected nutrient data
-df_nutr_package <- wq(Sources = c("EMP", "USGS"), End_year = 2021)
+# Import discrete nutrient data from the discretewq package (v2.3.1)
+# Select EMP and USGS_SFBS since these are the only surveys besides USGS_CAWSC
+  # that have collected discrete nutrient data
+# The USGS_CAWSC survey also has collected discrete nutrient data; however, we
+  # will use data directly imported with the dataRetrieval R package since the
+  # discretewq package does not provide preliminary data and RL values
+df_nutr_package <- wq(Sources = c("EMP", "USGS_SFBS"), End_year = 2021)
 
 # Import additional EMP nutrient data for 2021 provided from personal data request
 df_nutr_2021_emp <-
@@ -56,13 +63,13 @@ df_coord_cawsc <-
     col_types = c(rep("text", 3), rep("numeric", 2), rep("skip", 4))
   )
 
-# Download and save local copies of the USGS-CAWSC nutrient data using the `dataRetrieval`
+# Download and save local copies of the USGS_CAWSC nutrient data using the `dataRetrieval`
   # package since some of the data is provisional and may change
 
-# Set download to TRUE if need to download and save USGS-CAWSC nutrient data
+# Set download to TRUE if need to download and save USGS_CAWSC nutrient data
 download <- FALSE
 
-# Download and save DAYFLOW and DTO data if necessary
+# Download and save USGS_CAWSC data if necessary
 if (download == TRUE) {
 
   # Add "USGS-" as a prefix to siteNumbers to work correctly with the `readWQPqw` function
@@ -133,17 +140,15 @@ fill_miss_rl <- function(df, value_var, sign_var, rl_val) {
     )
 }
 
-# Prepare nutrient data from the discretewq package to be combined with EMP data from 2021 and USGS-CAWSC data
+# Prepare nutrient data from the discretewq package to be combined with EMP data from 2021 and USGS_CAWSC data
 df_nutr_package_c <- df_nutr_package %>%
   mutate(
     # Convert Date variable to date object
     Date = date(Date),
     # Convert Datetime to PST
-    Datetime = with_tz(Datetime, tzone = "Etc/GMT+8"),
-    # Change Source for USGS data to "USGS-SFBP"
-    Source = if_else(Source == "USGS", "USGS-SFBP", Source)
+    Datetime = with_tz(Datetime, tzone = "Etc/GMT+8")
   ) %>%
-  # Fill in "=" for the _Sign variables for the USGS-SFBP data for now
+  # Fill in "=" for the _Sign variables for the USGS_SFBS data for now
     # this assumes all provided values are above the RL
   mutate(across(ends_with("_Sign"), ~if_else(is.na(.x), "=", .x))) %>%
   # Fill in reporting limits for values that are non-detect and the reporting limits are unknown in the EMP
@@ -164,10 +169,10 @@ df_nutr_package_c <- df_nutr_package %>%
     starts_with("DissOrthophos")
   )
 
-# For the USGS-SFBP, if at least one of the nutrient parameters has a value reported, then we
+# For the USGS_SFBS, if at least one of the nutrient parameters has a value reported, then we
   # will assume that the other parameters were below the reporting limit for that station and day
-df_nutr_usgs_blw_rl <- df_nutr_package_c %>%
-  filter(Source == "USGS-SFBP") %>%
+df_nutr_sfbs_blw_rl <- df_nutr_package_c %>%
+  filter(Source == "USGS_SFBS") %>%
   filter(!if_all(c(DissAmmonia, DissNitrateNitrite, DissOrthophos), is.na)) %>%
   filter(if_any(c(DissAmmonia, DissNitrateNitrite, DissOrthophos), is.na)) %>%
   mutate(
@@ -182,8 +187,8 @@ df_nutr_usgs_blw_rl <- df_nutr_package_c %>%
   fill_miss_rl(DissOrthophos, DissOrthophos_Sign, 0.0015)
 
 df_nutr_package_c1 <- df_nutr_package_c %>%
-  anti_join(df_nutr_usgs_blw_rl, by = c("Source", "Station", "Datetime")) %>%
-  bind_rows(df_nutr_usgs_blw_rl)
+  anti_join(df_nutr_sfbs_blw_rl, by = c("Source", "Station", "Datetime")) %>%
+  bind_rows(df_nutr_sfbs_blw_rl)
 
 # 2.2 2021 EMP Data -------------------------------------------------------
 
@@ -241,9 +246,9 @@ df_nutr_2021_emp_c <- df_nutr_2021_emp %>%
     starts_with("DissOrthophos")
   )
 
-# 2.3 USGS-CAWSC Data -----------------------------------------------------
+# 2.3 USGS_CAWSC Data -----------------------------------------------------
 
-# Prepare USGS-CAWSC station coordinates to be joined to USGS-CAWSC data
+# Prepare USGS_CAWSC station coordinates to be joined to USGS_CAWSC data
 df_coord_cawsc_c <- df_coord_cawsc %>%
   # Fix one longitude value that should be negative
   mutate(Long = if_else(Long > 0, -Long, Long)) %>%
@@ -273,7 +278,7 @@ df_nutr_cawsc_c <- df_nutr_cawsc %>%
     # Remove "USGS-" prefix from Station names
     Station = str_remove(Station, "^USGS-"),
     # Add Source variable
-    Source = "USGS-CAWSC",
+    Source = "USGS_CAWSC",
     # Change Parameter names to standardized names
     Parameter = case_when(
       str_detect(Parameter, "^Amm") ~ "DissAmmonia",
@@ -339,7 +344,7 @@ df_nutr_cawsc_c <- df_nutr_cawsc %>%
 
 # 2.4 Combine All Data ----------------------------------------------------
 
-# Combine EMP data from 2021 and USGS-CAWSC data to discretewq data
+# Combine EMP data from 2021 and USGS_CAWSC data to discretewq data
 df_nutr_all <- bind_rows(df_nutr_package_c1, df_nutr_2021_emp_c, df_nutr_cawsc_c)
 
 
@@ -496,8 +501,8 @@ df_nutr_all_c2 <- df_nutr_all_c1 %>%
 raw_nutr_1975_2021 <- df_nutr_all_c2 %>%
   # Remove any data not chosen for the long-term analysis
   filter(Long_term) %>%
-  # Only include data from the SR @ Freeport station (11447650) for the USGS-CAWSC survey
-  filter(!(Source == "USGS-CAWSC" & Station != "11447650")) %>%
+  # Only include data from the SR @ Freeport station (11447650) for the USGS_CAWSC survey
+  filter(!(Source == "USGS_CAWSC" & Station != "11447650")) %>%
   # Remove data collected within the Suisun Marsh region since there is a large gap in the long-term record
   filter(Region != "Suisun Marsh") %>%
   # Remove the Long_term variable
