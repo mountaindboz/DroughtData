@@ -210,7 +210,7 @@
 #'   `Region` were excluded from this data set due to a large gap in the
 #'   long-term record.
 #'
-#' @format data frame with 13,397 rows and 17 columns
+#' @format data frame with 13,366 rows and 17 columns
 #' \describe{
 #'   \item{Source}{Name of the source dataset. Either EMP (DWR's Environmental
 #'     Monitoring Program), USGS_SFBS (USGS's San Francisco Bay Water Quality
@@ -219,9 +219,9 @@
 #'   \item{Latitude}{Latitude of `Station` in Decimal Degrees (WGS 84 Datum)}
 #'   \item{Longitude}{Longitude of `Station` in Decimal Degrees (WGS 84 Datum)}
 #'   \item{Region}{Region designation of `Station` within the larger Delta and
-#'     Suisun Marsh/Bay (Confluence, North, SouthCentral, Suisun Bay, Suisun
-#'     Marsh). The Drought Synthesis team categorized `SubRegion`s into broader
-#'     `Region`s using [this crosswalk](https://github.com/mountaindboz/DroughtData/blob/master/data-raw/Rosies_regions.csv)
+#'     Suisun Bay (Confluence, North, SouthCentral, Suisun Bay). The Drought
+#'     Synthesis team categorized `SubRegion`s into broader `Region`s using [this
+#'     crosswalk](https://github.com/mountaindboz/DroughtData/blob/master/data-raw/Rosies_regions.csv)
 #'     .}
 #'   \item{SubRegion}{Subregion designation of `Station` as defined by the
 #'     `R_EDSM_Subregions_Mahardja_FLOAT` shapefile from the
@@ -290,9 +290,11 @@
 #'
 #'   This data set contains only one data point per `Station` and `Date` and
 #'   excludes any data points that have modified z-scores greater than 15
-#'   grouped by `SubRegion`.
+#'   grouped by `SubRegion`. Additionally, samples collected in the Suisun Marsh
+#'   `Region` were excluded from this data set because it only has recent data
+#'   for 2017-2021.
 #'
-#' @format data frame with 3,316 rows and 17 columns
+#' @format data frame with 3,139 rows and 17 columns
 #' \describe{
 #'   \item{Source}{Name of the source dataset. Either EMP (DWR's Environmental
 #'     Monitoring Program), USGS_SFBS (USGS's San Francisco Bay Water Quality
@@ -301,9 +303,9 @@
 #'   \item{Latitude}{Latitude of `Station` in Decimal Degrees (WGS 84 Datum)}
 #'   \item{Longitude}{Longitude of `Station` in Decimal Degrees (WGS 84 Datum)}
 #'   \item{Region}{Region designation of `Station` within the larger Delta and
-#'     Suisun Marsh/Bay (Confluence, North, SouthCentral, Suisun Bay, Suisun
-#'     Marsh). The Drought Synthesis team categorized `SubRegion`s into broader
-#'     `Region`s using [this crosswalk](https://github.com/mountaindboz/DroughtData/blob/master/data-raw/Rosies_regions.csv)
+#'     Suisun Bay (Confluence, North, SouthCentral, Suisun Bay). The Drought
+#'     Synthesis team categorized `SubRegion`s into broader `Region`s using [this
+#'     crosswalk](https://github.com/mountaindboz/DroughtData/blob/master/data-raw/Rosies_regions.csv)
 #'     .}
 #'   \item{SubRegion}{Subregion designation of `Station` as defined by the
 #'     `R_EDSM_Subregions_Mahardja_FLOAT` shapefile from the

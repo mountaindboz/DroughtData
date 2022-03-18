@@ -5,7 +5,7 @@
 \alias{raw_nutr_1975_2021}
 \title{Raw values of nutrient concentrations for 1975-2021}
 \format{
-data frame with 13,397 rows and 17 columns
+data frame with 13,366 rows and 17 columns
 \describe{
 \item{Source}{Name of the source dataset. Either EMP (DWR's Environmental
 Monitoring Program), USGS_SFBS (USGS's San Francisco Bay Water Quality
@@ -14,9 +14,8 @@ Survey), or USGS_CAWSC (USGS's California Water Science Center)}
 \item{Latitude}{Latitude of \code{Station} in Decimal Degrees (WGS 84 Datum)}
 \item{Longitude}{Longitude of \code{Station} in Decimal Degrees (WGS 84 Datum)}
 \item{Region}{Region designation of \code{Station} within the larger Delta and
-Suisun Marsh/Bay (Confluence, North, SouthCentral, Suisun Bay, Suisun
-Marsh). The Drought Synthesis team categorized \code{SubRegion}s into broader
-\code{Region}s using \href{https://github.com/mountaindboz/DroughtData/blob/master/data-raw/Rosies_regions.csv}{this crosswalk}
+Suisun Bay (Confluence, North, SouthCentral, Suisun Bay). The Drought
+Synthesis team categorized \code{SubRegion}s into broader \code{Region}s using \href{https://github.com/mountaindboz/DroughtData/blob/master/data-raw/Rosies_regions.csv}{this crosswalk}
 .}
 \item{SubRegion}{Subregion designation of \code{Station} as defined by the
 \code{R_EDSM_Subregions_Mahardja_FLOAT} shapefile from the

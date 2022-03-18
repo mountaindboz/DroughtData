@@ -5,7 +5,7 @@
 \alias{raw_nutr_2013_2021}
 \title{Raw values of nutrient concentrations for 2013-2021}
 \format{
-data frame with 3,316 rows and 17 columns
+data frame with 3,139 rows and 17 columns
 \describe{
 \item{Source}{Name of the source dataset. Either EMP (DWR's Environmental
 Monitoring Program), USGS_SFBS (USGS's San Francisco Bay Water Quality
@@ -14,9 +14,8 @@ Survey), or USGS_CAWSC (USGS's California Water Science Center)}
 \item{Latitude}{Latitude of \code{Station} in Decimal Degrees (WGS 84 Datum)}
 \item{Longitude}{Longitude of \code{Station} in Decimal Degrees (WGS 84 Datum)}
 \item{Region}{Region designation of \code{Station} within the larger Delta and
-Suisun Marsh/Bay (Confluence, North, SouthCentral, Suisun Bay, Suisun
-Marsh). The Drought Synthesis team categorized \code{SubRegion}s into broader
-\code{Region}s using \href{https://github.com/mountaindboz/DroughtData/blob/master/data-raw/Rosies_regions.csv}{this crosswalk}
+Suisun Bay (Confluence, North, SouthCentral, Suisun Bay). The Drought
+Synthesis team categorized \code{SubRegion}s into broader \code{Region}s using \href{https://github.com/mountaindboz/DroughtData/blob/master/data-raw/Rosies_regions.csv}{this crosswalk}
 .}
 \item{SubRegion}{Subregion designation of \code{Station} as defined by the
 \code{R_EDSM_Subregions_Mahardja_FLOAT} shapefile from the
@@ -74,7 +73,9 @@ Some of the data from USGS_CAWSC is also considered provisional.
 
 This data set contains only one data point per \code{Station} and \code{Date} and
 excludes any data points that have modified z-scores greater than 15
-grouped by \code{SubRegion}.
+grouped by \code{SubRegion}. Additionally, samples collected in the Suisun Marsh
+\code{Region} were excluded from this data set because it only has recent data
+for 2017-2021.
 }
 \section{More information about the \verb{_Sign} variables}{
 

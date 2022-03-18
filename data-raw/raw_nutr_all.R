@@ -452,6 +452,16 @@ df_nutr_all_c1 <- df_nutr_all_c %>%
   rm_flagged(DissAmmonia) %>%
   rm_flagged(DissNitrateNitrite) %>%
   rm_flagged(DissOrthophos) %>%
+  # Exclude flagged data points that are <RL values with high RL's
+  # *** This filter removes some data that we would like to keep because the
+    # data frame is in a wide format; however, this is how the data was prepared
+    # for the Feb 2022 version of the Drought Synthesis report. We will fix this
+    # in a later version.
+  filter(
+    !(str_detect(DissAmmonia_Sign, "^<") & DissAmmonia >= .2),
+    !(str_detect(DissNitrateNitrite_Sign, "^<") & DissNitrateNitrite >= 3),
+    !(str_detect(DissOrthophos_Sign, "^<") & DissOrthophos > .15)
+  ) %>%
   # Remove mod z-score variables
   select(!contains("_mod_zscore"))
 
@@ -474,6 +484,9 @@ df_nutr_all_c2 <- df_nutr_all_c1 %>%
   filter(YearAdj %in% 1975:2021) %>%
   # Add region designations
   left_join(DroughtData:::df_regions, by = c("Season", "SubRegion")) %>%
+  # Remove data collected within the Suisun Marsh region since there is a large
+    # gap in its long-term record and it only has recent data for 2017-2021
+  filter(Region != "Suisun Marsh") %>%
   # Select variables to keep
   select(
     Source,
@@ -503,8 +516,6 @@ raw_nutr_1975_2021 <- df_nutr_all_c2 %>%
   filter(Long_term) %>%
   # Only include data from the SR @ Freeport station (11447650) for the USGS_CAWSC survey
   filter(!(Source == "USGS_CAWSC" & Station != "11447650")) %>%
-  # Remove data collected within the Suisun Marsh region since there is a large gap in the long-term record
-  filter(Region != "Suisun Marsh") %>%
   # Remove the Long_term variable
   select(-Long_term)
 
