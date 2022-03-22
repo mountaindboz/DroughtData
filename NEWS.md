@@ -2,6 +2,7 @@
 
 * Fixed code for cleaning raw data to refer to internal data for the region shapefile and assignments
 * Updated to use version 2.3.1 of the `discretewq` data package
+* Added daily averages of combined USGS outflow and Cache Slough flow to `raw_hydro_1975_2021`
 
 # DroughtData 0.4.0
 

@@ -1,6 +1,7 @@
 # Code to prepare data set of raw hydrology and LSZ metrics:
-  # `raw_hydro_1975_2021` - raw daily values for hydrology and LSZ metrics (Delta Outflow,
-    # Delta Exports, X2) for 1975-2021
+  # `raw_hydro_1975_2021` - raw daily values for hydrology and LSZ metrics
+    # (Delta Outflow from DAYFLOW, Delta Exports, X2, Combined USGS Outflow, Cache
+    # Slough Flow) for 1975-2021
 
 # Load packages
 library(tidyverse)
@@ -8,6 +9,7 @@ library(lubridate)
 library(readxl)
 library(pdftools)
 library(glue)
+library(dataRetrieval)
 
 
 # 1. Import Data ----------------------------------------------------------
@@ -117,6 +119,43 @@ if (download_usbr == TRUE) {
   rm(dnld_usbr_rpt, vec_mo_yr, i, fp_usbr_rpt, conv_pdf2tibb, df_usbr_rpt)
 }
 
+# If it hasn't been done already, download and save local copies of the daily
+  # average tidally-filtered flow data collected by USGS using the `dataRetrieval`
+  # package since some of the data is provisional and may change
+
+# Set download_usgs to TRUE if need to download and save USGS flow data
+download_usgs <- FALSE
+
+# Download and save USGS flow data if necessary
+if (download_usgs == TRUE) {
+  # Define site numbers for the USGS data download:
+  # 11455420 - Sacramento River at Rio Vista CA (RVB)
+  # 11337190 - San Joaquin River at Jersey Point CA (SJJ)
+  # 11337080 - Threemile Slough near Rio Vista CA (TSL)
+  # 11455350 - Cache Slough at Ryer Island (RYI)
+  # 11313433 - Dutch Slough below Jersey Island Road at Jersey Island (DSJ)
+  # 11455385 - Cache Slough above Ryer Island Ferry near Rio Vista CA (RYF)
+  site_numb <- c(
+    "11455420",
+    "11337190",
+    "11337080",
+    "11313433",
+    "11455350",
+    "11455385"
+  )
+
+  # Download daily average tidally-filtered flow data in cfs (#72137) collected
+    # by USGS using the `readNWISdv` function. Download data for entire period of
+    # record up to 11/30/2021.
+  df_tfq_dv_tmp <- readNWISdv(site_numb, "72137", endDate = "2021-11-30")
+
+  # Save data as a .csv file in the "data-raw/Hydrology" folder
+  df_tfq_dv_tmp %>% write_csv("data-raw/Hydrology/usgs_daily_avg_tf_flow_1994-2021.csv")
+
+  # Clean up
+  rm(site_numb, df_tfq_dv_tmp)
+}
+
 # Define file path for raw hydrology data
 fp_hydro <- "data-raw/Hydrology/"
 
@@ -149,6 +188,9 @@ df_hutton_x2 <-
     file.path(fp_hydro, "supplemental_data_wr.1943-5452.0000617_hutton3.xlsx"),
     sheet = "Daily"
   )
+
+# Import daily average tidally-filtered flow data collected by USGS
+df_usgs <- read_csv(file.path(fp_hydro, "usgs_daily_avg_tf_flow_1994-2021.csv"))
 
 
 # 2. Clean and Combine Data -----------------------------------------------
@@ -199,8 +241,46 @@ for (i in which(df_dayflow_v3$Date == "2020-10-01"):which(df_dayflow_v3$Date == 
   df_dayflow_v3$X2[i] = 10.16 + 0.945*df_dayflow_v3$X2[i-1] - 1.487*log10(df_dayflow_v3$Outflow[i])
 }
 
-# Finish cleaning raw data
-raw_hydro_1975_2021 <- df_dayflow_v3 %>%
+# Prepare daily average tidally-filtered flow data collected by USGS to be
+  # combined with other hydrology data
+# Start with some general cleaning
+df_usgs_c <- df_usgs %>% select(site_no, Date, DailyAvgFlow = X_72137_00003)
+
+# Calculate combined USGS outflow from RVB, SJJ, TSL, and DSJ
+df_usgs_comb_outf <- df_usgs_c %>%
+  # Remove Cache Slough data
+  filter(!site_no %in% c("11455350", "11455385")) %>%
+  # Fill in NA values to complete period of record to make sure data for all
+    # stations is included in the total outflow
+  complete(site_no, Date) %>%
+  group_by(Date) %>%
+  summarize(TotalUSGSOutflow = sum(DailyAvgFlow)) %>%
+  filter(!is.na(TotalUSGSOutflow))
+
+# Combine Cache Slough data from two stations (RYI and RYF) so that it only has
+  # one value per day
+df_usgs_cache <- df_usgs_c %>%
+  # Only keep Cache Slough data
+  filter(site_no %in% c("11455350", "11455385")) %>%
+  # Data for RYI (11455350) goes through 2019-04-26 - We'll use data from RYI
+    # through its period of record, then RYF (11455385) for the time period
+    # afterwards, so we'll remove data from RYF where data from the two stations
+    # overlap
+  filter(!(site_no == "11455385" & Date < "2019-04-27")) %>%
+  # Remove erroneous record from 2003-02-19
+  filter(Date != "2003-02-19") %>%
+  select(Date, CacheFlow = DailyAvgFlow)
+
+# Create a data frame that contains all possible dates from 12/1/1974 - 11/30/2021
+df_date <- tibble(Date = seq.Date(as_date("1974-12-01"), as_date("2021-11-30"), by = 1))
+
+# Integrate data sets of raw hydrology data
+lst_hydro <- list(df_date, df_dayflow_v3, df_usgs_comb_outf, df_usgs_cache)
+
+raw_hydro_1975_2021_v1 <- reduce(lst_hydro, left_join)
+
+# Finish cleaning raw hydrology data
+raw_hydro_1975_2021 <- raw_hydro_1975_2021_v1 %>%
 # Add variables for adjusted calendar year and season
   # Adjusted calendar year: December-November, with December of the previous calendar year
   # included with the following year
@@ -214,8 +294,6 @@ raw_hydro_1975_2021 <- df_dayflow_v3 %>%
       Month %in% c(12, 1, 2) ~ "Winter"
     )
   ) %>%
-  # Restrict data to 1975-2021
-  filter(YearAdj %in% 1975:2021) %>%
   # Select variables to keep
   select(
     YearAdj,
@@ -223,7 +301,9 @@ raw_hydro_1975_2021 <- df_dayflow_v3 %>%
     Date,
     Outflow,
     Export,
-    X2
+    X2,
+    TotalUSGSOutflow,
+    CacheFlow
   ) %>%
   arrange(Date)
 

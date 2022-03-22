@@ -59,3 +59,5 @@ Hutton, P. H., J. S. Rath, and S. B Roy. 2017. Freshwater flow to the San Franci
 
 Water Quality Portal hosted by the National Water Quality Monitoring Council: <https://www.waterqualitydata.us/>
 
+USGS National Water Information System (NWIS): <https://nwis.waterdata.usgs.gov/nwis>
+

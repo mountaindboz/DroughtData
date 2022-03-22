@@ -101,11 +101,11 @@
 
 #' @title Raw daily values of hydrology and LSZ metrics for 1975-2021
 #' @description A data set containing raw daily values of the hydrology and Low
-#'   Salinity Zone (LSZ) metrics for 1975-2021. Seasonal averages of this data
-#'   are in the `lt_seasonal` data set. Used in the analyses for the Drought
-#'   Synthesis.
+#'   Salinity Zone (LSZ) metrics for 1975-2021. Seasonal averages of the
+#'   `Outflow`, `Export`, and `X2` data are in the `lt_seasonal` data set. Used
+#'   in the analyses for the Drought Synthesis.
 #'
-#' @format data frame with 17,167 rows and 6 columns
+#' @format data frame with 17,167 rows and 8 columns
 #' \describe{
 #'   \item{YearAdj}{Adjusted calendar year - December-November, with December of
 #'     the previous calendar year included with the following year. For example,
@@ -128,6 +128,20 @@
 #'     1975-1996, from Dayflow for WY 1997-2020, and estimated using the
 #'     Autoregressive Lag Model from Dayflow and Outflow from the USBR Delta
 #'     Outflow Computation reports for October 2020 through November 2021.}
+#'   \item{TotalUSGSOutflow}{Daily averages of combined tidally-filtered flow
+#'     data in cubic feet per second (cfs) from four USGS stations: Sacramento
+#'     River at Rio Vista CA (11455420), San Joaquin River at Jersey Point CA
+#'     (11337190), Threemile Slough near Rio Vista CA (11337080), and Dutch Slough
+#'     below Jersey Island Road at Jersey Island (11313433). Regarded to be an
+#'     estimate of daily net Delta outflow. Data was obtained from the USGS
+#'     National Water Information System. Some of the data is considered
+#'     provisional.}
+#'   \item{CacheFlow}{Daily averages of tidally-filtered flow data for Cache
+#'     Slough in cubic feet per second (cfs). Data is from two USGS stations:
+#'     Cache Slough at Ryer Island (11455350) from 3/6/2003 to 4/26/2019, and
+#'     Cache Slough above Ryer Island Ferry near Rio Vista CA (11455385) from
+#'     4/27/2019 to 11/30/2021. Data was obtained from the USGS National Water
+#'     Information System. Some of the data is considered provisional.}
 #' }
 #'
 #' @source
@@ -137,6 +151,8 @@
 #' * Hutton, P. H., J. S. Rath, and S. B Roy. 2017. Freshwater flow to the San
 #'   Francisco Bay-Delta estuary over nine decades (Part 1): Trend evaluation.
 #'   Hydrological Processes **31**(14): 2500-2515. <https://doi.org/10.1002/hyp.11201>.
+#' * USGS National Water Information System (NWIS):
+#'   <https://nwis.waterdata.usgs.gov/nwis>
 "raw_hydro_1975_2021"
 
 #' @title Raw values of water quality measurements for 1975-2021

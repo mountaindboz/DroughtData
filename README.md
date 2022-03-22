@@ -72,3 +72,6 @@ evaluation. Hydrological Processes **31**(14): 2500-2515.
 
 Water Quality Portal hosted by the National Water Quality Monitoring
 Council: <https://www.waterqualitydata.us/>
+
+USGS National Water Information System (NWIS):
+<https://nwis.waterdata.usgs.gov/nwis>
