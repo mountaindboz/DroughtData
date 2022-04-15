@@ -370,3 +370,34 @@
 #' @inherit raw_nutr_1975_2021 return source
 "raw_nutr_2013_2021"
 
+#' @title Daily averages of continuous dissolved oxygen data from 2014-2021
+#' @description A data set containing daily average values of continuous
+#'   dissolved oxygen data collected by USGS from 2014-2021 at a few locations
+#'   in the upper San Francisco Estuary (Delta). The locations included are
+#'   Sacramento River near Decker Island (DEC) and the Yolo Bypass Toe Drain
+#'   (TOE). Used in the analyses for the Drought Synthesis.
+#'
+#'   All dissolved oxygen data were downloaded directly from the National Water
+#'   Information System (NWIS) using the `dataRetrieval` R package. For the DEC
+#'   location, data is from the Sacramento River at Decker Island station
+#'   (11455478) from 2014 to 4/27/2021 and from the Sacramento River below
+#'   Toland Landing station (11455485) from 4/29/2021 through the remainder of
+#'   2021. For the TOE location, data is from the Toe Drain at Mallard Road
+#'   station (11455139) from 2014 to 12/19/2016 and from the Toe Drain at
+#'   Liberty Island station (11455140) from 5/23/2017 through the remainder of
+#'   2021. Some of the data in 2021 is considered provisional.
+#'
+#' @format data frame with 5,305 rows and 4 columns
+#' \describe{
+#'   \item{Station}{Location where measurement was collected. Either DEC
+#'     (Sacramento River near Decker Island) or TOE (Yolo Bypass Toe Drain).}
+#'   \item{Year}{Calendar year of the value}
+#'   \item{Date}{Calendar date of the value}
+#'   \item{AvgDO}{Daily average dissolved oxygen value in milligrams per liter}
+#' }
+#'
+#' @source
+#' * USGS National Water Information System (NWIS):
+#'   <https://nwis.waterdata.usgs.gov/nwis>
+"cont_do_daily"
+
