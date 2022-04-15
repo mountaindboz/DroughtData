@@ -31,6 +31,9 @@ This package provides the following data tables:
 -   `raw_nutr_2013_2021`: a short-term data set containing raw values of
     three nutrient parameters (Dissolved Ammonia, Dissolved Nitrate +
     Nitrite, and Dissolved Ortho-phosphate) for 2013-2021
+-   `cont_do_daily`: A data set containing daily average values of
+    continuous dissolved oxygen data from 2014-2021 at a few locations
+    in the upper San Francisco Estuary
 
 This package also contains the following helper functions specific to
 the Drought Synthesis project:
