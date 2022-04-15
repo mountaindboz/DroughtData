@@ -5,18 +5,17 @@
 \alias{raw_nutr_1975_2021}
 \title{Raw values of nutrient concentrations for 1975-2021}
 \format{
-data frame with 13,397 rows and 17 columns
+data frame with 13,366 rows and 17 columns
 \describe{
 \item{Source}{Name of the source dataset. Either EMP (DWR's Environmental
-Monitoring Program), USGS-SFBP (USGS's San Francisco Bay Project), or
-USGS-CAWSC (USGS's California Water Science Center)}
+Monitoring Program), USGS_SFBS (USGS's San Francisco Bay Water Quality
+Survey), or USGS_CAWSC (USGS's California Water Science Center)}
 \item{Station}{Location where measurement was collected}
 \item{Latitude}{Latitude of \code{Station} in Decimal Degrees (WGS 84 Datum)}
 \item{Longitude}{Longitude of \code{Station} in Decimal Degrees (WGS 84 Datum)}
 \item{Region}{Region designation of \code{Station} within the larger Delta and
-Suisun Marsh/Bay (Confluence, North, SouthCentral, Suisun Bay, Suisun
-Marsh). The Drought Synthesis team categorized \code{SubRegion}s into broader
-\code{Region}s using \href{https://github.com/mountaindboz/DroughtData/blob/master/data-raw/Rosies_regions.csv}{this crosswalk}
+Suisun Bay (Confluence, North, SouthCentral, Suisun Bay). The Drought
+Synthesis team categorized \code{SubRegion}s into broader \code{Region}s using \href{https://github.com/mountaindboz/DroughtData/blob/master/data-raw/Rosies_regions.csv}{this crosswalk}
 .}
 \item{SubRegion}{Subregion designation of \code{Station} as defined by the
 \code{R_EDSM_Subregions_Mahardja_FLOAT} shapefile from the
@@ -49,8 +48,8 @@ the section below for more information about what these symbols represent.}
 }
 \source{
 \itemize{
-\item \code{discretewq} data package (version 2.1.0):
-\url{https://github.com/sbashevkin/discretewq/tree/78232cec30df1e2606431eeae3710ca25cf0c7f7}
+\item \code{discretewq} data package (version 2.3.1):
+\url{https://github.com/sbashevkin/discretewq/tree/v2.3.1}
 \item Water Quality Portal hosted by the National Water Quality Monitoring
 Council: \url{https://www.waterqualitydata.us/}
 }
@@ -61,16 +60,16 @@ raw_nutr_1975_2021
 \description{
 A long-term data set containing raw values of three nutrient
 parameters (Dissolved Ammonia, Dissolved Nitrate + Nitrite, and Dissolved
-Ortho-phosphate) for 1975-2021. Used in the analyses for the Drought
-Synthesis.
+Ortho-phosphate) for 1975-2021 within the upper San Francisco Estuary
+(Delta). Used in the analyses for the Drought Synthesis.
 
 Most of the nutrient data from EMP (DWR's Environmental Monitoring Program)
-and all of the nutrient data from USGS-SFBP (USGS's San Francisco Bay
-Project) are from the \code{discretewq} data package. Data from EMP collected in
-2021 was provided directly from staff who collected the data and should be
-considered provisional. Data from USGS-CASWC were downloaded directly from
-the Water Quality Portal using the \code{dataRetrieval} R package. Some of the
-data from USGS-CASWC is also considered provisional.
+and all of the nutrient data from USGS_SFBS (USGS's San Francisco Bay Water
+Quality Survey) are from the \code{discretewq} data package. Data from EMP
+collected in 2021 was provided directly from staff who collected the data
+and should be considered provisional. Data from USGS_CAWSC were downloaded
+directly from the Water Quality Portal using the \code{dataRetrieval} R package.
+Some of the data from USGS_CAWSC is also considered provisional.
 
 This data set contains only one data point per \code{Station} and \code{Date} and
 excludes any data points that have modified z-scores greater than 15

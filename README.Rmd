@@ -23,12 +23,13 @@ An R data package containing data sets used in the Drought Synthesis project. Th
 
 This package provides the following data tables:
 
-* `lt_seasonal`: long-term (1975-2021) integrated data set containing seasonal averages of various metrics for each year and across the entire Delta
-* `lt_regional`: long-term (1975-2021) integrated data set containing regional averages of various metrics for each year
-* `raw_hydro_1975_2021`: a data set containing raw daily values of the hydrology and Low Salinity Zone (LSZ) metrics for 1975-2021
-* `raw_wq_1975_2021`: a data set containing raw values of three water quality parameters (water temperature, salinity, and secchi depth) for 1975-2021
-* `raw_nutr_1975_2021`: a long-term data set containing raw values of three nutrient parameters (Dissolved Ammonia, Dissolved Nitrate + Nitrite, and Dissolved Ortho-phosphate) for 1975-2021
-* `raw_nutr_2013_2021`: a short-term data set containing raw values of three nutrient parameters (Dissolved Ammonia, Dissolved Nitrate + Nitrite, and Dissolved Ortho-phosphate) for 2013-2021
+* `lt_seasonal`: long-term (1975-2021) integrated data set containing seasonal averages of various metrics for each year and across the entire upper San Francisco Estuary (Delta)
+* `lt_regional`: long-term (1975-2021) integrated data set containing regional averages of various metrics for each year within the Delta
+* `raw_hydro_1975_2021`: a data set containing raw daily values of the hydrology and Low Salinity Zone (LSZ) metrics for 1975-2021 in the Delta
+* `raw_wq_1975_2021`: a data set containing raw values of three water quality parameters (water temperature, salinity, and secchi depth) for 1975-2021 within the Delta
+* `raw_nutr_1975_2021`: a long-term data set containing raw values of three nutrient parameters (Dissolved Ammonia, Dissolved Nitrate + Nitrite, and Dissolved Ortho-phosphate) for 1975-2021 within the Delta
+* `raw_nutr_2013_2021`: a short-term data set containing raw values of three nutrient parameters (Dissolved Ammonia, Dissolved Nitrate + Nitrite, and Dissolved Ortho-phosphate) for 2013-2021 within the Delta
+* `cont_do_daily`: A data set containing daily average values of continuous dissolved oxygen data from 2014-2021 at a few locations in the Delta
 
 This package also contains the following helper functions specific to the Drought Synthesis project:
 
@@ -55,7 +56,9 @@ USBR Delta Outflow Computation reports: <https://www.usbr.gov/mp/cvo/pmdoc.html>
 
 Hutton, P. H., J. S. Rath, and S. B Roy. 2017. Freshwater flow to the San Francisco Bay-Delta estuary over nine decades (Part 1): Trend evaluation. Hydrological Processes **31**(14): 2500-2515. <https://doi.org/10.1002/hyp.11201>.
 
-`discretewq` data package (version 2.1.0): <https://github.com/sbashevkin/discretewq/tree/78232cec30df1e2606431eeae3710ca25cf0c7f7>
+`discretewq` data package (version 2.3.1): <https://github.com/sbashevkin/discretewq/tree/v2.3.1>
 
 Water Quality Portal hosted by the National Water Quality Monitoring Council: <https://www.waterqualitydata.us/>
+
+USGS National Water Information System (NWIS): <https://nwis.waterdata.usgs.gov/nwis>
 

@@ -1,6 +1,10 @@
-# DroughtData (development version)
+# DroughtData 0.5.0
 
 * Fixed code for cleaning raw data to refer to internal data for the region shapefile and assignments
+* Updated to use version 2.3.1 of the `discretewq` data package
+* Updated nutrient data in `raw_nutr_1975_2021` and `raw_nutr_2013_2021` so they reflect data used in the February 2022 Drought Synthesis Report
+* Added daily averages of combined USGS outflow and Cache Slough flow to `raw_hydro_1975_2021`
+* Added the new data set `cont_do_daily` which contains daily average values of continuous dissolved oxygen data from 2014-2021 at a few locations in the upper San Francisco Estuary
 
 # DroughtData 0.4.0
 

@@ -6,9 +6,12 @@
 library(tidyverse)
 library(lubridate)
 library(hms)
-# Make sure we are using `discretewq` version 2.1.0, commit 1af04438c961c6d51f46cc777cbb6a142c1e3b30
-# devtools::install_github("sbashevkin/discretewq", ref = "1af04438c961c6d51f46cc777cbb6a142c1e3b30")
+# Make sure we are using `discretewq` version 2.3.1
+# install.packages("devtools")
+# devtools::install_github("sbashevkin/discretewq", ref = "v2.3.1")
 library(discretewq)
+# Make sure we are using `deltamapr` version 1.0.0, commit d0a6f9c22aa074f906176e99a0ed70f97f26fffd
+# devtools::install_github("InteragencyEcologicalProgram/deltamapr", ref = "d0a6f9c22aa074f906176e99a0ed70f97f26fffd")
 library(deltamapr)
 library(sf)
 library(wql)
