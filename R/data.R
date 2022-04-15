@@ -1,7 +1,7 @@
 #' @title Long-term seasonal averages
 #' @description A long-term (1975-2021) integrated data set containing seasonal
-#'   averages of various metrics for each year and across the entire Delta. Used
-#'   in the analyses for the Drought Synthesis.
+#'   averages of various metrics for each year and across the entire upper San
+#'   Francisco Estuary (Delta). Used in the analyses for the Drought Synthesis.
 #'
 #' @format data frame with 188 rows and 11 columns
 #' \describe{
@@ -62,8 +62,8 @@
 
 #' @title Long-term regional averages
 #' @description A long-term (1975-2021) integrated data set containing regional
-#'   averages of various metrics for each year. Used in the analyses for the
-#'   Drought Synthesis.
+#'   averages of various metrics for each year within the upper San Francisco
+#'   Estuary (Delta). Used in the analyses for the Drought Synthesis.
 #'
 #' @format data frame with 235 rows and 8 columns
 #' \describe{
@@ -101,9 +101,10 @@
 
 #' @title Raw daily values of hydrology and LSZ metrics for 1975-2021
 #' @description A data set containing raw daily values of the hydrology and Low
-#'   Salinity Zone (LSZ) metrics for 1975-2021. Seasonal averages of the
-#'   `Outflow`, `Export`, and `X2` data are in the `lt_seasonal` data set. Used
-#'   in the analyses for the Drought Synthesis.
+#'   Salinity Zone (LSZ) metrics for 1975-2021 in the upper San Francisco
+#'   Estuary (Delta). Seasonal averages of the `Outflow`, `Export`, and `X2`
+#'   data are in the `lt_seasonal` data set. Used in the analyses for the
+#'   Drought Synthesis.
 #'
 #' @format data frame with 17,167 rows and 8 columns
 #' \describe{
@@ -157,10 +158,10 @@
 
 #' @title Raw values of water quality measurements for 1975-2021
 #' @description A data set containing raw values of three water quality
-#'   parameters (water temperature, salinity, and secchi depth) for 1975-2021.
-#'   Seasonal and Regional averages of this data are in the `lt_seasonal` and
-#'   `lt_regional` data sets, respectively. Used in the analyses for the Drought
-#'   Synthesis.
+#'   parameters (water temperature, salinity, and secchi depth) for 1975-2021
+#'   within the upper San Francisco Estuary (Delta). Seasonal and Regional
+#'   averages of this data are in the `lt_seasonal` and `lt_regional` data sets,
+#'   respectively. Used in the analyses for the Drought Synthesis.
 #'
 #'   Data from 1975-2020 are from the `discretewq` data package. Data collected
 #'   in 2021 were provided directly from staff who collected the data and should
@@ -209,8 +210,8 @@
 #' @title Raw values of nutrient concentrations for 1975-2021
 #' @description A long-term data set containing raw values of three nutrient
 #'   parameters (Dissolved Ammonia, Dissolved Nitrate + Nitrite, and Dissolved
-#'   Ortho-phosphate) for 1975-2021. Used in the analyses for the Drought
-#'   Synthesis.
+#'   Ortho-phosphate) for 1975-2021 within the upper San Francisco Estuary
+#'   (Delta). Used in the analyses for the Drought Synthesis.
 #'
 #'   Most of the nutrient data from EMP (DWR's Environmental Monitoring Program)
 #'   and all of the nutrient data from USGS_SFBS (USGS's San Francisco Bay Water
@@ -293,8 +294,8 @@
 #' @title Raw values of nutrient concentrations for 2013-2021
 #' @description A short-term data set containing raw values of three nutrient
 #'   parameters (Dissolved Ammonia, Dissolved Nitrate + Nitrite, and Dissolved
-#'   Ortho-phosphate) for 2013-2021. Used in the analyses for the Drought
-#'   Synthesis.
+#'   Ortho-phosphate) for 2013-2021 within the upper San Francisco Estuary
+#'   (Delta). Used in the analyses for the Drought Synthesis.
 #'
 #'   Most of the nutrient data from EMP (DWR's Environmental Monitoring Program)
 #'   and all of the nutrient data from USGS_SFBS (USGS's San Francisco Bay Water

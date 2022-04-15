@@ -68,7 +68,7 @@ lt_seasonal
 }
 \description{
 A long-term (1975-2021) integrated data set containing seasonal
-averages of various metrics for each year and across the entire Delta. Used
-in the analyses for the Drought Synthesis.
+averages of various metrics for each year and across the entire upper San
+Francisco Estuary (Delta). Used in the analyses for the Drought Synthesis.
 }
 \keyword{datasets}

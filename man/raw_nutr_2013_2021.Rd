@@ -60,8 +60,8 @@ raw_nutr_2013_2021
 \description{
 A short-term data set containing raw values of three nutrient
 parameters (Dissolved Ammonia, Dissolved Nitrate + Nitrite, and Dissolved
-Ortho-phosphate) for 2013-2021. Used in the analyses for the Drought
-Synthesis.
+Ortho-phosphate) for 2013-2021 within the upper San Francisco Estuary
+(Delta). Used in the analyses for the Drought Synthesis.
 
 Most of the nutrient data from EMP (DWR's Environmental Monitoring Program)
 and all of the nutrient data from USGS_SFBS (USGS's San Francisco Bay Water

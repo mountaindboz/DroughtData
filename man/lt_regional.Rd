@@ -45,7 +45,7 @@ lt_regional
 }
 \description{
 A long-term (1975-2021) integrated data set containing regional
-averages of various metrics for each year. Used in the analyses for the
-Drought Synthesis.
+averages of various metrics for each year within the upper San Francisco
+Estuary (Delta). Used in the analyses for the Drought Synthesis.
 }
 \keyword{datasets}

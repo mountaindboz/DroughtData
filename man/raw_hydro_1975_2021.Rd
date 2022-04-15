@@ -61,8 +61,9 @@ raw_hydro_1975_2021
 }
 \description{
 A data set containing raw daily values of the hydrology and Low
-Salinity Zone (LSZ) metrics for 1975-2021. Seasonal averages of the
-\code{Outflow}, \code{Export}, and \code{X2} data are in the \code{lt_seasonal} data set. Used
-in the analyses for the Drought Synthesis.
+Salinity Zone (LSZ) metrics for 1975-2021 in the upper San Francisco
+Estuary (Delta). Seasonal averages of the \code{Outflow}, \code{Export}, and \code{X2}
+data are in the \code{lt_seasonal} data set. Used in the analyses for the
+Drought Synthesis.
 }
 \keyword{datasets}

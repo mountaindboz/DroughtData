@@ -23,13 +23,13 @@ An R data package containing data sets used in the Drought Synthesis project. Th
 
 This package provides the following data tables:
 
-* `lt_seasonal`: long-term (1975-2021) integrated data set containing seasonal averages of various metrics for each year and across the entire Delta
-* `lt_regional`: long-term (1975-2021) integrated data set containing regional averages of various metrics for each year
-* `raw_hydro_1975_2021`: a data set containing raw daily values of the hydrology and Low Salinity Zone (LSZ) metrics for 1975-2021
-* `raw_wq_1975_2021`: a data set containing raw values of three water quality parameters (water temperature, salinity, and secchi depth) for 1975-2021
-* `raw_nutr_1975_2021`: a long-term data set containing raw values of three nutrient parameters (Dissolved Ammonia, Dissolved Nitrate + Nitrite, and Dissolved Ortho-phosphate) for 1975-2021
-* `raw_nutr_2013_2021`: a short-term data set containing raw values of three nutrient parameters (Dissolved Ammonia, Dissolved Nitrate + Nitrite, and Dissolved Ortho-phosphate) for 2013-2021
-* `cont_do_daily`: A data set containing daily average values of continuous dissolved oxygen data from 2014-2021 at a few locations in the upper San Francisco Estuary
+* `lt_seasonal`: long-term (1975-2021) integrated data set containing seasonal averages of various metrics for each year and across the entire upper San Francisco Estuary (Delta)
+* `lt_regional`: long-term (1975-2021) integrated data set containing regional averages of various metrics for each year within the Delta
+* `raw_hydro_1975_2021`: a data set containing raw daily values of the hydrology and Low Salinity Zone (LSZ) metrics for 1975-2021 in the Delta
+* `raw_wq_1975_2021`: a data set containing raw values of three water quality parameters (water temperature, salinity, and secchi depth) for 1975-2021 within the Delta
+* `raw_nutr_1975_2021`: a long-term data set containing raw values of three nutrient parameters (Dissolved Ammonia, Dissolved Nitrate + Nitrite, and Dissolved Ortho-phosphate) for 1975-2021 within the Delta
+* `raw_nutr_2013_2021`: a short-term data set containing raw values of three nutrient parameters (Dissolved Ammonia, Dissolved Nitrate + Nitrite, and Dissolved Ortho-phosphate) for 2013-2021 within the Delta
+* `cont_do_daily`: A data set containing daily average values of continuous dissolved oxygen data from 2014-2021 at a few locations in the Delta
 
 This package also contains the following helper functions specific to the Drought Synthesis project:
 
