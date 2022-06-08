@@ -5,7 +5,7 @@
 \alias{raw_hydro_1975_2021}
 \title{Raw daily values of hydrology and LSZ metrics for 1975-2021}
 \format{
-data frame with 17,167 rows and 8 columns
+data frame with 17,167 rows and 12 columns
 \describe{
 \item{YearAdj}{Adjusted calendar year - December-November, with December of
 the previous calendar year included with the following year. For example,
@@ -13,6 +13,16 @@ December of 2020 is assigned year "2021" in this data set.}
 \item{Season}{Winter (Dec-Feb), Spring (Mar-May), Summer (Jun-Aug), or Fall
 (Sept-Nov)}
 \item{Date}{Calendar date}
+\item{InflowSacR}{Sacramento River inflow to the Delta in cubic feet per
+second (cfs). Data from WY 1975-2021 is from Dayflow.}
+\item{InflowYolo}{Yolo Bypass inflow to the Delta in cubic feet per
+second (cfs). Data from WY 1975-2021 is from Dayflow.}
+\item{InflowEast}{Eastern Delta inflow in cubic feet per second (cfs).
+Includes inflows from the San Joaquin, Cosumnes and Mokelumne Rivers, and
+miscellaneous streams from the northeast, east, and southeast. Data from WY
+1975-2021 is from Dayflow.}
+\item{InflowTotal}{Total Delta inflow in cubic feet per second (cfs). Data
+from WY 1975-2021 is from Dayflow.}
 \item{Outflow}{Net Delta outflow in cubic feet per second (cfs) at Chipps
 Island. Data from WY 1975-2021 is from Dayflow. The values for October
 through November 2021 are estimated by data from the USBR Delta Outflow

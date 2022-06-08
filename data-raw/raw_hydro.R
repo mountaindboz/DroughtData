@@ -1,7 +1,7 @@
 # Code to prepare data set of raw hydrology and LSZ metrics:
   # `raw_hydro_1975_2021` - raw daily values for hydrology and LSZ metrics
-    # (Delta Outflow from DAYFLOW, Delta Exports, X2, Combined USGS Outflow, Cache
-    # Slough Flow) for 1975-2021
+    # (Delta Inflow and Outflow from DAYFLOW, Delta Exports, X2, Combined USGS
+    # Outflow, Cache Slough Flow) for 1975-2021
 
 # Load packages
 library(tidyverse)
@@ -150,25 +150,59 @@ fp_hydro <- "data-raw/Hydrology/"
 df_dayflow_1970_1983 <-
   read_csv(
     file.path(fp_hydro, "dayflow_1970-1983.csv"),
-    col_types = cols_only(Date = "c", EXPORT = "d", OUT = "d")
+    col_types = cols_only(
+      Date = "c",
+      SAC = "d",
+      YOLO = "d",
+      EAST = "d",
+      TOT = "d",
+      EXPORT = "d",
+      OUT = "d"
+    )
   )
 
 df_dayflow_1984_1996 <-
   read_csv(
     file.path(fp_hydro, "dayflow_1984-1996.csv"),
-    col_types = cols_only(Date = "c", EXPORT = "d", OUT = "d")
+    col_types = cols_only(
+      Date = "c",
+      SAC = "d",
+      YOLO = "d",
+      EAST = "d",
+      TOT = "d",
+      EXPORT = "d",
+      OUT = "d"
+    )
   )
 
 df_dayflow_1997_2020 <-
   read_csv(
     file.path(fp_hydro, "dayflow_1997-2020.csv"),
-    col_types = cols_only(Date = "c", EXPORTS = "d", OUT = "d", X2 = "d")
+    col_types = cols_only(
+      Date = "c",
+      SAC = "d",
+      YOLO = "d",
+      EAST = "d",
+      TOT = "d",
+      EXPORTS = "d",
+      OUT = "d",
+      X2 = "d"
+    )
   )
 
 df_dayflow_2021 <-
   read_csv(
     file.path(fp_hydro, "dayflow_2021.csv"),
-    col_types = cols_only(Date = "c", EXPORTS = "d", OUT = "d", X2 = "d")
+    col_types = cols_only(
+      Date = "c",
+      SAC = "d",
+      YOLO = "d",
+      EAST = "d",
+      TOT = "d",
+      EXPORTS = "d",
+      OUT = "d",
+      X2 = "d"
+    )
   )
 
 # Import Delta Export and Outflow data from the USBR Delta Outflow Computation
@@ -201,6 +235,10 @@ df_dayflow_v1 <-
     df_dayflow_2021_c
   ) %>%
   rename(
+    InflowSacR = SAC,
+    InflowYolo = YOLO,
+    InflowEast = EAST,
+    InflowTotal = TOT,
     Outflow = OUT,
     Export = EXPORT
   ) %>%
@@ -301,6 +339,10 @@ raw_hydro_1975_2021 <- raw_hydro_1975_2021_v1 %>%
     YearAdj,
     Season,
     Date,
+    InflowSacR,
+    InflowYolo,
+    InflowEast,
+    InflowTotal,
     Outflow,
     Export,
     X2,
