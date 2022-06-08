@@ -1,5 +1,7 @@
 # DroughtData 1.0.0
 
+* Package contains versions of all water quality and flow data analyzed in the Feb 2022 report.
+
 # DroughtData 0.5.0
 
 * Fixed code for cleaning raw data to refer to internal data for the region shapefile and assignments
