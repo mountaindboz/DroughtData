@@ -243,7 +243,7 @@ df_dayflow_v1 <-
     Export = EXPORT
   ) %>%
   # convert date column to date
-  mutate(Date = parse_date_time(Date, c("mdY", "Ymd")))
+  mutate(Date = date(parse_date_time(Date, c("mdY", "Ymd"))))
 
 # Prepare X2 data from Hutton et al. paper to be joined with DAYFLOW data
 df_hutton_x2_c <- df_hutton_x2 %>%
@@ -277,7 +277,7 @@ df_dayflow_v3 <- bind_rows(df_dayflow_v2, df_usbr_2021_c) %>% arrange(Date)
   # NOTE: It seems like the log in the DAYFLOW notation is referring to Log10 (i.e., not ln)
 
 # Fill in X2 data for Oct - Nov 2021
-for (i in which(df_dayflow_v3$Date == as_date("2021-10-01")):which(df_dayflow_v3$Date == as_date("2021-11-30"))) {
+for (i in which(df_dayflow_v3$Date == "2021-10-01"):which(df_dayflow_v3$Date == "2021-11-30")) {
   df_dayflow_v3$X2[i] = 10.16 + 0.945*df_dayflow_v3$X2[i-1] - 1.487*log10(df_dayflow_v3$Outflow[i])
 }
 
