@@ -1,5 +1,8 @@
 # DroughtData 1.1.0
 
+* Updated `raw_hydro_1975_2021` and `lt_seasonal` data sets with recently released 2021 Dayflow data.
+* Added Dayflow inflow metrics (Sacramento River, Yolo Bypass, Eastern Inflows, and Total) to `raw_hydro_1975_2021`
+
 # DroughtData 1.0.0
 
 * Package contains versions of all water quality and flow data analyzed in the Feb 2022 report.
