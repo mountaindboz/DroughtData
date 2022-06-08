@@ -1,3 +1,5 @@
+# DroughtData 1.0.0
+
 # DroughtData 0.5.0
 
 * Fixed code for cleaning raw data to refer to internal data for the region shapefile and assignments
