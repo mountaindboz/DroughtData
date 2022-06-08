@@ -14,20 +14,19 @@ December of 2020 is assigned year "2021" in this data set.}
 (Sept-Nov)}
 \item{Date}{Calendar date}
 \item{Outflow}{Net Delta outflow in cubic feet per second (cfs) at Chipps
-Island. Data from WY 1975-2020 is from Dayflow. The values for October 2020
+Island. Data from WY 1975-2021 is from Dayflow. The values for October
 through November 2021 are estimated by data from the USBR Delta Outflow
 Computation reports.}
 \item{Export}{Total amount of water diverted from the Delta by the Federal
 and State governments to meet water agreements and contracts, expressed in
-cubic feet per second (cfs). Data from WY 1975-2020 is from Dayflow. The
-values for October 2020 through November 2021 are estimated by data from
-the USBR Delta Outflow Computation reports.}
+cubic feet per second (cfs). Data from WY 1975-2021 is from Dayflow. The
+values for October through November 2021 are estimated by data from the
+USBR Delta Outflow Computation reports.}
 \item{X2}{The distance from the Golden Gate Bridge to the point where daily
 average salinity is 2 parts per thousand at a depth of 1 meter off the
 bottom, expressed in kilometers. From Hutton et al. (2017) for WY
-1975-1996, from Dayflow for WY 1997-2020, and estimated using the
-Autoregressive Lag Model from Dayflow and Outflow from the USBR Delta
-Outflow Computation reports for October 2020 through November 2021.}
+1975-1996, from Dayflow for WY 1997-2021, and estimated using the
+Autoregressive Lag Model from Dayflow for October through November 2021.}
 \item{TotalUSGSOutflow}{Daily averages of combined tidally-filtered flow
 data in cubic feet per second (cfs) from four USGS stations: Sacramento
 River at Rio Vista CA (11455420), San Joaquin River at Jersey Point CA

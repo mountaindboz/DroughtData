@@ -22,20 +22,19 @@ and Below Normal years in a row are a drought (D), multiple Wet or Above
 Normal years in a row are a wet period (W), and years that are not on a
 streak are neutral (N).}
 \item{Outflow}{Net Delta outflow in cubic feet per second (cfs) at Chipps
-Island. Data from WY 1975-2020 is from Dayflow. The values for October 2020
+Island. Data from WY 1975-2021 is from Dayflow. The values for October
 through November 2021 are estimated by data from the USBR Delta Outflow
 Computation reports.}
 \item{Export}{Total amount of water diverted from the Delta by the Federal
 and State governments to meet water agreements and contracts, expressed in
-cubic feet per second (cfs). Data from WY 1975-2020 is from Dayflow. The
-values for October 2020 through November 2021 are estimated by data from
-the USBR Delta Outflow Computation reports.}
+cubic feet per second (cfs). Data from WY 1975-2021 is from Dayflow. The
+values for October through November 2021 are estimated by data from the
+USBR Delta Outflow Computation reports.}
 \item{X2}{The distance from the Golden Gate Bridge to the point where daily
 average salinity is 2 parts per thousand at a depth of 1 meter off the
 bottom, expressed in kilometers. From Hutton et al. (2017) for WY
-1975-1996, from Dayflow for WY 1997-2020, and estimated using the
-Autoregressive Lag Model from Dayflow and Outflow from the USBR Delta
-Outflow Computation reports for October 2020 through November 2021.}
+1975-1996, from Dayflow for WY 1997-2021, and estimated using the
+Autoregressive Lag Model from Dayflow for October through November 2021.}
 \item{Temperature}{Water temperature in degrees Celsius from the
 \code{discretewq} data package. Data from EMP and FMWT collected in 2021 were
 provided directly from staff who collected the data and should be
