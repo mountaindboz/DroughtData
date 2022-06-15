@@ -1,3 +1,5 @@
+# DroughtData (development version)
+
 # DroughtData 1.1.0
 
 * Updated `raw_hydro_1975_2021` and `lt_seasonal` data sets with recently released 2021 Dayflow data.
