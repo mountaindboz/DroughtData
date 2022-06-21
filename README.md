@@ -37,6 +37,9 @@ This package provides the following data tables:
 -   `cont_do_daily`: A data set containing daily average values of
     continuous dissolved oxygen data from 2014-2021 at a few locations
     in the Delta
+-   `raw_nutr_1975_2021`: a long-term data set containing raw values of
+    discrete chlorophyll-a water concentrations for 1975-2021 within the
+    Delta
 
 This package also contains the following helper functions specific to
 the Drought Synthesis project:
