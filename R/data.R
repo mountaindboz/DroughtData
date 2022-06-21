@@ -235,7 +235,7 @@
 #'   `Region` were excluded from this data set due to a large gap in the
 #'   long-term record.
 #'
-#' @format data frame with 13,366 rows and 17 columns
+#' @format data frame with 13,397 rows and 17 columns
 #' \describe{
 #'   \item{Source}{Name of the source dataset. Either EMP (DWR's Environmental
 #'     Monitoring Program), USGS_SFBS (USGS's San Francisco Bay Water Quality
@@ -293,8 +293,8 @@
 #' determined to be an outlier and is excluded from the data set.
 #'
 #' @source
-#' * `discretewq` data package (version 2.3.1):
-#'   <https://github.com/sbashevkin/discretewq/tree/v2.3.1>
+#' * `discretewq` data package (version 2.3.2):
+#'   <https://github.com/sbashevkin/discretewq/tree/v2.3.2>
 #' * Water Quality Portal hosted by the National Water Quality Monitoring
 #'   Council: <https://www.waterqualitydata.us/>
 "raw_nutr_1975_2021"
@@ -319,7 +319,7 @@
 #'   `Region` were excluded from this data set because it only has recent data
 #'   for 2017-2021.
 #'
-#' @format data frame with 3,139 rows and 17 columns
+#' @format data frame with 3,179 rows and 17 columns
 #' \describe{
 #'   \item{Source}{Name of the source dataset. Either EMP (DWR's Environmental
 #'     Monitoring Program), USGS_SFBS (USGS's San Francisco Bay Water Quality

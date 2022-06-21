@@ -385,7 +385,8 @@ for (var in vars_nutr) {
 # NO- no need to filter out duplicates
 
 # Look for and remove outliers from the data set:
-# Create function to flag data points with modified z-scores greater than a specified threshold
+# Create function to flag data points with modified z-scores greater than a
+  # specified threshold
 flag_modzscore <- function(df, data_var, threshold) {
   mod_zscore_sym <- sym(glue("{as_name(enquo(data_var))}_mod_zscore"))
   mod_zscore_enquo <- enquo(mod_zscore_sym)
@@ -399,7 +400,7 @@ flag_modzscore <- function(df, data_var, threshold) {
         NA_real_,
         abs(0.6745 * ({{ data_var }} - tmp_median) / tmp_mad)
       ),
-      "{{data_var}}_mod_zscore_flag" := case_when(
+      "{{data_var}}_flag" := case_when(
         is.na(!!mod_zscore_enquo) ~ FALSE,
         !!mod_zscore_enquo > threshold ~ TRUE,
         TRUE ~ FALSE
@@ -408,11 +409,45 @@ flag_modzscore <- function(df, data_var, threshold) {
     select(!starts_with("tmp_"))
 }
 
-# Create function to remove flagged data points and modify value in related _Sign variable to "= (unreliable)"
+# Create function to flag the <RL values with high reporting limits (greater
+  # than a specified percentile of the data)
+flag_high_rl <- function(df, data_var, perc_thresh) {
+  sign_sym <- sym(glue("{as_name(enquo(data_var))}_Sign"))
+  sign_enquo <- enquo(sign_sym)
+  flag_sym <- sym(glue("{as_name(enquo(data_var))}_flag"))
+  flag_enquo <- enquo(flag_sym)
+
+  threshold <- df %>%
+    summarize(quant = quantile({{ data_var }}, probs = perc_thresh, na.rm = TRUE)) %>%
+    pull(quant)
+
+  if (any(names(df) == as_name(flag_sym))) {
+    df %>%
+      mutate(
+        !!flag_sym := case_when(
+          is.na({{ data_var }}) ~ FALSE,
+          str_detect(!!sign_enquo, "^<") & {{ data_var }} > threshold ~ TRUE,
+          TRUE ~ !!flag_enquo
+        )
+      )
+  } else {
+    df %>%
+      mutate(
+        !!flag_sym := case_when(
+          is.na({{ data_var }}) ~ FALSE,
+          str_detect(!!sign_enquo, "^<") & {{ data_var }} > threshold ~ TRUE,
+          TRUE ~ FALSE
+        )
+      )
+  }
+}
+
+# Create function to remove flagged data points and modify value in related
+  # _Sign variable to "= (unreliable)"
 rm_flagged <- function(df, data_var) {
   sign_sym <- sym(glue("{as_name(enquo(data_var))}_Sign"))
   sign_enquo <- enquo(sign_sym)
-  flag_sym <- sym(glue("{as_name(enquo(data_var))}_mod_zscore_flag"))
+  flag_sym <- sym(glue("{as_name(enquo(data_var))}_flag"))
   flag_enquo <- enquo(flag_sym)
 
   df %>%
@@ -432,38 +467,36 @@ df_nutr_all_c1 <- df_nutr_all_c %>%
   # Remove flags from all data points in the Lower Mokelumne River subregion since these probably
     # shouldn't be considered outliers
   mutate(
-    DissAmmonia_mod_zscore_flag = if_else(
-      SubRegion == "Lower Mokelumne River" & DissAmmonia_mod_zscore_flag == TRUE,
+    DissAmmonia_flag = if_else(
+      SubRegion == "Lower Mokelumne River" & DissAmmonia_flag == TRUE,
       FALSE,
-      DissAmmonia_mod_zscore_flag
+      DissAmmonia_flag
     ),
-    DissNitrateNitrite_mod_zscore_flag = if_else(
-      SubRegion == "Lower Mokelumne River" & DissNitrateNitrite_mod_zscore_flag == TRUE,
+    DissNitrateNitrite_flag = if_else(
+      SubRegion == "Lower Mokelumne River" & DissNitrateNitrite_flag == TRUE,
       FALSE,
-      DissNitrateNitrite_mod_zscore_flag
+      DissNitrateNitrite_flag
     ),
-    DissOrthophos_mod_zscore_flag = if_else(
-      SubRegion == "Lower Mokelumne River" & DissOrthophos_mod_zscore_flag == TRUE,
+    DissOrthophos_flag = if_else(
+      SubRegion == "Lower Mokelumne River" & DissOrthophos_flag == TRUE,
       FALSE,
-      DissOrthophos_mod_zscore_flag
+      DissOrthophos_flag
     )
   ) %>%
   # Exclude remaining flagged data points
   rm_flagged(DissAmmonia) %>%
   rm_flagged(DissNitrateNitrite) %>%
   rm_flagged(DissOrthophos) %>%
+  # Flag the <RL values with high RL's (> 75th percentile) in the DWR_EMP data set
+  flag_high_rl(DissAmmonia, 0.75) %>%
+  flag_high_rl(DissNitrateNitrite, 0.75) %>%
+  flag_high_rl(DissOrthophos, 0.75) %>%
   # Exclude flagged data points that are <RL values with high RL's
-  # *** This filter removes some data that we would like to keep because the
-    # data frame is in a wide format; however, this is how the data was prepared
-    # for the Feb 2022 version of the Drought Synthesis report. We will fix this
-    # in a later version.
-  filter(
-    !(str_detect(DissAmmonia_Sign, "^<") & DissAmmonia >= .2),
-    !(str_detect(DissNitrateNitrite_Sign, "^<") & DissNitrateNitrite >= 3),
-    !(str_detect(DissOrthophos_Sign, "^<") & DissOrthophos > .15)
-  ) %>%
-  # Remove mod z-score variables
-  select(!contains("_mod_zscore"))
+  rm_flagged(DissAmmonia) %>%
+  rm_flagged(DissNitrateNitrite) %>%
+  rm_flagged(DissOrthophos) %>%
+  # Remove mod z-score and flag variables
+  select(!ends_with(c("_mod_zscore", "_flag")))
 
 # Finish cleaning all raw data
 df_nutr_all_c2 <- df_nutr_all_c1 %>%
@@ -532,8 +565,15 @@ raw_nutr_2013_2021 <- df_nutr_all_c2 %>%
 # 6. Save and Export Data -------------------------------------------------
 
 # Save final data sets of raw nutrient concentrations as csv files for easier diffing
-write_csv(raw_nutr_1975_2021, "data-raw/Final/raw_nutr_1975_2021.csv")
-write_csv(raw_nutr_2013_2021, "data-raw/Final/raw_nutr_2013_2021.csv")
+raw_nutr_1975_2021 %>%
+  # Convert Datetime to character so that it isn't converted to UTC upon export
+  mutate(Datetime = as.character(Datetime)) %>%
+  write_csv("data-raw/Final/raw_nutr_1975_2021.csv")
+
+raw_nutr_2013_2021 %>%
+  # Convert Datetime to character so that it isn't converted to UTC upon export
+  mutate(Datetime = as.character(Datetime)) %>%
+  write_csv("data-raw/Final/raw_nutr_2013_2021.csv")
 
 # Save final data sets of raw nutrient concentrations as objects in the data package
 usethis::use_data(raw_nutr_1975_2021, raw_nutr_2013_2021, overwrite = TRUE)

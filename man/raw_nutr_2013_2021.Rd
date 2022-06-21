@@ -5,7 +5,7 @@
 \alias{raw_nutr_2013_2021}
 \title{Raw values of nutrient concentrations for 2013-2021}
 \format{
-data frame with 3,139 rows and 17 columns
+data frame with 3,179 rows and 17 columns
 \describe{
 \item{Source}{Name of the source dataset. Either EMP (DWR's Environmental
 Monitoring Program), USGS_SFBS (USGS's San Francisco Bay Water Quality
@@ -48,8 +48,8 @@ the section below for more information about what these symbols represent.}
 }
 \source{
 \itemize{
-\item \code{discretewq} data package (version 2.3.1):
-\url{https://github.com/sbashevkin/discretewq/tree/v2.3.1}
+\item \code{discretewq} data package (version 2.3.2):
+\url{https://github.com/sbashevkin/discretewq/tree/v2.3.2}
 \item Water Quality Portal hosted by the National Water Quality Monitoring
 Council: \url{https://www.waterqualitydata.us/}
 }
