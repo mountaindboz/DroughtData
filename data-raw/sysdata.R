@@ -6,6 +6,9 @@
 # Load packages
 library(readr)
 library(dplyr)
+# Make sure we are using `deltamapr` version 1.0.0, commit d0a6f9c22aa074f906176e99a0ed70f97f26fffd
+# install.packages("devtools")
+# devtools::install_github("InteragencyEcologicalProgram/deltamapr", ref = "d0a6f9c22aa074f906176e99a0ed70f97f26fffd")
 library(deltamapr)
 library(sf)
 
