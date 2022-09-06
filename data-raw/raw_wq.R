@@ -7,15 +7,15 @@ library(dplyr)
 library(tidyr)
 library(purrr)
 library(stringr)
+library(readr)
 library(dtplyr)
 library(lubridate)
 library(hms)
-# Make sure we are using `discretewq` version 2.3.2.9000, commit 23c5a31122a68fb7b0f543f57e783bafd7878981
+# Make sure we are using `discretewq` version 2.3.2.9000, commit c910fa0f00504cb1120741ab6c4630518aba36b3
 # install.packages("devtools")
-# devtools::install_github("sbashevkin/discretewq", ref = "23c5a31122a68fb7b0f543f57e783bafd7878981")
+# devtools::install_github("sbashevkin/discretewq", ref = "c910fa0f00504cb1120741ab6c4630518aba36b3")
 library(discretewq)
 library(sf)
-library(wql)
 
 
 # 1. Import Data ----------------------------------------------------------
@@ -156,8 +156,8 @@ filt_daily_dups <- function(df, param) {
       Longitude,
       SubRegion,
       YearAdj,
-      Month,
       Season,
+      Month,
       Date,
       Datetime,
       .data[[param]]
@@ -166,17 +166,6 @@ filt_daily_dups <- function(df, param) {
 
 # Filter daily duplicates for each parameter
 ndf_dwq_c <- ndf_dwq %>% mutate(df_data = map2(df_data, Parameter, .f = filt_daily_dups))
-
-# Make sure filtering procedure worked as expected
-# for (var in vars_wq) {
-#   print(var)
-#   df_dwq_c2 %>%
-#     filter(!is.na(.data[[var]])) %>%
-#     count(Source, Station, Date) %>%
-#     filter(n > 1) %>%
-#     print()
-# }
-# No more duplicates now
 
 
 # 3. Filter Data Temporally and Spatially ---------------------------------
@@ -244,7 +233,7 @@ flag_zscore <- function(df, param, threshold) {
     select(!starts_with("tmp_"))
 }
 
-# Remove data points that are more than 10 SDs away from the mean of each subregion
+# Remove data points that are more than 15 SDs away from the mean of each subregion
 ndf_dwq_filt2 <- ndf_dwq_filt %>%
   transmute(
     Parameter,
@@ -252,54 +241,39 @@ ndf_dwq_filt2 <- ndf_dwq_filt %>%
     df_data_flag = map2(
       df_data,
       Parameter,
-      ~ flag_zscore(.x, .y, threshold = 10) %>%
+      ~ flag_zscore(.x, .y, threshold = 15) %>%
         ungroup
+    ),
+    df_data_filt = map(
+      df_data_flag,
+      ~ filter(.x, !Zscore_flag) %>%
+        select(!starts_with("Zscore"))
     )
   )
 
+
+# 5. Save and Export Data -------------------------------------------------
+
 # Finish cleaning all raw data
-raw_wq_1975_2021 <- df_wq_all_c1 %>%
-  # Add variables for adjusted calendar year, month, and season
-    # Adjusted calendar year: December-November, with December of the previous calendar year
-    # included with the following year
-  mutate(
-    Month = month(Date),
-    YearAdj = if_else(Month == 12, year(Date) + 1, year(Date)),
-    Season = case_when(
-      Month %in% 3:5 ~ "Spring",
-      Month %in% 6:8 ~ "Summer",
-      Month %in% 9:11 ~ "Fall",
-      Month %in% c(12, 1, 2) ~ "Winter"
-    )
-  ) %>%
-  # Restrict data to 1975-2021
-  filter(YearAdj %in% 1975:2021) %>%
+raw_wq_1975_2021 <-
+  # Combine WQ data back together
+  reduce(ndf_dwq_filt2$df_data_filt, full_join) %>%
   # Add region designations
-  left_join(DroughtData:::df_regions, by = c("Season", "SubRegion")) %>%
-  # Remove any data not chosen for the long-term analysis
-  filter(Long_term) %>%
-  # Select variables to keep
-  select(
-    Source,
-    Station,
-    Latitude,
-    Longitude,
-    Region,
-    SubRegion,
-    YearAdj,
-    Season,
-    Month,
-    Date,
-    Datetime,
-    Temperature,
-    Salinity,
-    Secchi
-  ) %>%
+  left_join(DroughtData:::df_regions %>% distinct(SubRegion, Region)) %>%
+  relocate(Region, .before = SubRegion) %>%
   # Arrange data
   arrange(Date, Source, Station)
 
-
-# 4. Save and Export Data -------------------------------------------------
+# Make sure there is only one sample per station-day for each parameter
+for (var in vars_wq) {
+  print(var)
+  raw_wq_1975_2021 %>%
+    filter(!is.na(.data[[var]])) %>%
+    count(Source, Station, Date) %>%
+    filter(n > 1) %>%
+    print()
+}
+# No more duplicates now
 
 # Save final data set of raw water quality measurements as csv file for easier diffing
 write_csv(raw_wq_1975_2021, "data-raw/Final/raw_wq_1975_2021.csv")
