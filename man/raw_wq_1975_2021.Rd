@@ -5,18 +5,22 @@
 \alias{raw_wq_1975_2021}
 \title{Raw values of water quality measurements for 1975-2021}
 \format{
-data frame with 34,523 rows and 14 columns
+data frame with 82,548 rows and 14 columns
 \describe{
-\item{Source}{Name of the source dataset. Either EMP (DWR's Environmental
-Monitoring Program), FMWT (CDFW's Fall Midwater Trawl survey), or STN
-(CDFW's Summer Townet survey)}
+\item{Source}{Name of the source dataset. Either 20mm (CDFW's 20mm survey),
+Baystudy (CDFW's Bay Study), DJFMP (USFWS's Delta Juvenile Fish Monitoring
+Program), EMP (DWR's Environmental Monitoring Program), FMWT (CDFW's Fall
+Midwater Trawl survey), SDO (DWR's Stockton Dissolved Oxygen Monitoring
+Program), SKT (CDFW's Spring Kodiak Trawl), STN (CDFW's Summer Townet
+survey), Suisun (UC Davis's Suisun Marsh Fish Study), or USGS_SFBS (USGS's
+San Francisco Bay Water Quality Survey)}
 \item{Station}{Location where measurement was collected}
 \item{Latitude}{Latitude of \code{Station} in Decimal Degrees (WGS 84 Datum)}
 \item{Longitude}{Longitude of \code{Station} in Decimal Degrees (WGS 84 Datum)}
 \item{Region}{Region designation of \code{Station} within the larger Delta and
 Suisun Marsh/Bay (Confluence, North, SouthCentral, Suisun Bay, Suisun
 Marsh). The Drought Synthesis team categorized \code{SubRegion}s into broader
-\code{Region}s using \href{https://github.com/mountaindboz/DroughtData/blob/master/data-raw/Rosies_regions.csv}{this crosswalk}
+\code{Region}s using \href{https://github.com/mountaindboz/DroughtData/blob/master/data-raw/Global/Rosies_regions.csv}{this crosswalk}
 .}
 \item{SubRegion}{Subregion designation of \code{Station} as defined by the
 \code{R_EDSM_Subregions_Mahardja_FLOAT} shapefile from the
@@ -28,17 +32,17 @@ December of 2020 is assigned year "2021" in this data set.}
 \item{Season}{Winter (Dec-Feb), Spring (Mar-May), Summer (Jun-Aug), or Fall
 (Sept-Nov)}
 \item{Month}{Integer representing the month}
-\item{Date}{Calendar date of the measurement}
-\item{Datetime}{Date and time of the measurement. Not available for all
-measurements.}
+\item{Date}{Calendar date of the measurement in yyyy-mm-dd}
+\item{Datetime}{Date and time (yyyy-mm-dd HH:MM:SS) of the measurement in
+PST. Not available for all measurements.}
 \item{Temperature}{Water temperature in degrees Celsius}
 \item{Salinity}{Salinity value on the Practical Salinity Scale}
 \item{Secchi}{Secchi depth in centimeters}
 }
 }
 \source{
-\code{discretewq} data package (version 2.3.1):
-\url{https://github.com/sbashevkin/discretewq/tree/v2.3.1}
+\code{discretewq} data package (version 2.3.2.9000):
+\url{https://github.com/sbashevkin/discretewq/tree/c910fa0f00504cb1120741ab6c4630518aba36b3}
 }
 \usage{
 raw_wq_1975_2021
@@ -50,12 +54,9 @@ within the upper San Francisco Estuary (Delta). Seasonal and Regional
 averages of this data are in the \code{lt_seasonal} and \code{lt_regional} data sets,
 respectively. Used in the analyses for the Drought Synthesis.
 
-Data from 1975-2020 are from the \code{discretewq} data package. Data collected
-in 2021 were provided directly from staff who collected the data and should
-be considered provisional.
-
-This data set contains only one data point per \code{Station} and \code{Date} and
-excludes any data points that are more than 10 standard deviations away
-from the mean of each \code{SubRegion}.
+All data are from the \code{discretewq} data package. This data set contains
+only one data point per \code{Station} and \code{Date} and excludes any data points
+that are more than 15 standard deviations away from the mean of each
+\code{SubRegion}.
 }
 \keyword{datasets}
