@@ -57,7 +57,7 @@ USBR Delta Outflow Computation reports: <https://www.usbr.gov/mp/cvo/pmdoc.html>
 
 Hutton, P. H., J. S. Rath, and S. B Roy. 2017. Freshwater flow to the San Francisco Bay-Delta estuary over nine decades (Part 1): Trend evaluation. Hydrological Processes **31**(14): 2500-2515. <https://doi.org/10.1002/hyp.11201>.
 
-`discretewq` data package (version 2.3.1): <https://github.com/sbashevkin/discretewq/tree/v2.3.1>
+`discretewq` data package (version 2.3.2.9000): <https://github.com/sbashevkin/discretewq/tree/c910fa0f00504cb1120741ab6c4630518aba36b3>
 
 Water Quality Portal hosted by the National Water Quality Monitoring Council: <https://www.waterqualitydata.us/>
 
