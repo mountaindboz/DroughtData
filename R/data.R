@@ -222,21 +222,14 @@
 #'   Ortho-phosphate) for 1975-2021 within the upper San Francisco Estuary
 #'   (Delta). Used in the analyses for the Drought Synthesis.
 #'
-#'   Most of the nutrient data from EMP (DWR's Environmental Monitoring Program)
-#'   and all of the nutrient data from USGS_SFBS (USGS's San Francisco Bay Water
-#'   Quality Survey) are from the `discretewq` data package. Data from EMP
-#'   collected in 2021 was provided directly from staff who collected the data
-#'   and should be considered provisional. Data from USGS_CAWSC were downloaded
-#'   directly from the Water Quality Portal using the `dataRetrieval` R package.
-#'   Some of the data from USGS_CAWSC is also considered provisional.
+#'   All data are from the `discretewq` data package. This data set contains
+#'   only one data point per `Station` and `Date` and excludes any data points
+#'   that have modified z-scores greater than 15 grouped by `SubRegion` with the
+#'   exception of Dissolved Ammonia. The flagged outliers in the Dissolved
+#'   Ammonia data set appeared to be accurate based upon best professional
+#'   judgement.
 #'
-#'   This data set contains only one data point per `Station` and `Date` and
-#'   excludes any data points that have modified z-scores greater than 15
-#'   grouped by `SubRegion`. Additionally, samples collected in the Suisun Marsh
-#'   `Region` were excluded from this data set due to a large gap in the
-#'   long-term record.
-#'
-#' @format data frame with 13,397 rows and 17 columns
+#' @format data frame with 10,523 rows and 17 columns
 #' \describe{
 #'   \item{Source}{Name of the source dataset. Either EMP (DWR's Environmental
 #'     Monitoring Program), USGS_SFBS (USGS's San Francisco Bay Water Quality
@@ -247,7 +240,7 @@
 #'   \item{Region}{Region designation of `Station` within the larger Delta and
 #'     Suisun Bay (Confluence, North, SouthCentral, Suisun Bay). The Drought
 #'     Synthesis team categorized `SubRegion`s into broader `Region`s using [this
-#'     crosswalk](https://github.com/mountaindboz/DroughtData/blob/master/data-raw/Rosies_regions.csv)
+#'     crosswalk](https://github.com/mountaindboz/DroughtData/blob/master/data-raw/Global/Rosies_regions.csv)
 #'     .}
 #'   \item{SubRegion}{Subregion designation of `Station` as defined by the
 #'     `R_EDSM_Subregions_Mahardja_FLOAT` shapefile from the
@@ -259,21 +252,22 @@
 #'   \item{Season}{Winter (Dec-Feb), Spring (Mar-May), Summer (Jun-Aug), or Fall
 #'     (Sept-Nov)}
 #'   \item{Month}{Integer representing the month}
-#'   \item{Date}{Calendar date of the measurement}
-#'   \item{Datetime}{Date and time of the measurement}
+#'   \item{Date}{Calendar date of the measurement in yyyy-mm-dd}
+#'   \item{Datetime}{Date and time (yyyy-mm-dd HH:MM:SS) of the measurement in
+#'     PST.}
 #'   \item{DissAmmonia_Sign}{A symbol representing whether the Dissolved Ammonia
 #'     value is below the reporting limit or above it. Contains one of four
-#'     symbols: "<", "< (estimated)", "=", or "= (unreliable)". See the section
+#'     symbols: "<", "< (estimated)", "=", or "~". See the section
 #'     below for more information about what these symbols represent.}
 #'   \item{DissAmmonia}{Dissolved Ammonia value in mg/L as N}
 #'   \item{DissNitrateNitrite_Sign}{A symbol representing whether the Dissolved
 #'     Nitrate + Nitrite value is below the reporting limit or above it. Contains
-#'     one of four symbols: "<", "< (estimated)", "=", or "= (unreliable)". See
+#'     one of four symbols: "<", "< (estimated)", "=", or "~". See
 #'     the section below for more information about what these symbols represent.}
 #'   \item{DissNitrateNitrite}{Dissolved Nitrate + Nitrite value in mg/L as N}
 #'   \item{DissOrthophos_Sign}{A symbol representing whether the Dissolved
 #'     Ortho-phosphate value is below the reporting limit or above it. Contains
-#'     one of four symbols: "<", "< (estimated)", "=", or "= (unreliable)". See
+#'     one of four symbols: "<", "< (estimated)", "=", or "~". See
 #'     the section below for more information about what these symbols represent.}
 #'   \item{DissOrthophos}{Dissolved Ortho-phosphate value in mg/L as P}
 #' }
@@ -290,14 +284,11 @@
 #' variable equal to the actual value measured by the laboratory. An `NA` value
 #' in the corresponding result variable indicates that the value is missing or
 #' wasn't collected.
-#' * "= (unreliable)" - The value in the corresponding result variable was
-#' determined to be an outlier and is excluded from the data set.
+#' * "~" - The value in the corresponding result variable was estimated.
 #'
 #' @source
-#' * `discretewq` data package (version 2.3.2):
-#'   <https://github.com/sbashevkin/discretewq/tree/v2.3.2>
-#' * Water Quality Portal hosted by the National Water Quality Monitoring
-#'   Council: <https://www.waterqualitydata.us/>
+#' `discretewq` data package (version 2.3.2.9000):
+#'   <https://github.com/sbashevkin/discretewq/tree/c910fa0f00504cb1120741ab6c4630518aba36b3>
 "raw_nutr_1975_2021"
 
 #' @title Raw values of nutrient concentrations for 2013-2021
@@ -377,7 +368,11 @@
 #' * "= (unreliable)" - The value in the corresponding result variable was
 #' determined to be an outlier and is excluded from the data set.
 #'
-#' @inherit raw_nutr_1975_2021 return source
+#' @source
+#' * `discretewq` data package (version 2.3.2):
+#'   <https://github.com/sbashevkin/discretewq/tree/v2.3.2>
+#' * Water Quality Portal hosted by the National Water Quality Monitoring
+#'   Council: <https://www.waterqualitydata.us/>
 "raw_nutr_2013_2021"
 
 #' @title Daily averages of continuous dissolved oxygen data from 2014-2021

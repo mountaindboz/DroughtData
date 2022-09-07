@@ -5,7 +5,7 @@
 \alias{raw_nutr_1975_2021}
 \title{Raw values of nutrient concentrations for 1975-2021}
 \format{
-data frame with 13,397 rows and 17 columns
+data frame with 10,523 rows and 17 columns
 \describe{
 \item{Source}{Name of the source dataset. Either EMP (DWR's Environmental
 Monitoring Program), USGS_SFBS (USGS's San Francisco Bay Water Quality
@@ -15,7 +15,7 @@ Survey), or USGS_CAWSC (USGS's California Water Science Center)}
 \item{Longitude}{Longitude of \code{Station} in Decimal Degrees (WGS 84 Datum)}
 \item{Region}{Region designation of \code{Station} within the larger Delta and
 Suisun Bay (Confluence, North, SouthCentral, Suisun Bay). The Drought
-Synthesis team categorized \code{SubRegion}s into broader \code{Region}s using \href{https://github.com/mountaindboz/DroughtData/blob/master/data-raw/Rosies_regions.csv}{this crosswalk}
+Synthesis team categorized \code{SubRegion}s into broader \code{Region}s using \href{https://github.com/mountaindboz/DroughtData/blob/master/data-raw/Global/Rosies_regions.csv}{this crosswalk}
 .}
 \item{SubRegion}{Subregion designation of \code{Station} as defined by the
 \code{R_EDSM_Subregions_Mahardja_FLOAT} shapefile from the
@@ -27,32 +27,29 @@ December of 2020 is assigned year "2021" in this data set.}
 \item{Season}{Winter (Dec-Feb), Spring (Mar-May), Summer (Jun-Aug), or Fall
 (Sept-Nov)}
 \item{Month}{Integer representing the month}
-\item{Date}{Calendar date of the measurement}
-\item{Datetime}{Date and time of the measurement}
+\item{Date}{Calendar date of the measurement in yyyy-mm-dd}
+\item{Datetime}{Date and time (yyyy-mm-dd HH:MM:SS) of the measurement in
+PST.}
 \item{DissAmmonia_Sign}{A symbol representing whether the Dissolved Ammonia
 value is below the reporting limit or above it. Contains one of four
-symbols: "<", "< (estimated)", "=", or "= (unreliable)". See the section
+symbols: "<", "< (estimated)", "=", or "~". See the section
 below for more information about what these symbols represent.}
 \item{DissAmmonia}{Dissolved Ammonia value in mg/L as N}
 \item{DissNitrateNitrite_Sign}{A symbol representing whether the Dissolved
 Nitrate + Nitrite value is below the reporting limit or above it. Contains
-one of four symbols: "<", "< (estimated)", "=", or "= (unreliable)". See
+one of four symbols: "<", "< (estimated)", "=", or "~". See
 the section below for more information about what these symbols represent.}
 \item{DissNitrateNitrite}{Dissolved Nitrate + Nitrite value in mg/L as N}
 \item{DissOrthophos_Sign}{A symbol representing whether the Dissolved
 Ortho-phosphate value is below the reporting limit or above it. Contains
-one of four symbols: "<", "< (estimated)", "=", or "= (unreliable)". See
+one of four symbols: "<", "< (estimated)", "=", or "~". See
 the section below for more information about what these symbols represent.}
 \item{DissOrthophos}{Dissolved Ortho-phosphate value in mg/L as P}
 }
 }
 \source{
-\itemize{
-\item \code{discretewq} data package (version 2.3.2):
-\url{https://github.com/sbashevkin/discretewq/tree/v2.3.2}
-\item Water Quality Portal hosted by the National Water Quality Monitoring
-Council: \url{https://www.waterqualitydata.us/}
-}
+\code{discretewq} data package (version 2.3.2.9000):
+\url{https://github.com/sbashevkin/discretewq/tree/c910fa0f00504cb1120741ab6c4630518aba36b3}
 }
 \usage{
 raw_nutr_1975_2021
@@ -63,19 +60,12 @@ parameters (Dissolved Ammonia, Dissolved Nitrate + Nitrite, and Dissolved
 Ortho-phosphate) for 1975-2021 within the upper San Francisco Estuary
 (Delta). Used in the analyses for the Drought Synthesis.
 
-Most of the nutrient data from EMP (DWR's Environmental Monitoring Program)
-and all of the nutrient data from USGS_SFBS (USGS's San Francisco Bay Water
-Quality Survey) are from the \code{discretewq} data package. Data from EMP
-collected in 2021 was provided directly from staff who collected the data
-and should be considered provisional. Data from USGS_CAWSC were downloaded
-directly from the Water Quality Portal using the \code{dataRetrieval} R package.
-Some of the data from USGS_CAWSC is also considered provisional.
-
-This data set contains only one data point per \code{Station} and \code{Date} and
-excludes any data points that have modified z-scores greater than 15
-grouped by \code{SubRegion}. Additionally, samples collected in the Suisun Marsh
-\code{Region} were excluded from this data set due to a large gap in the
-long-term record.
+All data are from the \code{discretewq} data package. This data set contains
+only one data point per \code{Station} and \code{Date} and excludes any data points
+that have modified z-scores greater than 15 grouped by \code{SubRegion} with the
+exception of Dissolved Ammonia. The flagged outliers in the Dissolved
+Ammonia data set appeared to be accurate based upon best professional
+judgement.
 }
 \section{More information about the \verb{_Sign} variables}{
 
@@ -91,8 +81,7 @@ value in the corresponding result variable is the estimated RL value.
 variable equal to the actual value measured by the laboratory. An \code{NA} value
 in the corresponding result variable indicates that the value is missing or
 wasn't collected.
-\item "= (unreliable)" - The value in the corresponding result variable was
-determined to be an outlier and is excluded from the data set.
+\item "~" - The value in the corresponding result variable was estimated.
 }
 }
 
