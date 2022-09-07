@@ -95,16 +95,34 @@ ndf_dwq <-
   tibble(
     Parameter = vars_wq,
     df_data = rep(list(df_dwq_c), 3)
+  ) %>%
+  mutate(
+    df_data = map2(
+      df_data,
+      Parameter,
+      ~ drop_na(.x, all_of(.y)) %>%
+        select(
+          Source,
+          Station,
+          Latitude,
+          Longitude,
+          SubRegion,
+          YearAdj,
+          Season,
+          Month,
+          Date,
+          Datetime,
+          contains(.y)
+        )
+    )
   )
 
 # Are there cases where multiple samples were collected at the same station in one day?
 ndf_dwq %>%
   transmute(
-    df_count = map2(
+    df_count = map(
       df_data,
-      Parameter,
-      ~ drop_na(.x, all_of(.y)) %>%
-        count(Source, Station, Date) %>%
+      ~ count(.x, Source, Station, Date) %>%
         filter(n > 1)
     )
   ) %>%
@@ -114,17 +132,14 @@ ndf_dwq %>%
 # Create function to filter data so that there is only one sample per
   # station-day by choosing the data point closest to noon
 filt_daily_dups <- function(df, param) {
-  # Remove any NA values in parameter of interest
-  df_param <- df %>% drop_na(.data[[param]])
-
   # Look for any instances when more than 1 data point was collected at a station-day
-  df_dups <- df_param %>%
+  df_dups <- df %>%
     count(Source, Station, Date) %>%
     filter(n > 1) %>%
     select(-n)
 
   # Fix duplicates
-  df_dups_fixed <- df_param %>%
+  df_dups_fixed <- df %>%
     inner_join(df_dups, by = c("Source", "Station", "Date")) %>%
     drop_na(Datetime) %>%
     mutate(
@@ -146,22 +161,9 @@ filt_daily_dups <- function(df, param) {
     select(-c(Time, Noon_diff))
 
   # Add back fixed duplicates and format data frame
-  df_param %>%
+  df %>%
     anti_join(df_dups, by = c("Source", "Station", "Date")) %>%
-    bind_rows(df_dups_fixed) %>%
-    select(
-      Source,
-      Station,
-      Latitude,
-      Longitude,
-      SubRegion,
-      YearAdj,
-      Season,
-      Month,
-      Date,
-      Datetime,
-      .data[[param]]
-    )
+    bind_rows(df_dups_fixed)
 }
 
 # Filter daily duplicates for each parameter
@@ -217,8 +219,8 @@ ndf_dwq_filt <- ndf_dwq_filt %>%
 flag_zscore <- function(df, param, threshold) {
   df %>%
     mutate(
-      tmp_mean = mean(.data[[param]], na.rm = TRUE),
-      tmp_sd = sd(.data[[param]], na.rm = TRUE),
+      tmp_mean = mean(.data[[param]]),
+      tmp_sd = sd(.data[[param]]),
       Zscore = if_else(
         tmp_sd == 0,
         NA_real_,
@@ -237,12 +239,12 @@ flag_zscore <- function(df, param, threshold) {
 ndf_dwq_filt2 <- ndf_dwq_filt %>%
   transmute(
     Parameter,
-    df_data = map(df_data_filt_seas, ~ group_by(.x, SubRegion)),
     df_data_flag = map2(
-      df_data,
+      df_data_filt_seas,
       Parameter,
-      ~ flag_zscore(.x, .y, threshold = 15) %>%
-        ungroup
+      ~ group_by(.x, SubRegion) %>%
+        flag_zscore(.y, threshold = 15) %>%
+        ungroup()
     ),
     df_data_filt = map(
       df_data_flag,
