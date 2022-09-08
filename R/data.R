@@ -112,7 +112,7 @@
 #'     December of 2020 is assigned year "2021" in this data set.}
 #'   \item{Season}{Winter (Dec-Feb), Spring (Mar-May), Summer (Jun-Aug), or Fall
 #'     (Sept-Nov)}
-#'   \item{Date}{Calendar date}
+#'   \item{Date}{Calendar date of the value in yyyy-mm-dd}
 #'   \item{InflowSacR}{Sacramento River inflow to the Delta in cubic feet per
 #'     second (cfs). Data from WY 1975-2021 is from Dayflow.}
 #'   \item{InflowYolo}{Yolo Bypass inflow to the Delta in cubic feet per
@@ -322,7 +322,7 @@
 #'   \item{Region}{Region designation of `Station` within the larger Delta and
 #'     Suisun Bay (Confluence, North, SouthCentral, Suisun Bay). The Drought
 #'     Synthesis team categorized `SubRegion`s into broader `Region`s using [this
-#'     crosswalk](https://github.com/mountaindboz/DroughtData/blob/master/data-raw/Rosies_regions.csv)
+#'     crosswalk](https://github.com/mountaindboz/DroughtData/blob/master/data-raw/Global/Rosies_regions.csv)
 #'     .}
 #'   \item{SubRegion}{Subregion designation of `Station` as defined by the
 #'     `R_EDSM_Subregions_Mahardja_FLOAT` shapefile from the
@@ -334,8 +334,9 @@
 #'   \item{Season}{Winter (Dec-Feb), Spring (Mar-May), Summer (Jun-Aug), or Fall
 #'     (Sept-Nov)}
 #'   \item{Month}{Integer representing the month}
-#'   \item{Date}{Calendar date of the measurement}
-#'   \item{Datetime}{Date and time of the measurement}
+#'   \item{Date}{Calendar date of the measurement in yyyy-mm-dd}
+#'   \item{Datetime}{Date and time (yyyy-mm-dd HH:MM:SS) of the measurement in
+#'     PST.}
 #'   \item{DissAmmonia_Sign}{A symbol representing whether the Dissolved Ammonia
 #'     value is below the reporting limit or above it. Contains one of four
 #'     symbols: "<", "< (estimated)", "=", or "= (unreliable)". See the section
@@ -397,7 +398,7 @@
 #'   \item{Station}{Location where measurement was collected. Either DEC
 #'     (Sacramento River near Decker Island) or TOE (Yolo Bypass Toe Drain).}
 #'   \item{Year}{Calendar year of the value}
-#'   \item{Date}{Calendar date of the value}
+#'   \item{Date}{Calendar date of the value in yyyy-mm-dd}
 #'   \item{AvgDO}{Daily average dissolved oxygen value in milligrams per liter}
 #' }
 #'

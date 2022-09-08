@@ -12,7 +12,7 @@ the previous calendar year included with the following year. For example,
 December of 2020 is assigned year "2021" in this data set.}
 \item{Season}{Winter (Dec-Feb), Spring (Mar-May), Summer (Jun-Aug), or Fall
 (Sept-Nov)}
-\item{Date}{Calendar date}
+\item{Date}{Calendar date of the value in yyyy-mm-dd}
 \item{InflowSacR}{Sacramento River inflow to the Delta in cubic feet per
 second (cfs). Data from WY 1975-2021 is from Dayflow.}
 \item{InflowYolo}{Yolo Bypass inflow to the Delta in cubic feet per

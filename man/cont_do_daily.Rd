@@ -10,7 +10,7 @@ data frame with 5,305 rows and 4 columns
 \item{Station}{Location where measurement was collected. Either DEC
 (Sacramento River near Decker Island) or TOE (Yolo Bypass Toe Drain).}
 \item{Year}{Calendar year of the value}
-\item{Date}{Calendar date of the value}
+\item{Date}{Calendar date of the value in yyyy-mm-dd}
 \item{AvgDO}{Daily average dissolved oxygen value in milligrams per liter}
 }
 }
