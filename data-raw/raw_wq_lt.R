@@ -250,6 +250,16 @@ ndf_dwq_filt2 <- ndf_dwq_filt %>%
       df_data_flag,
       ~ filter(.x, !Zscore_flag) %>%
         select(!starts_with("Zscore"))
+    ),
+    # Remove one temperature outlier collected at S42 (EMP) on 5/3/1983
+    df_data_filt = if_else(
+      Parameter == "Temperature",
+      modify_depth(
+        df_data_filt,
+        1,
+        ~ filter(.x, !(Source == "EMP" & Station == "S42" & Date == "1983-05-03"))
+      ),
+      df_data_filt
     )
   )
 
