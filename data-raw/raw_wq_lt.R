@@ -288,7 +288,10 @@ for (var in vars_wq) {
 # No more duplicates now
 
 # Save final data set of raw water quality measurements as csv file for easier diffing
-write_csv(raw_wq_1975_2021, "data-raw/Final/raw_wq_1975_2021.csv")
+raw_wq_1975_2021 %>%
+  # Convert Datetime to character so that it isn't converted to UTC upon export
+  mutate(Datetime = as.character(Datetime)) %>%
+  write_csv("data-raw/Final/raw_wq_1975_2021.csv")
 
 # Save final data set of raw water quality measurements as object in the data package
 usethis::use_data(raw_wq_1975_2021, overwrite = TRUE)
