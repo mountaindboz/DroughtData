@@ -412,26 +412,22 @@
 #'   Estuary (Delta) from 1975-2021. Used in the analyses for the Drought
 #'   Synthesis.
 #'
-#'   Most of the chlorophyll-a data from EMP (DWR's Environmental Monitoring
-#'   Program) and all the data from USGS_SFBS (USGS's San Francisco Bay Water
-#'   Quality Survey) are from the `discretewq` data package. Data from EMP
-#'   collected in 2021 was provided directly from staff who collected the data
-#'   and should be considered provisional. This data set contains only one data
-#'   point per `Station` and `Date`.
+#'   All data are from the `discretewq` data package. This data set contains
+#'   only one data point per `Station` and `Date`.
 #'
-#' @format data frame with 16,940 rows and 13 columns
+#' @format data frame with 19,887 rows and 13 columns
 #' \describe{
 #'   \item{Source}{Name of the source dataset. Either EMP (DWR's Environmental
-#'     Monitoring Program) or USGS_SFBS (USGS's San Francisco Bay Water Quality
-#'     Survey)}
+#'     Monitoring Program), USGS_SFBS (USGS's San Francisco Bay Water Quality
+#'     Survey), or DWR_NCRO (DWR's North Central Region Office)}
 #'   \item{Station}{Location where sample was collected}
 #'   \item{Latitude}{Latitude of `Station` in Decimal Degrees (WGS 84 Datum)}
 #'   \item{Longitude}{Longitude of `Station` in Decimal Degrees (WGS 84 Datum)}
 #'   \item{Region}{Region designation of `Station` within the larger Delta and
-#'     Suisun Bay (Confluence, North, SouthCentral, Suisun Bay, Suisun Marsh). The
+#'     Suisun Bay (Confluence, North, SouthCentral, Suisun Bay). The
 #'     Drought Synthesis team categorized `SubRegion`s into broader `Region`s
 #'     using [this
-#'     crosswalk](https://github.com/mountaindboz/DroughtData/blob/master/data-raw/Rosies_regions.csv)
+#'     crosswalk](https://github.com/mountaindboz/DroughtData/blob/master/data-raw/Global/Rosies_regions.csv)
 #'   .}
 #'   \item{SubRegion}{Subregion designation of `Station` as defined by the
 #'     `R_EDSM_Subregions_Mahardja_FLOAT` shapefile from the
@@ -443,18 +439,19 @@
 #'   \item{Season}{Winter (Dec-Feb), Spring (Mar-May), Summer (Jun-Aug), or Fall
 #'     (Sept-Nov)}
 #'   \item{Month}{Integer representing the month}
-#'   \item{Date}{Calendar date of the sample}
-#'   \item{Datetime}{Date and time of the sample}
-#'   \item{Chlorophyll}{Chlorophyll-a concentration in micrograms per liter}
+#'   \item{Date}{Calendar date of the measurement in yyyy-mm-dd}
+#'   \item{Datetime}{Date and time (yyyy-mm-dd HH:MM:SS) of the measurement in
+#'     PST.}
 #'   \item{Chlorophyll_Sign}{A symbol representing whether the chlorophyll-a
 #'     value is below the reporting limit or above it. Contains one of two
 #'     symbols: "<" or "=". "<" indicates that the value is below the Reporting
 #'     Limit (RL) with the value in `Chlorophyll` equal to the RL. "=" indicates
 #'     that the value was detected by the laboratory with the value in
 #'     `Chlorophyll` equal to the actual value measured by the laboratory.}
+#'   \item{Chlorophyll}{Chlorophyll-a concentration in micrograms per liter}
 #' }
 #'
-#' @source `discretewq` data package (version 2.3.2):
-#'   <https://github.com/sbashevkin/discretewq/tree/v2.3.2>
+#' `discretewq` data package (version 2.3.2.9000):
+#'   <https://github.com/sbashevkin/discretewq/tree/dbb2638e800e637f3f2c70d47c9faad68f95db07>
 "raw_chla_1975_2021"
 
