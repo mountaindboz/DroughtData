@@ -15,10 +15,8 @@ data frame with 5,305 rows and 4 columns
 }
 }
 \source{
-\itemize{
-\item USGS National Water Information System (NWIS):
+USGS National Water Information System (NWIS):
 \url{https://nwis.waterdata.usgs.gov/nwis}
-}
 }
 \usage{
 cont_do_daily

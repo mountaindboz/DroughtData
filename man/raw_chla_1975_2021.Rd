@@ -39,7 +39,8 @@ that the value was detected by the laboratory with the value in
 \code{Chlorophyll} equal to the actual value measured by the laboratory.}
 \item{Chlorophyll}{Chlorophyll-a concentration in micrograms per liter}
 }
-
+}
+\source{
 \code{discretewq} data package (version 2.3.2.9000):
 \url{https://github.com/sbashevkin/discretewq/tree/dbb2638e800e637f3f2c70d47c9faad68f95db07}
 }

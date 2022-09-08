@@ -213,7 +213,7 @@
 #'
 #' @source
 #' `discretewq` data package (version 2.3.2.9000):
-#'   <https://github.com/sbashevkin/discretewq/tree/c910fa0f00504cb1120741ab6c4630518aba36b3>
+#'   <https://github.com/sbashevkin/discretewq/tree/dbb2638e800e637f3f2c70d47c9faad68f95db07>
 "raw_wq_1975_2021"
 
 #' @title Raw values of nutrient concentrations for 1975-2021
@@ -288,7 +288,7 @@
 #'
 #' @source
 #' `discretewq` data package (version 2.3.2.9000):
-#'   <https://github.com/sbashevkin/discretewq/tree/c910fa0f00504cb1120741ab6c4630518aba36b3>
+#'   <https://github.com/sbashevkin/discretewq/tree/dbb2638e800e637f3f2c70d47c9faad68f95db07>
 "raw_nutr_1975_2021"
 
 #' @title Raw values of nutrient concentrations for 2013-2021
@@ -403,7 +403,7 @@
 #' }
 #'
 #' @source
-#' * USGS National Water Information System (NWIS):
+#' USGS National Water Information System (NWIS):
 #'   <https://nwis.waterdata.usgs.gov/nwis>
 "cont_do_daily"
 
@@ -452,6 +452,7 @@
 #'   \item{Chlorophyll}{Chlorophyll-a concentration in micrograms per liter}
 #' }
 #'
+#' @source
 #' `discretewq` data package (version 2.3.2.9000):
 #'   <https://github.com/sbashevkin/discretewq/tree/dbb2638e800e637f3f2c70d47c9faad68f95db07>
 "raw_chla_1975_2021"

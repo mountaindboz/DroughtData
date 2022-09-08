@@ -42,7 +42,7 @@ PST. Not available for all measurements.}
 }
 \source{
 \code{discretewq} data package (version 2.3.2.9000):
-\url{https://github.com/sbashevkin/discretewq/tree/c910fa0f00504cb1120741ab6c4630518aba36b3}
+\url{https://github.com/sbashevkin/discretewq/tree/dbb2638e800e637f3f2c70d47c9faad68f95db07}
 }
 \usage{
 raw_wq_1975_2021

@@ -77,7 +77,7 @@ evaluation. Hydrological Processes **31**(14): 2500-2515.
 <https://doi.org/10.1002/hyp.11201>.
 
 `discretewq` data package (version 2.3.2.9000):
-<https://github.com/sbashevkin/discretewq/tree/c910fa0f00504cb1120741ab6c4630518aba36b3>
+<https://github.com/sbashevkin/discretewq/tree/dbb2638e800e637f3f2c70d47c9faad68f95db07>
 
 Water Quality Portal hosted by the National Water Quality Monitoring
 Council: <https://www.waterqualitydata.us/>
