@@ -98,8 +98,8 @@ df_nutr_c1 <- df_nutr_c %>%
   filter(!is.na(SubRegion)) %>%
   st_drop_geometry() %>%
   # Add variables for adjusted calendar year, month, and season
-  # Adjusted calendar year: December-November, with December of the previous
-  # calendar year included with the following year
+    # Adjusted calendar year: December-November, with December of the previous
+    # calendar year included with the following year
   mutate(
     Month = month(Date),
     YearAdj = if_else(Month == 12, year(Date) + 1, year(Date)),
@@ -253,7 +253,7 @@ flag_high_rl <- function(df, param, perc_thresh) {
 }
 
 # Create function to flag data points with modified z-scores greater than a
-# specified threshold
+  # specified threshold
 flag_modzscore <- function(df, param, threshold) {
   df %>%
     mutate(

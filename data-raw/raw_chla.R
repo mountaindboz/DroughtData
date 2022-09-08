@@ -9,7 +9,6 @@ library(readr)
 library(dtplyr)
 library(lubridate)
 library(hms)
-# library(readxl)
 # Make sure we are using `discretewq` version 2.3.2.9000, commit dbb2638e800e637f3f2c70d47c9faad68f95db07
 # install.packages("devtools")
 # devtools::install_github("sbashevkin/discretewq", ref = "dbb2638e800e637f3f2c70d47c9faad68f95db07")
