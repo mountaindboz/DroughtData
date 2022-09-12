@@ -9,7 +9,8 @@ drt_avg_data(
   data_var,
   avg_type = c("season", "region", "both"),
   month.na = c("strict", "relaxed"),
-  .quote = FALSE
+  .quote = FALSE,
+  .remove_na = TRUE
 )
 }
 \arguments{
@@ -18,7 +19,9 @@ contain variables for \code{Month}, \code{Season}, \code{Region}, and \code{Year
 
 \item{data_var}{The variable name in \code{df} containing the values to be
 averaged. Supports tidy or non-standard evaluation as default. Place the
-variable name in quotes if the \code{.quote} argument is \code{TRUE}.}
+variable name in quotes if the \code{.quote} argument is \code{TRUE}. Also, the
+default behavior is for \code{NA} values in \code{data_var} to be removed before
+averaging. Set \code{.remove_na = FALSE} to keep \code{NA} values when averaging.}
 
 \item{avg_type}{Use \code{"season"} for seasonal averages, \code{"region"} for regional
 averages, or \code{"both"} for seasonal-regional averages}
@@ -33,6 +36,12 @@ name in \code{data_var} to be unquoted. If this argument is set to \code{FALSE},
 \code{data_var} must be quoted. Allowing for quoted variable names can be useful
 to run more than one variable through the function using a character vector
 of variable names.}
+
+\item{.remove_na}{An optional argument that determines whether \code{NA} values in
+\code{data_var} are removed before averaging. The default (\code{TRUE}) removes \code{NA}
+values in \code{data_var} before averaging, while \code{FALSE} keeps \code{NA} values.
+WARNING: keeping \code{NA} values in \code{data_var} may result in unintended \code{NA}
+values in the calculated averages.}
 }
 \value{
 A tibble containing the averaged data

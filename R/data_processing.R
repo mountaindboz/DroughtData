@@ -6,7 +6,9 @@
 #'   contain variables for `Month`, `Season`, `Region`, and `YearAdj`.
 #' @param data_var The variable name in `df` containing the values to be
 #'   averaged. Supports tidy or non-standard evaluation as default. Place the
-#'   variable name in quotes if the `.quote` argument is `TRUE`.
+#'   variable name in quotes if the `.quote` argument is `TRUE`. Also, the
+#'   default behavior is for `NA` values in `data_var` to be removed before
+#'   averaging. Set `.remove_na = FALSE` to keep `NA` values when averaging.
 #' @param avg_type Use `"season"` for seasonal averages, `"region"` for regional
 #'   averages, or `"both"` for seasonal-regional averages
 #' @param month.na Either `"strict"` to make sure all months are represented in
@@ -18,6 +20,11 @@
 #'   `data_var` must be quoted. Allowing for quoted variable names can be useful
 #'   to run more than one variable through the function using a character vector
 #'   of variable names.
+#' @param .remove_na An optional argument that determines whether `NA` values in
+#'   `data_var` are removed before averaging. The default (`TRUE`) removes `NA`
+#'   values in `data_var` before averaging, while `FALSE` keeps `NA` values.
+#'   WARNING: keeping `NA` values in `data_var` may result in unintended `NA`
+#'   values in the calculated averages.
 #'
 #' @return A tibble containing the averaged data
 #' @export
@@ -25,7 +32,8 @@ drt_avg_data <- function(df,
                          data_var,
                          avg_type = c("season", "region", "both"),
                          month.na = c("strict", "relaxed"),
-                         .quote = FALSE) {
+                         .quote = FALSE,
+                         .remove_na = TRUE) {
   # Argument checking
   avg_type <- match.arg(avg_type, c("season", "region", "both"))
   month.na <- match.arg(month.na, c("strict", "relaxed"))
@@ -35,14 +43,18 @@ drt_avg_data <- function(df,
   Month <- NULL
   Season <- NULL
 
+  # Remove rows with NAs in data_var if .remove_na is TRUE
+  if (.remove_na == TRUE) {
+    # Method depends on .quote argument
+    if (.quote == TRUE) {
+      df <- dplyr::filter(df, !is.na(.data[[data_var]]))
+    } else {
+      df <- dplyr::filter(df, !is.na({{ data_var }}))
+    }
+  }
+
   # Calculate seasonal averages for each region
   df_avg_seas_reg <- df %>%
-    # Remove any rows with NAs in data_var to summarize - method depends on .quote argument
-    {if (.quote == TRUE) {
-      dplyr::filter(., !is.na(.data[[data_var]]))
-    } else {
-      dplyr::filter(., !is.na({{ data_var }}))
-    }} %>%
     # Calculate monthly mean for each region - method depends on .quote argument
     dplyr::group_by(.data$Month, .data$Season, .data$Region, .data$YearAdj) %>%
     {if (.quote == TRUE) {
