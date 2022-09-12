@@ -15,8 +15,8 @@
 #'   each season, or `"relaxed"` to allow for one or more missing months in a
 #'   season
 #' @param .quote An optional argument that determines whether the function uses
-#'   tidy or non-standard evaluation. The default (`TRUE`) requires the variable
-#'   name in `data_var` to be unquoted. If this argument is set to `FALSE`,
+#'   tidy or non-standard evaluation. The default (`FALSE`) requires the variable
+#'   name in `data_var` to be unquoted. If this argument is set to `TRUE`,
 #'   `data_var` must be quoted. Allowing for quoted variable names can be useful
 #'   to run more than one variable through the function using a character vector
 #'   of variable names.

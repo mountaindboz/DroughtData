@@ -31,8 +31,8 @@ each season, or \code{"relaxed"} to allow for one or more missing months in a
 season}
 
 \item{.quote}{An optional argument that determines whether the function uses
-tidy or non-standard evaluation. The default (\code{TRUE}) requires the variable
-name in \code{data_var} to be unquoted. If this argument is set to \code{FALSE},
+tidy or non-standard evaluation. The default (\code{FALSE}) requires the variable
+name in \code{data_var} to be unquoted. If this argument is set to \code{TRUE},
 \code{data_var} must be quoted. Allowing for quoted variable names can be useful
 to run more than one variable through the function using a character vector
 of variable names.}
