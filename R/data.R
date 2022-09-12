@@ -1,9 +1,9 @@
-#' @title Long-term seasonal averages
-#' @description A long-term (1975-2021) integrated data set containing seasonal
-#'   averages of various metrics for each year and across the entire upper San
-#'   Francisco Estuary (Delta). Used in the analyses for the Drought Synthesis.
+#' @title Long-term seasonal averages of hydrology parameters
+#' @description A long-term (1975-2021) data set containing seasonal averages of
+#'   three hydrology parameters (Delta Outflow, Delta Exports, X2). Used in the
+#'   analyses for the Drought Synthesis.
 #'
-#' @format data frame with 188 rows and 11 columns
+#' @format data frame with 188 rows and 8 columns
 #' \describe{
 #'   \item{YearAdj}{Adjusted calendar year - December-November, with December of
 #'     the previous calendar year included with the following year. For example,
@@ -19,31 +19,21 @@
 #'     and Below Normal years in a row are a drought (D), multiple Wet or Above
 #'     Normal years in a row are a wet period (W), and years that are not on a
 #'     streak are neutral (N).}
-#'   \item{Outflow}{Net Delta outflow in cubic feet per second (cfs) at Chipps
-#'     Island. Data from WY 1975-2021 is from Dayflow. The values for October
-#'     through November 2021 are estimated by data from the USBR Delta Outflow
-#'     Computation reports.}
-#'   \item{Export}{Total amount of water diverted from the Delta by the Federal
-#'     and State governments to meet water agreements and contracts, expressed in
-#'     cubic feet per second (cfs). Data from WY 1975-2021 is from Dayflow. The
-#'     values for October through November 2021 are estimated by data from the
-#'     USBR Delta Outflow Computation reports.}
-#'   \item{X2}{The distance from the Golden Gate Bridge to the point where daily
-#'     average salinity is 2 parts per thousand at a depth of 1 meter off the
-#'     bottom, expressed in kilometers. From Hutton et al. (2017) for WY
-#'     1975-1996, from Dayflow for WY 1997-2021, and estimated using the
-#'     Autoregressive Lag Model from Dayflow for October through November 2021.}
-#'   \item{Temperature}{Water temperature in degrees Celsius from the
-#'     `discretewq` data package. Data from EMP and FMWT collected in 2021 were
-#'     provided directly from staff who collected the data and should be
-#'     considered provisional.}
-#'   \item{Salinity}{Salinity value on the Practical Salinity Scale from the
-#'     `discretewq` data package. Data from EMP and FMWT collected in 2021 were
-#'     provided directly from staff who collected the data and should be
-#'     considered provisional.}
-#'   \item{Secchi}{Secchi depth in centimeters from the `discretewq` data
-#'     package. Data from EMP and FMWT collected in 2021 were provided directly
-#'     from staff who collected the data and should be considered provisional.}
+#'   \item{Outflow}{Seasonal averages of net Delta outflow in cubic feet per
+#'     second (cfs) at Chipps Island. Data from WY 1975-2021 is from Dayflow. The
+#'     raw values for October through November 2021 were estimated by data from
+#'     the USBR Delta Outflow Computation reports.}
+#'   \item{Export}{Seasonal averages of the total amount of water diverted from
+#'     the Delta by the Federal and State governments to meet water agreements and
+#'     contracts, expressed in cubic feet per second (cfs). Data from WY 1975-2021
+#'     is from Dayflow. The raw values for October through November 2021 were
+#'     estimated by data from the USBR Delta Outflow Computation reports.}
+#'   \item{X2}{Seasonal averages of the distance from the Golden Gate Bridge to
+#'     the point where daily average salinity is 2 parts per thousand at a depth
+#'     of 1 meter off the bottom, expressed in kilometers. From Hutton et al.
+#'     (2017) for WY 1975-1996 and from Dayflow for WY 1997-2021. Raw values were
+#'     estimated using the Autoregressive Lag Model from Dayflow for October
+#'     through November 2021.}
 #' }
 #'
 #' @source
@@ -54,21 +44,22 @@
 #'   <https://www.usbr.gov/mp/cvo/pmdoc.html>
 #' * Hutton, P. H., J. S. Rath, and S. B Roy. 2017. Freshwater flow to the San
 #'   Francisco Bay-Delta estuary over nine decades (Part 1): Trend evaluation.
-#'   Hydrological Processes **31**(14): 2500-2515. <https://doi.org/10.1002/hyp.11201>.
-#' * `discretewq` data package (version 2.3.1):
-#'   <https://github.com/sbashevkin/discretewq/tree/v2.3.1>
-"lt_seasonal"
+#'   Hydrological Processes **31**(14): 2500-2515. <https://doi.org/10.1002/hyp.11201>
+"lt_avg_hydro"
 
-#' @title Long-term regional averages
-#' @description A long-term (1975-2021) integrated data set containing regional
-#'   averages of various metrics for each year within the upper San Francisco
-#'   Estuary (Delta). Used in the analyses for the Drought Synthesis.
+#' @title Long-term seasonal-regional averages of water quality parameters
+#' @description A long-term (1975-2021) data set containing seasonal-regional
+#'   averages of three water quality parameters (water temperature, salinity,
+#'   and secchi depth) within the upper San Francisco Estuary (Delta). Used in
+#'   the analyses for the Drought Synthesis.
 #'
-#' @format data frame with 235 rows and 8 columns
+#' @format data frame with 940 rows and 9 columns
 #' \describe{
 #'   \item{YearAdj}{Adjusted calendar year - December-November, with December of
 #'     the previous calendar year included with the following year. For example,
 #'     December of 2020 is assigned year "2021" in this data set.}
+#'   \item{Season}{Winter (Dec-Feb), Spring (Mar-May), Summer (Jun-Aug), or Fall
+#'     (Sept-Nov)}
 #'   \item{Region}{Region designation within the larger Delta and Suisun
 #'     Marsh/Bay (Confluence, North, SouthCentral, Suisun Bay, Suisun Marsh).}
 #'   \item{SVIndex}{Sacramento Valley Water Year Index}
@@ -80,29 +71,25 @@
 #'     and Below Normal years in a row are a drought (D), multiple Wet or Above
 #'     Normal years in a row are a wet period (W), and years that are not on a
 #'     streak are neutral (N).}
-#'   \item{Temperature}{Water temperature in degrees Celsius from the
-#'     `discretewq` data package. Data collected in 2021 were provided directly
-#'     from staff who collected the data and should be considered provisional.}
-#'   \item{Salinity}{Salinity value on the Practical Salinity Scale from the
-#'     `discretewq` data package. Data collected in 2021 were provided directly
-#'     from staff who collected the data and should be considered provisional.}
-#'   \item{Secchi}{Secchi depth in centimeters from the `discretewq` data
-#'     package. Data collected in 2021 were provided directly from staff who
-#'     collected the data and should be considered provisional.}
+#'   \item{Temperature}{Seasonal-regional averages of water temperature in
+#'     degrees Celsius}
+#'   \item{Salinity}{Seasonal-regional averages of salinity value on the
+#'     Practical Salinity Scale}
+#'   \item{Secchi}{Seasonal-regional averages of secchi depth in centimeters}
 #' }
 #'
 #' @source
 #' * Sacramento Valley Water Year Index:
 #'   <https://cdec.water.ca.gov/reportapp/javareports?name=WSIHIST>
-#' * `discretewq` data package (version 2.3.1):
-#'   <https://github.com/sbashevkin/discretewq/tree/v2.3.1>
-"lt_regional"
+#' * `discretewq` data package (version 2.3.2.9000):
+#'   <https://github.com/sbashevkin/discretewq/tree/dbb2638e800e637f3f2c70d47c9faad68f95db07>
+"lt_avg_wq"
 
 #' @title Raw daily values of hydrology and LSZ metrics for 1975-2021
 #' @description A data set containing raw daily values of the hydrology and Low
 #'   Salinity Zone (LSZ) metrics for 1975-2021 in the upper San Francisco
 #'   Estuary (Delta). Seasonal averages of the `Outflow`, `Export`, and `X2`
-#'   data are in the `lt_seasonal` data set. Used in the analyses for the
+#'   data are in the [`lt_avg_hydro`] data set. Used in the analyses for the
 #'   Drought Synthesis.
 #'
 #' @format data frame with 17,167 rows and 12 columns
@@ -167,9 +154,9 @@
 #' @title Raw values of water quality measurements for 1975-2021
 #' @description A data set containing raw values of three water quality
 #'   parameters (water temperature, salinity, and secchi depth) for 1975-2021
-#'   within the upper San Francisco Estuary (Delta). Seasonal and Regional
-#'   averages of this data are in the `lt_seasonal` and `lt_regional` data sets,
-#'   respectively. Used in the analyses for the Drought Synthesis.
+#'   within the upper San Francisco Estuary (Delta). Seasonal-regional averages
+#'   of this data are in the [`lt_avg_wq`] data set. Used in the analyses for the
+#'   Drought Synthesis.
 #'
 #'   All data are from the `discretewq` data package. This data set contains
 #'   only one data point per `Station` and `Date` and excludes any data points

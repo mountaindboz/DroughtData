@@ -50,9 +50,9 @@ raw_wq_1975_2021
 \description{
 A data set containing raw values of three water quality
 parameters (water temperature, salinity, and secchi depth) for 1975-2021
-within the upper San Francisco Estuary (Delta). Seasonal and Regional
-averages of this data are in the \code{lt_seasonal} and \code{lt_regional} data sets,
-respectively. Used in the analyses for the Drought Synthesis.
+within the upper San Francisco Estuary (Delta). Seasonal-regional averages
+of this data are in the \code{\link{lt_avg_wq}} data set. Used in the analyses for the
+Drought Synthesis.
 
 All data are from the \code{discretewq} data package. This data set contains
 only one data point per \code{Station} and \code{Date} and excludes any data points
