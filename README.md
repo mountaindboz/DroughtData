@@ -15,11 +15,13 @@ helper functions.
 
 This package provides the following data tables:
 
--   `lt_seasonal`: long-term (1975-2021) integrated data set containing
-    seasonal averages of various metrics for each year and across the
-    entire upper San Francisco Estuary (Delta)
--   `lt_regional`: long-term (1975-2021) integrated data set containing
-    regional averages of various metrics for each year within the Delta
+-   `lt_avg_hydro`: long-term (1975-2021) data set containing seasonal
+    averages of three hydrology parameters (Delta Outflow, Delta
+    Exports, X2)
+-   `lt_avg_wq`: long-term (1975-2021) data set containing
+    seasonal-regional averages of three water quality parameters (water
+    temperature, salinity, and secchi depth) within the the upper San
+    Francisco Estuary (Delta)
 -   `raw_hydro_1975_2021`: a data set containing raw daily values of the
     hydrology and Low Salinity Zone (LSZ) metrics for 1975-2021 in the
     Delta
