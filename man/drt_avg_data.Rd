@@ -8,7 +8,7 @@ drt_avg_data(
   df,
   data_var,
   avg_type = c("season", "region", "both"),
-  month.na = c("strict", "relaxed"),
+  month_na = c("strict", "relaxed"),
   .quote = FALSE,
   .remove_na = TRUE
 )
@@ -26,7 +26,7 @@ averaging. Set \code{.remove_na = FALSE} to keep \code{NA} values when averaging
 \item{avg_type}{Use \code{"season"} for seasonal averages, \code{"region"} for regional
 averages, or \code{"both"} for seasonal-regional averages}
 
-\item{month.na}{Either \code{"strict"} to make sure all months are represented in
+\item{month_na}{Either \code{"strict"} to make sure all months are represented in
 each season, or \code{"relaxed"} to allow for one or more missing months in a
 season}
 

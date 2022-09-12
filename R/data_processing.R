@@ -11,7 +11,7 @@
 #'   averaging. Set `.remove_na = FALSE` to keep `NA` values when averaging.
 #' @param avg_type Use `"season"` for seasonal averages, `"region"` for regional
 #'   averages, or `"both"` for seasonal-regional averages
-#' @param month.na Either `"strict"` to make sure all months are represented in
+#' @param month_na Either `"strict"` to make sure all months are represented in
 #'   each season, or `"relaxed"` to allow for one or more missing months in a
 #'   season
 #' @param .quote An optional argument that determines whether the function uses
@@ -31,12 +31,12 @@
 drt_avg_data <- function(df,
                          data_var,
                          avg_type = c("season", "region", "both"),
-                         month.na = c("strict", "relaxed"),
+                         month_na = c("strict", "relaxed"),
                          .quote = FALSE,
                          .remove_na = TRUE) {
   # Argument checking
   avg_type <- match.arg(avg_type, c("season", "region", "both"))
-  month.na <- match.arg(month.na, c("strict", "relaxed"))
+  month_na <- match.arg(month_na, c("strict", "relaxed"))
 
   # Set local variables to NULL to avoid no visible binding for global variable
   . <- NULL
@@ -62,7 +62,7 @@ drt_avg_data <- function(df,
     } else {
       dplyr::summarize(., var_month_mean = mean({{ data_var }}), .groups = "drop")
     }} %>%
-    {if (month.na == "strict") {
+    {if (month_na == "strict") {
       # Fill in NAs for data_var for any missing Month, Region, YearAdj
         # combinations to make sure all months are represented in each season
       tidyr::complete(., tidyr::nesting(Month, Season), .data$Region, .data$YearAdj)
