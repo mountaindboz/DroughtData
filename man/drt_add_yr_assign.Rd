@@ -31,3 +31,9 @@ years in a row are a wet period (W), and years that are not on a streak are
 neutral (N).
 }
 }
+\examples{
+# Add year assignment information to raw water quality data
+df_wq <- drt_add_yr_assign(raw_wq_1975_2021)
+dplyr::glimpse(df_wq)
+
+}
