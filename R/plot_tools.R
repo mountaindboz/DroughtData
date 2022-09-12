@@ -19,12 +19,12 @@
 #' @return A discrete color scale for a [ggplot2::ggplot()] object
 #' @seealso [ggplot2::scale_fill_manual()], [ggplot2::scale_color_manual()]
 #' @examples
-#' # A simple boxplot of seasonal average water temperatures for the Drought
-#'   # categories - using default ggplot2 colors for the fill aesthetic
-#' lt_water_temp <- dplyr::filter(lt_seasonal, !is.na(Temperature))
+#' # A simple boxplot of seasonal average outflow for the Drought categories -
+#'   # using default ggplot2 colors for the fill aesthetic
+#' lt_outflow <- dplyr::filter(lt_avg_hydro, !is.na(Outflow))
 #'
 #' library(ggplot2)
-#' p <- ggplot(lt_water_temp, aes(x = Season, y = Temperature, fill = Drought)) +
+#' p <- ggplot(lt_outflow, aes(x = Season, y = Outflow, fill = Drought)) +
 #'   geom_boxplot()
 #' p
 #'
@@ -35,7 +35,7 @@
 #' p + drt_color_pal_drought(aes_type = "fill", scale_title = "Something Else")
 #'
 #' # Use the custom color palette for the color aesthetic instead
-#' ggplot(lt_water_temp, aes(x = Season, y = Temperature, color = Drought)) +
+#' ggplot(lt_outflow, aes(x = Season, y = Outflow, color = Drought)) +
 #'   geom_boxplot() +
 #'   drt_color_pal_drought(aes_type = "color")
 #'
