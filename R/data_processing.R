@@ -30,8 +30,10 @@ drt_avg_data <- function(df,
   avg_type <- match.arg(avg_type, c("season", "region", "both"))
   month.na <- match.arg(month.na, c("strict", "relaxed"))
 
-  # Set local variable to NULL to avoid no visible binding for global variable
+  # Set local variables to NULL to avoid no visible binding for global variable
   . <- NULL
+  Month <- NULL
+  Season <- NULL
 
   # Calculate seasonal averages for each region
   df_avg_seas_reg <- df %>%
