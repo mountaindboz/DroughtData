@@ -1,173 +1,86 @@
-# Code to prepare long-term (1975-2021) integrated data sets:
-  # 1) `lt_seasonal` - Seasonal averages for each year for the entire Delta
-  # 2) `lt_regional` - Regional averages for each year
+# Code to prepare long-term (1975-2021) averaged data sets:
+  # 1) `lt_avg_hydro` - Seasonal averages for each year for 3 hydrology metrics
+    # (Outflow, Exports, X2)
+  # 2) `lt_avg_wq` - Seasonal-regional averages for each year for 3 water
+    # quality parameters (Water Temperature, Salinity, Secchi Depth)
 
 
 # 1. Global Code ----------------------------------------------------------
 
 # Load packages
-library(tidyverse)
-library(dtplyr)
+library(dplyr)
+library(tidyr)
+library(purrr)
+library(readr)
+
+# Create data frames that contain all possible combinations of year, season, and region
+lt_yrs <- c(1975:2021)
+seasons <- c("Winter", "Spring", "Summer", "Fall")
+df_yr_season <- expand_grid(YearAdj = lt_yrs, Season = seasons)
+df_yr_seas_reg <- expand_grid(
+  YearAdj = lt_yrs,
+  Season = seasons,
+  Region = unique(DroughtData:::df_regions$Region)
+)
 
 
-# 2. Water Quality --------------------------------------------------------
-
-# 2.1 Hydrology -----------------------------------------------------------
-
-# Load raw hydrology data from 1975-2021
-load("data/raw_hydro_1975_2021.rda")
+# 2. Hydrology -----------------------------------------------------------
 
 # Calculate seasonal averages for each year
-df_hydro_season <- raw_hydro_1975_2021 %>%
+df_hydro_season <- DroughtData::raw_hydro_1975_2021 %>%
   group_by(YearAdj, Season) %>%
   summarize(across(c("Outflow", "Export", "X2"), mean, na.rm = TRUE)) %>%
-  ungroup() %>%
-  # Convert any NaN values to NA values
-  mutate(across(c("Outflow", "Export", "X2"), ~if_else(is.nan(.x), NA_real_, .x)))
+  ungroup()
 
-## WARNING!: Hutton et al. had missing X2 data and summarized seasonal X2 may be skewed as a result.
+# Make sure each Year-Season combination is represented and add Year Type info
+lt_avg_hydro <- reduce(
+  list(
+    df_yr_season,
+    DroughtData:::df_yr_type,
+    df_hydro_season
+  ),
+  left_join
+)
 
-# 2.2 WQ Field measurements -----------------------------------------------
+## WARNING!: Hutton et al. had missing X2 data and summarized seasonal X2 may be
+  # skewed as a result.
 
-# Load raw WQ measurement data from 1975-2021
-load("data/raw_wq_1975_2021.rda")
 
-# Create function to summarize WQ field measurement data
-WQindices <- function(df, variable, type = c("season", "region"), month.na = c("strict", "relaxed")) {
-  # Argument checking
-  type <- match.arg(type, c("season", "region"))
-  month.na <- match.arg(month.na, c("strict", "relaxed"))
-
-  # Calculate seasonal averages for each region
-  vardata <- df %>%
-    # Remove any rows with NAs in the variable to summarize
-    filter(!is.na(.data[[variable]])) %>%
-    # Use dtplyr to speed up operations
-    lazy_dt() %>%
-    # Calculate monthly mean for each region
-    group_by(Month, Season, Region, YearAdj) %>%
-    summarize(var_month_mean = mean(.data[[variable]])) %>%
-    ungroup() %>%
-    # End dtplyr operation
-    as_tibble() %>%
-    {if (month.na == "strict") {
-      # Fill in NAs for variable for any missing Month, Region, YearAdj
-        # combinations to make sure all months are represented in each season
-      complete(., nesting(Month, Season), Region, YearAdj)
-    } else {
-      # Fill in NAs for variable for any missing Season, Region, YearAdj
-        # combinations to make sure all seasons and regions are represented when
-        # averaging
-      complete(., Season, Region, YearAdj)
-    }} %>%
-    # Use dtplyr to speed up operations
-    lazy_dt() %>%
-    # Calculate seasonal mean for each region
-    group_by(Season, Region, YearAdj) %>%
-    summarize(var_mean = mean(var_month_mean)) %>%
-    ungroup() %>%
-    # End dtplyr operation
-    as_tibble()
-
-  # Calculate either the overall seasonal or regional averages
-  out <- vardata %>%
-    {if (type == "season") {
-      # Group by season in order to calculate seasonal averages for entire Delta
-      group_by(., Season, YearAdj)
-    } else {
-      # Group by region in order to calculate regional averages for each year
-      group_by(., Region, YearAdj)
-    }} %>%
-    summarize(
-      {{variable}} := mean(var_mean),
-      .groups = "drop"
-    )
-
-  cat(paste("\nFinished", variable, "\n"))
-
-  return(out)
-}
+# 3. WQ Field measurements -----------------------------------------------
 
 # Define WQ variables to summarize
 vars_wq <- c("Temperature", "Salinity", "Secchi")
 
-# Seasonal averages for each year - relaxing the requirement of 3 months being present in all years
-df_wq_season <-
+# Seasonal-regional averages for each year - relaxing the requirement of 3
+  # months being present in all years
+df_wq_seas_reg <-
   map2(
-    rep(list(raw_wq_1975_2021), 3),
+    rep(list(DroughtData::raw_wq_1975_2021), 3),
     vars_wq,
-    .f = WQindices,
-    type = "season",
-    month.na = "relaxed"
+    .f = DroughtData::drt_avg_data,
+    avg_type = "both",
+    month_na = "relaxed",
+    .quote = TRUE
   ) %>%
-  reduce(left_join) %>%
-  select(YearAdj, Season, Temperature, Salinity, Secchi) %>%
-  arrange(YearAdj, Season)
+  reduce(full_join)
 
-# Yearly averages for each region - relaxing the requirement of 3 months being present in all years
-df_wq_region <-
-  map2(
-    rep(list(raw_wq_1975_2021), 3),
-    vars_wq,
-    .f = WQindices,
-    type = "region",
-    month.na = "relaxed"
-  ) %>%
-  reduce(left_join) %>%
-  select(YearAdj, Region, Temperature, Salinity, Secchi) %>%
-  arrange(YearAdj, Region)
-
-# 2.3 Nutrients -----------------------------------------------------------
-
-
-
-
-# 3. Primary Producers ----------------------------------------------------
-
-
-
-
-# 4. Lower Trophic --------------------------------------------------------
-
-
-
-
-# 5. Fish -----------------------------------------------------------------
-
-
-
-
-# 6. Integrate data sets --------------------------------------------------
-
-# Create data frames that contain all possible combinations of year, season, and region
-lt_yrs <- c(1975:2021)
-df_yr <- tibble(Year = lt_yrs)
-df_yr_season <- expand_grid(YearAdj = lt_yrs, Season = c("Winter", "Spring", "Summer", "Fall"))
-df_yr_region <- expand_grid(YearAdj = lt_yrs, Region = unique(DroughtData:::df_regions$Region))
-
-# Integrate data sets with seasonal averages for each year for the entire Delta
-lst_seasonal <- lst(
-  df_yr_season,
-  DroughtData:::df_yr_type,
-  df_hydro_season,
-  df_wq_season
+# Make sure each Year-Season-Region combination is represented and add Year Type info
+lt_avg_wq <- reduce(
+  list(
+    df_yr_seas_reg,
+    DroughtData:::df_yr_type,
+    df_wq_seas_reg
+  ),
+  left_join
 )
 
-lt_seasonal <- reduce(lst_seasonal, left_join)
 
-# Integrate data sets with regional averages for each year
-lst_regional <- lst(
-  df_yr_region,
-  DroughtData:::df_yr_type,
-  df_wq_region
-)
+# 4. Save and Export Data --------------------------------------------------
 
-lt_regional <- reduce(lst_regional, left_join)
+# Save final long-term averaged data sets as csv files for easier diffing
+write_csv(lt_avg_hydro, "data-raw/Final/lt_avg_hydro.csv")
+write_csv(lt_avg_wq, "data-raw/Final/lt_avg_wq.csv")
 
-# Save final long-term integrated data sets as csv files for easier diffing
-write_csv(lt_seasonal, "data-raw/Final/lt_seasonal.csv")
-write_csv(lt_regional, "data-raw/Final/lt_regional.csv")
-
-# Save final long-term integrated data sets as objects in the data package
-usethis::use_data(lt_seasonal, lt_regional, overwrite = TRUE)
+# Save final long-term averaged data sets as objects in the data package
+usethis::use_data(lt_avg_hydro, lt_avg_wq, overwrite = TRUE)
 
