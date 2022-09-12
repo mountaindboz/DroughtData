@@ -53,15 +53,17 @@ drt_avg_data <- function(df,
     }
   }
 
-  # Calculate seasonal averages for each region
-  df_avg_seas_reg <- df %>%
-    # Calculate monthly mean for each region - method depends on .quote argument
+  # Calculate monthly mean for each region - method depends on .quote argument
+  df_avg_month <- df %>%
     dplyr::group_by(.data$Month, .data$Season, .data$Region, .data$YearAdj) %>%
     {if (.quote == TRUE) {
       dplyr::summarize(., var_month_mean = mean(.data[[data_var]]), .groups = "drop")
     } else {
       dplyr::summarize(., var_month_mean = mean({{ data_var }}), .groups = "drop")
-    }} %>%
+    }}
+
+  # Calculate seasonal-regional averages for each year
+  df_avg_seas_reg <- df_avg_month %>%
     {if (month_na == "strict") {
       # Fill in NAs for data_var for any missing Month, Region, YearAdj
         # combinations to make sure all months are represented in each season
@@ -72,7 +74,7 @@ drt_avg_data <- function(df,
         # averaging
       tidyr::complete(., .data$Season, .data$Region, .data$YearAdj)
     }} %>%
-    # Calculate seasonal mean for each region
+    # Calculate mean
     dplyr::group_by(.data$Season, .data$Region, .data$YearAdj) %>%
     dplyr::summarize(var_mean = mean(.data$var_month_mean), .groups = "drop")
 
