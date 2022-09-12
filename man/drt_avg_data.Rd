@@ -2,12 +2,12 @@
 % Please edit documentation in R/data_processing.R
 \name{drt_avg_data}
 \alias{drt_avg_data}
-\title{Calculate seasonal or regional averages}
+\title{Calculate seasonal and/or regional averages}
 \usage{
 drt_avg_data(
   df,
   data_var,
-  avg_type = c("season", "region"),
+  avg_type = c("season", "region", "both"),
   month.na = c("strict", "relaxed"),
   .quote = FALSE
 )
@@ -20,8 +20,8 @@ contain variables for \code{Month}, \code{Season}, \code{Region}, and \code{Year
 averaged. Supports tidy or non-standard evaluation as default. Place the
 variable name in quotes if the \code{.quote} argument is \code{TRUE}.}
 
-\item{avg_type}{Either \code{"season"} for seasonal averages, or \code{"region"} for
-regional averages}
+\item{avg_type}{Use \code{"season"} for seasonal averages, \code{"region"} for regional
+averages, or \code{"both"} for seasonal-regional averages}
 
 \item{month.na}{Either \code{"strict"} to make sure all months are represented in
 each season, or \code{"relaxed"} to allow for one or more missing months in a
@@ -38,6 +38,6 @@ of variable names.}
 A tibble containing the averaged data
 }
 \description{
-Calculates either the seasonal or regional averages of raw data
-used for the Drought Synthesis
+Calculates the seasonal, regional, or seasonal-regional averages
+of raw data used for the Drought Synthesis
 }

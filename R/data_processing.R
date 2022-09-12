@@ -1,14 +1,14 @@
-#' @title Calculate seasonal or regional averages
-#' @description Calculates either the seasonal or regional averages of raw data
-#'   used for the Drought Synthesis
+#' @title Calculate seasonal and/or regional averages
+#' @description Calculates the seasonal, regional, or seasonal-regional averages
+#'   of raw data used for the Drought Synthesis
 #'
 #' @param df A data frame or tibble containing the raw data to average. Must
 #'   contain variables for `Month`, `Season`, `Region`, and `YearAdj`.
 #' @param data_var The variable name in `df` containing the values to be
 #'   averaged. Supports tidy or non-standard evaluation as default. Place the
 #'   variable name in quotes if the `.quote` argument is `TRUE`.
-#' @param avg_type Either `"season"` for seasonal averages, or `"region"` for
-#'   regional averages
+#' @param avg_type Use `"season"` for seasonal averages, `"region"` for regional
+#'   averages, or `"both"` for seasonal-regional averages
 #' @param month.na Either `"strict"` to make sure all months are represented in
 #'   each season, or `"relaxed"` to allow for one or more missing months in a
 #'   season
@@ -23,18 +23,18 @@
 #' @export
 drt_avg_data <- function(df,
                          data_var,
-                         avg_type = c("season", "region"),
+                         avg_type = c("season", "region", "both"),
                          month.na = c("strict", "relaxed"),
                          .quote = FALSE) {
   # Argument checking
-  avg_type <- match.arg(avg_type, c("season", "region"))
+  avg_type <- match.arg(avg_type, c("season", "region", "both"))
   month.na <- match.arg(month.na, c("strict", "relaxed"))
 
   # Set local variable to NULL to avoid no visible binding for global variable
   . <- NULL
 
   # Calculate seasonal averages for each region
-  df_avg_seas <- df %>%
+  df_avg_seas_reg <- df %>%
     # Remove any rows with NAs in data_var to summarize - method depends on .quote argument
     {if (.quote == TRUE) {
       dplyr::filter(., !is.na(.data[[data_var]]))
@@ -44,15 +44,14 @@ drt_avg_data <- function(df,
     # Calculate monthly mean for each region - method depends on .quote argument
     dplyr::group_by(.data$Month, .data$Season, .data$Region, .data$YearAdj) %>%
     {if (.quote == TRUE) {
-      dplyr::summarize(., var_month_mean = mean(.data[[data_var]]))
+      dplyr::summarize(., var_month_mean = mean(.data[[data_var]]), .groups = "drop")
     } else {
-      dplyr::summarize(., var_month_mean = mean({{ data_var }}))
+      dplyr::summarize(., var_month_mean = mean({{ data_var }}), .groups = "drop")
     }} %>%
-    dplyr::ungroup() %>%
     {if (month.na == "strict") {
       # Fill in NAs for data_var for any missing Month, Region, YearAdj
         # combinations to make sure all months are represented in each season
-      tidyr::complete(., tidyr::nesting(.data$Month, .data$Season), .data$Region, .data$YearAdj)
+      tidyr::complete(., tidyr::nesting(Month, Season), .data$Region, .data$YearAdj)
     } else {
       # Fill in NAs for data_var for any missing Season, Region, YearAdj
         # combinations to make sure all seasons and regions are represented when
@@ -61,22 +60,30 @@ drt_avg_data <- function(df,
     }} %>%
     # Calculate seasonal mean for each region
     dplyr::group_by(.data$Season, .data$Region, .data$YearAdj) %>%
-    dplyr::summarize(var_mean = mean(.data$var_month_mean)) %>%
-    dplyr::ungroup()
+    dplyr::summarize(var_mean = mean(.data$var_month_mean), .groups = "drop")
 
-  # Calculate either the overall seasonal or regional averages
-  df_avg_f <- df_avg_seas %>%
-    {if (avg_type == "season") {
+  # Calculate either the overall seasonal or regional averages, or keep as
+    # seasonal-regional averages as determined by the avg_type argument
+  if (avg_type == "both") {
+    df_avg_f <- df_avg_seas_reg %>%
+      dplyr::rename({{ data_var }} := .data$var_mean)
+  } else if (avg_type == "season") {
+    df_avg_f <- df_avg_seas_reg %>%
       # Group by season in order to calculate seasonal averages for entire Delta
-      dplyr::group_by(., .data$Season, .data$YearAdj)
-    } else {
+      dplyr::group_by(.data$Season, .data$YearAdj) %>%
+      dplyr::summarize(
+        {{ data_var }} := mean(.data$var_mean),
+        .groups = "drop"
+      )
+  } else {
+    df_avg_f <- df_avg_seas_reg %>%
       # Group by region in order to calculate regional averages for each year
-      dplyr::group_by(., .data$Region, .data$YearAdj)
-    }} %>%
-    dplyr::summarize(
-      {{ data_var }} := mean(.data$var_mean),
-      .groups = "drop"
-    )
+      dplyr::group_by(.data$Region, .data$YearAdj) %>%
+      dplyr::summarize(
+        {{ data_var }} := mean(.data$var_mean),
+        .groups = "drop"
+      )
+  }
 
   return(df_avg_f)
 }
