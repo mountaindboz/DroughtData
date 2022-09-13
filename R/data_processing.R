@@ -191,7 +191,7 @@ drt_add_yr_assign <- function(df) {
 
 #' @title Replace values below the reporting limit
 #' @description Replaces values measured below the analytical reporting limit
-#'   with a random number of uniform distribution between 0.0001 (default) and
+#'   with a random number of uniform distribution between 0.00001 (default) and
 #'   the reporting limit. This function only replaces the values below the
 #'   reporting limit. It does not change any other values in the data.
 #'
@@ -206,7 +206,7 @@ drt_add_yr_assign <- function(df) {
 #'   the values. The codes used to indicate whether a value was measured below
 #'   the reporting limit must start with "<".
 #' @param min_val The minimum value allowed for the random number generation for
-#'   the values below the reporting limit. Default is 0.0001, but the user can
+#'   the values below the reporting limit. Default is 0.00001, but the user can
 #'   specify their preferred value.
 #' @param seed The seed specification for the random number generation. Default
 #'   is 1, but the user can specify their preferred value. Allows for the random
@@ -230,7 +230,7 @@ drt_add_yr_assign <- function(df) {
 #' drt_replace_rl(raw_nutr_1975_2021, DissAmmonia, DissAmmonia_Sign, seed = 500)
 #'
 #' @export
-drt_replace_rl <- function(df, data_var, sign_var, min_val = 0.0001, seed = 1) {
+drt_replace_rl <- function(df, data_var, sign_var, min_val = 0.00001, seed = 1) {
   # Pull out values that are below the RL
   df_blw_rl <- df %>% dplyr::filter(stringr::str_detect({{ sign_var }}, "^<"))
 

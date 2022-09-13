@@ -4,7 +4,7 @@
 \alias{drt_replace_rl}
 \title{Replace values below the reporting limit}
 \usage{
-drt_replace_rl(df, data_var, sign_var, min_val = 1e-04, seed = 1)
+drt_replace_rl(df, data_var, sign_var, min_val = 1e-05, seed = 1)
 }
 \arguments{
 \item{df}{A data frame or tibble containing the data to run the replacement
@@ -21,7 +21,7 @@ the values. The codes used to indicate whether a value was measured below
 the reporting limit must start with "<".}
 
 \item{min_val}{The minimum value allowed for the random number generation for
-the values below the reporting limit. Default is 0.0001, but the user can
+the values below the reporting limit. Default is 0.00001, but the user can
 specify their preferred value.}
 
 \item{seed}{The seed specification for the random number generation. Default
@@ -36,7 +36,7 @@ All other values remain the same.
 }
 \description{
 Replaces values measured below the analytical reporting limit
-with a random number of uniform distribution between 0.0001 (default) and
+with a random number of uniform distribution between 0.00001 (default) and
 the reporting limit. This function only replaces the values below the
 reporting limit. It does not change any other values in the data.
 }
