@@ -5,6 +5,7 @@
 * Updated the `raw_wq_1975_2021`, `raw_nutr_1975_2021`, and `raw_chla_1975_2021` data sets with the data in the latest version of the `discretewq` package (version 2.3.2.9000). Added additional surveys to the water quality and chlorophyll data sets. Implemented a filtering strategy to make sure that we are only including the subregions that were sampled adequately across seasons.
 * Updated the `drt_avg_data()` function to allow for it to calculate seasonal-regional averages
 * Replaced `lt_seasonal` and `lt_regional` data sets with `lt_avg_hydro` and `lt_avg_wq`. `lt_avg_hydro` contains long-term seasonal averages of three hydrology parameters (Delta Outflow, Delta Exports, X2), while `lt_avg_wq` contains long-term seasonal-regional averages of three water quality parameters (water temperature, salinity, and secchi depth).
+* Added a new function `drt_replace_rl()` which replaces values measured below the analytical reporting limit with a random number
 
 # DroughtData 1.1.0
 

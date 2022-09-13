@@ -50,6 +50,8 @@ the Drought Synthesis project:
 -   `drt_add_yr_assign()`: Adds year assignment information to a data
     frame. The year assignment information is used in the analyses for
     the Drought Synthesis.
+-   `drt_replace_rl()`: Replaces values measured below the analytical
+    reporting limit with a random number
 -   `drt_color_pal_drought()` and `drt_color_pal_yrtype()`: Apply custom
     color palettes to the figures used in the Drought Synthesis report
 

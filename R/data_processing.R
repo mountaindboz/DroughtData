@@ -157,3 +157,64 @@ drt_add_yr_assign <- function(df) {
   df %>% dplyr::left_join(df_yr_type, by = "YearAdj")
 }
 
+#' @title Replace values below the reporting limit
+#' @description Replaces values measured below the analytical reporting limit
+#'   with a random number of uniform distribution between 0.0001 (default) and
+#'   the reporting limit. This function only replaces the values below the
+#'   reporting limit. It does not change any other values in the data.
+#'
+#' @param df A data frame or tibble containing the data to run the replacement
+#'   procedure on.
+#' @param data_var The variable name in `df` containing the values to run the
+#'   replacement procedure on. Must be numeric with the records measured below
+#'   the reporting limit substituted with the analytical reporting limit. Can
+#'   contain a mixture of values, some measured below the reporting limit and
+#'   others that aren't.
+#' @param sign_var The variable name in `df` containing the qualifier codes for
+#'   the values. The codes used to indicate whether a value was measured below
+#'   the reporting limit must start with "<".
+#' @param min_val The minimum value allowed for the random number generation for
+#'   the values below the reporting limit. Default is 0.0001, but the user can
+#'   specify their preferred value.
+#' @param seed The seed specification for the random number generation. Default
+#'   is 1, but the user can specify their preferred value. Allows for the random
+#'   number generation procedure to be reproducible. See the documentation for
+#'   [base::set.seed()] for more information.
+#'
+#' @return A tibble containing the original data with random numbers of uniform
+#'   distribution substituted for the values measured below the reporting limit.
+#'   All other values remain the same.
+#' @seealso [stats::runif()]
+#' @examples
+#' # Replace Dissolved Ammonia values below the reporting limit with a random
+#'   # number
+#' drt_replace_rl(raw_nutr_1975_2021, DissAmmonia, DissAmmonia_Sign)
+#'
+#' # Use the min_val argument to set a different minimum value for the range of
+#'   # random values generated
+#' drt_replace_rl(raw_nutr_1975_2021, DissAmmonia, DissAmmonia_Sign, min_val = 0.0000001)
+#'
+#' # Use the seed argument to set a different random seed
+#' drt_replace_rl(raw_nutr_1975_2021, DissAmmonia, DissAmmonia_Sign, seed = 500)
+#'
+#' @export
+drt_replace_rl <- function(df, data_var, sign_var, min_val = 0.0001, seed = 1) {
+  # Pull out values that are below the RL
+  df_blw_rl <- df %>% dplyr::filter(stringr::str_detect({{ sign_var }}, "^<"))
+
+  # Replace below RL values with simulated ones
+  withr::with_seed(
+    # Set seed for reproducibility
+    seed = seed,
+    df_blw_rl_sim <- df_blw_rl %>%
+      dplyr::mutate(
+        {{ data_var }} := round(stats::runif(nrow(df_blw_rl), min = min_val, max = {{ data_var }}), 5)
+      )
+  )
+
+  # Add simulated values back to main data frame
+  df %>%
+    dplyr::filter(!stringr::str_detect({{ sign_var }}, "^<") | is.na({{ sign_var }})) %>%
+    dplyr::bind_rows(df_blw_rl_sim)
+}
+
