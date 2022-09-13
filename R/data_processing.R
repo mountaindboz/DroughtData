@@ -240,7 +240,7 @@ drt_replace_rl <- function(df, data_var, sign_var, min_val = 0.00001, seed = 1) 
     seed = seed,
     df_blw_rl_sim <- df_blw_rl %>%
       dplyr::mutate(
-        {{ data_var }} := round(stats::runif(nrow(df_blw_rl), min = min_val, max = {{ data_var }}), 5)
+        {{ data_var }} := round(stats::runif(nrow(df_blw_rl), min = min_val, max = {{ data_var }}), 6)
       )
   )
 
