@@ -2,14 +2,15 @@
 % Please edit documentation in R/data_processing.R
 \name{drt_avg_data}
 \alias{drt_avg_data}
-\title{Calculate seasonal or regional averages}
+\title{Calculate seasonal and/or regional averages}
 \usage{
 drt_avg_data(
   df,
   data_var,
-  avg_type = c("season", "region"),
-  month.na = c("strict", "relaxed"),
-  .quote = FALSE
+  avg_type = c("season", "region", "both"),
+  month_na = c("strict", "relaxed"),
+  .quote = FALSE,
+  .remove_na = TRUE
 )
 }
 \arguments{
@@ -18,26 +19,88 @@ contain variables for \code{Month}, \code{Season}, \code{Region}, and \code{Year
 
 \item{data_var}{The variable name in \code{df} containing the values to be
 averaged. Supports tidy or non-standard evaluation as default. Place the
-variable name in quotes if the \code{.quote} argument is \code{TRUE}.}
+variable name in quotes if the \code{.quote} argument is \code{TRUE}. Also, the
+default behavior is for \code{NA} values in \code{data_var} to be removed before
+averaging. Set \code{.remove_na = FALSE} to keep \code{NA} values when averaging.}
 
-\item{avg_type}{Either \code{"season"} for seasonal averages, or \code{"region"} for
-regional averages}
+\item{avg_type}{Use \code{"season"} for seasonal averages, \code{"region"} for regional
+averages, or \code{"both"} for seasonal-regional averages}
 
-\item{month.na}{Either \code{"strict"} to make sure all months are represented in
+\item{month_na}{Either \code{"strict"} to make sure all months are represented in
 each season, or \code{"relaxed"} to allow for one or more missing months in a
 season}
 
 \item{.quote}{An optional argument that determines whether the function uses
-tidy or non-standard evaluation. The default (\code{TRUE}) requires the variable
-name in \code{data_var} to be unquoted. If this argument is set to \code{FALSE},
+tidy or non-standard evaluation. The default (\code{FALSE}) requires the variable
+name in \code{data_var} to be unquoted. If this argument is set to \code{TRUE},
 \code{data_var} must be quoted. Allowing for quoted variable names can be useful
 to run more than one variable through the function using a character vector
 of variable names.}
+
+\item{.remove_na}{An optional argument that determines whether \code{NA} values in
+\code{data_var} are removed before averaging. The default (\code{TRUE}) removes \code{NA}
+values in \code{data_var} before averaging, while \code{FALSE} keeps \code{NA} values.
+WARNING: keeping \code{NA} values in \code{data_var} may result in unintended \code{NA}
+values in the calculated averages.}
 }
 \value{
 A tibble containing the averaged data
 }
 \description{
-Calculates either the seasonal or regional averages of raw data
-used for the Drought Synthesis
+Calculates the seasonal, regional, or seasonal-regional averages
+of raw data used for the Drought Synthesis
+}
+\examples{
+# Calculate seasonal averages of the water temperature data
+drt_avg_data(
+  raw_wq_1975_2021,
+  Temperature,
+  avg_type = "season",
+  month_na = "strict"
+)
+
+# Set the month_na argument to "relaxed" to allow for one or more missing
+  # months in a season when calculating the averages
+drt_avg_data(
+  raw_wq_1975_2021,
+  Temperature,
+  avg_type = "season",
+  month_na = "relaxed"
+)
+
+# Change the avg_type argument to get different types of averages
+# Regional averages:
+drt_avg_data(
+  raw_wq_1975_2021,
+  Temperature,
+  avg_type = "region",
+  month_na = "relaxed"
+)
+# Seasonal-regional averages
+drt_avg_data(
+  raw_wq_1975_2021,
+  Temperature,
+  avg_type = "both",
+  month_na = "relaxed"
+)
+
+# Use the optional .quote argument to allow for a quoted data variable name
+drt_avg_data(
+  raw_wq_1975_2021,
+  "Temperature",
+  avg_type = "both",
+  month_na = "relaxed",
+  .quote = TRUE
+)
+
+# Use the optional .remove_na argument to keep NA values when averaging
+  # Note that there are more NA values in the resulting tibble
+drt_avg_data(
+  raw_wq_1975_2021,
+  Temperature,
+  avg_type = "both",
+  month_na = "relaxed",
+  .remove_na = FALSE
+)
+
 }

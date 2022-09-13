@@ -15,7 +15,7 @@ Survey), or USGS_CAWSC (USGS's California Water Science Center)}
 \item{Longitude}{Longitude of \code{Station} in Decimal Degrees (WGS 84 Datum)}
 \item{Region}{Region designation of \code{Station} within the larger Delta and
 Suisun Bay (Confluence, North, SouthCentral, Suisun Bay). The Drought
-Synthesis team categorized \code{SubRegion}s into broader \code{Region}s using \href{https://github.com/mountaindboz/DroughtData/blob/master/data-raw/Rosies_regions.csv}{this crosswalk}
+Synthesis team categorized \code{SubRegion}s into broader \code{Region}s using \href{https://github.com/mountaindboz/DroughtData/blob/master/data-raw/Global/Rosies_regions.csv}{this crosswalk}
 .}
 \item{SubRegion}{Subregion designation of \code{Station} as defined by the
 \code{R_EDSM_Subregions_Mahardja_FLOAT} shapefile from the
@@ -27,8 +27,9 @@ December of 2020 is assigned year "2021" in this data set.}
 \item{Season}{Winter (Dec-Feb), Spring (Mar-May), Summer (Jun-Aug), or Fall
 (Sept-Nov)}
 \item{Month}{Integer representing the month}
-\item{Date}{Calendar date of the measurement}
-\item{Datetime}{Date and time of the measurement}
+\item{Date}{Calendar date of the measurement in yyyy-mm-dd}
+\item{Datetime}{Date and time (yyyy-mm-dd HH:MM:SS) of the measurement in
+PST.}
 \item{DissAmmonia_Sign}{A symbol representing whether the Dissolved Ammonia
 value is below the reporting limit or above it. Contains one of four
 symbols: "<", "< (estimated)", "=", or "= (unreliable)". See the section

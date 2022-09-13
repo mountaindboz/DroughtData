@@ -12,7 +12,7 @@ the previous calendar year included with the following year. For example,
 December of 2020 is assigned year "2021" in this data set.}
 \item{Season}{Winter (Dec-Feb), Spring (Mar-May), Summer (Jun-Aug), or Fall
 (Sept-Nov)}
-\item{Date}{Calendar date}
+\item{Date}{Calendar date of the value in yyyy-mm-dd}
 \item{InflowSacR}{Sacramento River inflow to the Delta in cubic feet per
 second (cfs). Data from WY 1975-2021 is from Dayflow.}
 \item{InflowYolo}{Yolo Bypass inflow to the Delta in cubic feet per
@@ -72,7 +72,7 @@ raw_hydro_1975_2021
 A data set containing raw daily values of the hydrology and Low
 Salinity Zone (LSZ) metrics for 1975-2021 in the upper San Francisco
 Estuary (Delta). Seasonal averages of the \code{Outflow}, \code{Export}, and \code{X2}
-data are in the \code{lt_seasonal} data set. Used in the analyses for the
+data are in the \code{\link{lt_avg_hydro}} data set. Used in the analyses for the
 Drought Synthesis.
 }
 \keyword{datasets}
