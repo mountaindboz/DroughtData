@@ -65,7 +65,9 @@ df_nutr_c <- df_nutr %>%
     DissOrthophos = if_else(DissOrthophos_Sign == "< (estimated)", 0.01, DissOrthophos)
   ) %>%
   # Remove records with NA values for all nutrient parameters
-  filter(!if_all(c(DissAmmonia, DissNitrateNitrite, DissOrthophos), is.na))
+  filter(!if_all(c(DissAmmonia, DissNitrateNitrite, DissOrthophos), is.na)) %>%
+  # Remove one DissAmmonia value from the USGS_CAWSC survey that is equal to zero
+  mutate(DissAmmonia = if_else(DissAmmonia == 0, NA_real_, DissAmmonia))
 
 # For the USGS_SFBS survey, if at least one of the nutrient parameters has a
   # value reported, then we will assume that the other parameters were below the
