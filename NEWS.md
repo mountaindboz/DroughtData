@@ -1,4 +1,4 @@
-# DroughtData (development version)
+# DroughtData 2.0.0
 
 * Added the new data set `raw_chla_1975_2021` which contains raw values of discrete chlorophyll-a water concentrations from 1975-2021 within the Delta
 * Corrected nutrient data in `raw_nutr_1975_2021` and `raw_nutr_2013_2021` so that only the intended <RL values with high RL values are excluded
