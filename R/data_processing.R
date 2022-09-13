@@ -30,24 +30,56 @@
 #'
 #' @examples
 #' # Calculate seasonal averages of the water temperature data
-#' drt_avg_data(raw_wq_1975_2021, Temperature, avg_type = "season", month_na = "strict")
+#' drt_avg_data(
+#'   raw_wq_1975_2021,
+#'   Temperature,
+#'   avg_type = "season",
+#'   month_na = "strict"
+#' )
 #'
 #' # Set the month_na argument to "relaxed" to allow for one or more missing
 #'   # months in a season when calculating the averages
-#' drt_avg_data(raw_wq_1975_2021, Temperature, avg_type = "season", month_na = "relaxed")
+#' drt_avg_data(
+#'   raw_wq_1975_2021,
+#'   Temperature,
+#'   avg_type = "season",
+#'   month_na = "relaxed"
+#' )
 #'
 #' # Change the avg_type argument to get different types of averages
 #' # Regional averages:
-#' drt_avg_data(raw_wq_1975_2021, Temperature, avg_type = "region", month_na = "relaxed")
+#' drt_avg_data(
+#'   raw_wq_1975_2021,
+#'   Temperature,
+#'   avg_type = "region",
+#'   month_na = "relaxed"
+#' )
 #' # Seasonal-regional averages
-#' drt_avg_data(raw_wq_1975_2021, Temperature, avg_type = "both", month_na = "relaxed")
+#' drt_avg_data(
+#'   raw_wq_1975_2021,
+#'   Temperature,
+#'   avg_type = "both",
+#'   month_na = "relaxed"
+#' )
 #'
 #' # Use the optional .quote argument to allow for a quoted data variable name
-#' drt_avg_data(raw_wq_1975_2021, "Temperature", avg_type = "both", month_na = "relaxed", .quote = TRUE)
+#' drt_avg_data(
+#'   raw_wq_1975_2021,
+#'   "Temperature",
+#'   avg_type = "both",
+#'   month_na = "relaxed",
+#'   .quote = TRUE
+#' )
 #'
 #' # Use the optional .remove_na argument to keep NA values when averaging
 #'   # Note that there are more NA values in the resulting tibble
-#' drt_avg_data(raw_wq_1975_2021, Temperature, avg_type = "both", month_na = "relaxed", .remove_na = FALSE)
+#' drt_avg_data(
+#'   raw_wq_1975_2021,
+#'   Temperature,
+#'   avg_type = "both",
+#'   month_na = "relaxed",
+#'   .remove_na = FALSE
+#' )
 #'
 #' @export
 drt_avg_data <- function(df,
