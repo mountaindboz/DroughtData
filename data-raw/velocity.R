@@ -1,0 +1,173 @@
+#merge all station data for pub
+
+library(readr)
+library(dplyr)
+library(lubridate)
+
+#import 4 data sets
+
+Cache <- read_rds("data-raw/Hydrology/dv_cache.rds")
+
+Jersey <- read_rds("data-raw/Hydrology/dv_jersey.rds")
+
+Middle <- read_rds("data-raw/Hydrology/dv_middle.rds")
+
+Old <- read_rds("data-raw/Hydrology/dv_old.rds")
+
+#round dates down to week
+
+Cache_weekly <- Cache
+
+Cache_weekly$week <- floor_date(Cache_weekly$Date, "week")
+
+Jersey_weekly <- Jersey
+
+Jersey_weekly$week <- floor_date(Jersey_weekly$Date, "week")
+
+Middle_weekly <- Middle
+
+Middle_weekly$week <- floor_date(Middle_weekly$Date, "week")
+
+Old_weekly <- Old
+
+Old_weekly$week <- floor_date(Old_weekly$Date, "week")
+
+#downstep to week
+Cache_week <- Cache_weekly%>%
+  group_by(week) %>%
+  summarize(mean_vel = mean(mean_vel),
+            max_vel = max(max_vel),
+            min_vel = min(min_vel),
+            max_abs_vel = max(max_abs_vel),
+            mean_tide_vel = mean(mean_tide_vel),
+            ratio = mean(ratio_mean),
+            mean_net_vel = mean(net_vel_mean),
+            mean_amp = mean(amp))
+
+Jersey_week <- Jersey_weekly%>%
+  group_by(week) %>%
+  summarize(mean_vel = mean(mean_vel),
+            max_vel = max(max_vel),
+            min_vel = min(min_vel),
+            max_abs_vel = max(max_abs_vel),
+            mean_tide_vel = mean(mean_tide_vel),
+            ratio = mean(ratio_mean),
+            mean_net_vel = mean(net_vel_mean),
+            mean_amp = mean(amp))
+
+Middle_week <- Middle_weekly%>%
+  group_by(week) %>%
+  summarize(mean_vel = mean(mean_vel),
+            max_vel = max(max_vel),
+            min_vel = min(min_vel),
+            max_abs_vel = max(max_abs_vel),
+            mean_tide_vel = mean(mean_tide_vel),
+            ratio = mean(ratio_mean),
+            mean_net_vel = mean(net_vel_mean),
+            mean_amp = mean(amp))
+
+Old_week <- Old_weekly%>%
+  group_by(week) %>%
+  summarize(mean_vel = mean(mean_vel),
+            max_vel = max(max_vel),
+            min_vel = min(min_vel),
+            max_abs_vel = max(max_abs_vel),
+            mean_tide_vel = mean(mean_tide_vel),
+            ratio = mean(ratio_mean),
+            mean_net_vel = mean(net_vel_mean),
+            mean_amp = mean(amp))
+
+#add station column and sign column back to dfs
+
+Cache_week <- Cache_week %>%
+  mutate(sign=case_when(abs(min_vel) > max_vel ~ "-", abs(min_vel) < max_vel ~ "+"))
+
+Cache_week$station <- "Cache"
+
+Jersey_week <- Jersey_week %>%
+  mutate(sign=case_when(abs(min_vel) > max_vel ~ "-", abs(min_vel) < max_vel ~ "+"))
+
+Jersey_week$station <- "Jersey"
+
+Middle_week <- Middle_week %>%
+  mutate(sign=case_when(abs(min_vel) > max_vel ~ "-", abs(min_vel) < max_vel ~ "+"))
+
+Middle_week$station <- "Middle"
+
+Old_week <- Old_week %>%
+  mutate(sign=case_when(abs(min_vel) > max_vel ~ "-", abs(min_vel) < max_vel ~ "+"))
+
+Old_week$station <- "Old"
+
+#bind all dfs to one weekly df
+
+vel_weekly_pub <- rbind(Jersey_week, Old_week, Middle_week, Cache_week)
+
+#make raw_hydro into weekly mean
+
+week_hydro <- subset(raw_hydro_1975_2021, Date > as.Date('2007-09-30'))
+
+week_hydro$week <- floor_date(week_hydro$Date, "week")
+
+week_hydro <- week_hydro%>%
+  group_by(week) %>%
+  summarize(X2 = mean(X2),
+            Export = mean(Export),
+            Outflow = mean(Outflow))
+
+#merge dayflow params and WY type
+
+vel_weekly_pub <- merge(vel_weekly_pub, week_hydro, by = 'week')
+
+lt_seas <- lt_avg_hydro[c(1, 4:5)]
+
+lt_seas <- unique(lt_seas)
+
+vel_daily_pub <- merge(vel_daily_pub, lt_seas, by = "YearAdj")
+
+vel_weekly_pub <- vel_weekly_pub %>%
+  # Add variables for adjusted calendar year and season
+  # Adjusted calendar year: December-November, with December of the previous calendar year
+  # included with the following year
+  mutate(
+    Month = month(week),
+    YearAdj = if_else(Month == 12, year(week) + 1, year(week)),
+    Season = case_when(
+      Month %in% 3:5 ~ "Spring",
+      Month %in% 6:8 ~ "Summer",
+      Month %in% 9:11 ~ "Fall",
+      Month %in% c(12, 1, 2) ~ "Winter"))
+
+vel_weekly_pub <- merge(vel_weekly_pub, lt_seas, by = "YearAdj")
+
+vel_weekly_pub$Log_Outflow <- log(vel_weekly_pub$Outflow)
+
+#add wateryear to weekly data frame
+
+wtr_yr <- function(Date, start_month=10) {
+  # Convert dates into POSIXlt
+  dates.posix = as.POSIXlt(Date)
+  # Year offset
+  offset = ifelse(dates.posix$mon >= start_month - 1, 1, 0)
+  # Water year
+  adj.year = dates.posix$year + 1900 + offset
+  # Return the water year
+  adj.year
+}
+
+vel_weekly_WY_pub <- vel_weekly_pub %>%
+  mutate(wtr_yr = wtr_yr(week))
+
+vel_weekly_WY_pub <- vel_weekly_WY_pub %>%
+  group_by(wtr_yr) %>%
+  mutate(wtr_day = (as.integer(difftime(week,ymd(paste0(wtr_yr - 1 ,'-09-30')), units = "days"))))
+
+vel_weekly <- vel_weekly_WY_pub%>%
+  #filter(!is.na(mean_vel))%>%
+  mutate(across(c(Drought, YearType),
+                list(`20_21`=~case_when(YearAdj==2021 ~ "2021",YearAdj==2020 ~ "2020",TRUE ~ as.character(.x)))),
+         across(c(YearType, YearType_20_21), ~factor(.x, levels=c("2020", "2021", "Critical", "Dry", "Below Normal", "Above Normal", "Wet"))),
+         Season=factor(Season, levels=c("Winter", "Spring", "Summer", "Fall")))
+
+write_rds(vel_weekly, glue("data/velocity.rds"))
+
