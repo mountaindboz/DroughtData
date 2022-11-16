@@ -3,6 +3,8 @@
 library(readr)
 library(dplyr)
 library(lubridate)
+library(DroughtData)
+library(glue)
 
 #import 4 data sets
 
@@ -123,7 +125,7 @@ lt_seas <- lt_avg_hydro[c(1, 4:5)]
 
 lt_seas <- unique(lt_seas)
 
-vel_daily_pub <- merge(vel_daily_pub, lt_seas, by = "YearAdj")
+#vel_daily_pub <- merge(vel_daily_pub, lt_seas, by = "YearAdj")
 
 vel_weekly_pub <- vel_weekly_pub %>%
   # Add variables for adjusted calendar year and season
@@ -169,5 +171,20 @@ vel_weekly <- vel_weekly_WY_pub%>%
          across(c(YearType, YearType_20_21), ~factor(.x, levels=c("2020", "2021", "Critical", "Dry", "Below Normal", "Above Normal", "Wet"))),
          Season=factor(Season, levels=c("Winter", "Spring", "Summer", "Fall")))
 
-write_rds(vel_weekly, glue("data/velocity.rds"))
+vel_metric <- vel_weekly %>%
+  select(c(1,2,6,7,9,11:24)) %>%
+  mutate(max_abs_vel_m = max_abs_vel/3.2808399,
+         mean_tide_vel_m = mean_tide_vel/3.2808399,
+         mean_net_vel_m = mean_net_vel/3.2808399,
+         Export_m = Export/35.315,
+         Outflow_m = Outflow/35.315,
+         Log_Outflow_m = log(Outflow_m),
+         Export_ft = Export,
+         Outflow_ft = Outflow,
+         Log_Outflow_ft = Log_Outflow)
+
+vel_metric <- vel_metric %>%
+  select(-c(8:10))
+
+write_rds(vel_metric, glue("data/velocity.rds"))
 

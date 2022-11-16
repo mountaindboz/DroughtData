@@ -1,7 +1,7 @@
 ---
 title: "Fine scale velocity exploration for water quality drought synthesis"
 author: "Elizabeth Stumpner"
-date: "2022-10-31"
+date: "2022-11-15"
 output: html_document
 ---
 
@@ -43,38 +43,60 @@ mapview(lat_long_sf, col_regions = "blue", layer.name = "Velocity", cex=6, label
 
 ```
 
+## Delta outflow
+To start, delta outflow is similar at the start of most water years except for wet years when outflow is greater. Running the GAM through each water year type shows outflow 'peaks' earlier in the water year during critical and drier years relative to wetter water years. This pattern likely reflects increasing water storage in reservoirs.
+```{r}
+vel_weekly %>%
+  ggplot(aes(x=wtr_day, y=Log_Outflow_m, color = YearType))+
+  drt_color_pal_yrtype(aes_type = 'color') +
+  geom_line(alpha=1)+
+  theme (text = element_text (size = 15)) +
+  theme_bw()+
+  labs(y = "log(Outflow (m^3/s))", x = "WY day", title = "log outflow 2007 - 2021")
+
+vel_weekly %>%
+  ggplot(aes(x=wtr_day, y=Log_Outflow_m, color = YearType))+
+  drt_color_pal_yrtype(aes_type = 'color') +
+  geom_smooth(alpha=1)+
+  theme (text = element_text (size = 15)) +
+  theme_bw()+
+  labs(y = "log(Outflow (m^3/s))", x = "WY day", title = "log outflow 2007 - 2021")
+```
+
+
 ## Velocity & delta outflow by station
 
-First I reviewed the relationship with delta outflow and mean net velocity and mean tidal velocity at the four USGS flow stations.
+Next up is exploring the relationship with delta outflow and mean net velocity and mean tidal velocity at four USGS flow stations.
 
 Net velocities increase considerably in wet years relative to other water year types. Tidal velocities generally fall within a similar range across all water year types except during periods of high outflow.
 
 ```{r}
 vel_weekly %>%
-  ggplot(aes(x=Log_Outflow, y=mean_net_vel, color = YearType))+
+  ggplot(aes(x=Log_Outflow_m, y=mean_net_vel_m, color = YearType))+
   drt_color_pal_yrtype(aes_type = 'color') +
   geom_point(alpha=0.5)+
   facet_wrap(~station, scales = "fixed") +
   theme (text = element_text (size = 15)) +
   geom_hline(yintercept=0, linetype='solid', col = 'black') + 
-  labs(y = "mean net vel (cfs)", x = "log(Outflow)", title = "mean net velocity (cfs) and outflow 2007 - 2021")
+  labs(y = "mean net vel (m/s)", x = "log(Outflow (m^3/s))", title = "mean net velocity and outflow 2007 - 2021")
 
 vel_weekly %>%
-  ggplot(aes(x=Log_Outflow, y=mean_tide_vel, color=YearType, ))+
+  ggplot(aes(x=Log_Outflow_m, y=mean_tide_vel_m, color=YearType, ))+
   geom_point(alpha=0.5)+
   drt_color_pal_yrtype(aes_type = 'color') +
   facet_wrap(~station, scales = "fixed") +
   theme (text = element_text (size = 15)) +
   geom_hline(yintercept=0, linetype='solid', col = 'black') + 
-  labs(y = "mean tidal vel (cfs)", x = "log(Outflow)", title = "mean tidal velocity (cfs) and outflow 2007 - 2021")
+  labs(y = "mean tidal vel (m/s)", x = "log(Outflow (m^3/s))", title = "mean tidal velocity and outflow  2007 - 2021")
 
 vel_weekly %>%
-  ggplot(aes(x=Log_Outflow, y=max_abs_vel, color=YearType, shape = sign))+
-  geom_point(alpha=0.5)+
+  ggplot(aes(x=Log_Outflow_m, y=max_abs_vel_m, color=YearType, shape = sign))+
+  geom_point(alpha=0.5, cex = 3, fill = "black")+
   drt_color_pal_yrtype(aes_type = 'color') +
-  facet_wrap(~station, scales = "fixed") +
-  theme (text = element_text (size = 15)) +
-  labs(y = "max. abs. vel (cfs)", x = "log(Outflow)", title = "max. absolute velocity (cfs) and outflow 2007 - 2021") 
+  facet_wrap(~station, scales = "free") +
+  theme (text = element_text (size = 20)) +
+  theme_bw()+
+  labs(y = "max. abs. vel (m/s)", x = "log(Outflow (m^3/s))", title = "max. absolute velocity and outflow 2007 - 2021") 
 ```
 
 ## Velocity & delta outflow by station and season
@@ -83,70 +105,71 @@ When the data is categorized by season, the highest mean net velocities are noti
 
 ```{r}
 vel_weekly %>%
-  ggplot(aes(x=Log_Outflow, y=mean_net_vel, color=YearType))+
+  ggplot(aes(x=Log_Outflow_m, y=mean_net_vel_m, color=YearType))+
+  geom_point(alpha=0.5)+
+  drt_color_pal_yrtype(aes_type = 'color') +
+  facet_grid(Season~station, scales = "free") +
+  theme (text = element_text (size = 15)) +
+  geom_hline(yintercept=0, linetype='solid', col = 'black') + 
+  labs(y = "mean net vel (m/s)", x = "log(Outflow(m^3/s))", title = "mean net velocity and outflow 2007 - 2021") 
+
+vel_weekly %>%
+  ggplot(aes(x=Log_Outflow_m, y=mean_tide_vel_m, color=YearType))+
   geom_point(alpha=0.5)+
   drt_color_pal_yrtype(aes_type = 'color') +
   facet_grid(Season~station, scales = "fixed") +
   theme (text = element_text (size = 15)) +
   geom_hline(yintercept=0, linetype='solid', col = 'black') + 
-  labs(y = "mean net vel (cfs)", x = "log(Outflow)", title = "mean net velocity (cfs) and outflow 2007 - 2021") 
+  labs(y = "mean tidal vel (m/s)", x = "log(Outflow (m^3/s))", title = "mean tidal velocity and outflow 2007 - 2021")
 
 vel_weekly %>%
-  ggplot(aes(x=Log_Outflow, y=mean_tide_vel, color=YearType))+
-  geom_point(alpha=0.5)+
+  ggplot(aes(x=Log_Outflow_m, y=max_abs_vel_m, color=YearType, shape = sign))+
   drt_color_pal_yrtype(aes_type = 'color') +
-  facet_grid(Season~station, scales = "fixed") +
+  geom_point(alpha=0.8)+
+  facet_grid(Season~station, scales = "free") +
   theme (text = element_text (size = 15)) +
-  geom_hline(yintercept=0, linetype='solid', col = 'black') + 
-  labs(y = "mean tidal vel (cfs)", x = "log(Outflow)", title = "mean tidal velocity (cfs) and outflow 2007 - 2021")
-
-vel_weekly %>%
-  ggplot(aes(x=Log_Outflow, y=max_abs_vel, color=YearType, shape = sign))+
-  drt_color_pal_yrtype(aes_type = 'color') +
-  geom_point(alpha=0.5)+
-  facet_grid(Season~station, scales = "fixed") +
-  theme (text = element_text (size = 15)) +
-  labs(y = "max. abs. vel (cfs)", x = "log(Outflow)", title = "max. absolute velocity (cfs) and outflow 2007 - 2021")
+  theme_bw()+
+  labs(y = "max. abs. vel (m/s)", x = "log(Outflow (m^3/s))", title = "max. absolute velocity and outflow 2007 - 2021")
 ```
 
 ### Box and whisker plots
 viewing the data in box and whisker plots reinforces that net and tidal velocities do not appreciably change with water year type. 
 
 ```{r}
-ggplot(vel_weekly, aes(x = YearType, y = mean_net_vel, fill = YearType))+
+ggplot(vel_weekly, aes(x = YearType, y = mean_net_vel_m, fill = YearType))+
   geom_boxplot(alpha = 0.7)+
   facet_wrap(~station)+
   drt_color_pal_yrtype()+
-  ylab("mean net vel. (cfs)")+
+  ylab("mean net vel. (m/s)")+
   xlab("Year Type")+
   theme_bw()+
   scale_x_discrete(labels = c("C", "D", "B", "A", "W"))
 
-ggplot(vel_weekly, aes(x = YearType, y = mean_tide_vel, fill = YearType))+
+ggplot(vel_weekly, aes(x = YearType, y = mean_tide_vel_m, fill = YearType))+
   geom_boxplot(alpha = 0.7)+
   facet_wrap(~station)+
   drt_color_pal_yrtype()+
-  ylab("mean tidal vel. (cfs)")+
+  ylab("mean tidal vel. (m/s)")+
   xlab("Year Type")+
   theme_bw()+
   scale_x_discrete(labels = c("C", "D", "B", "A", "W"))
 
-ggplot(vel_weekly, aes(x = YearType, y = mean_tide_vel, fill = YearType))+
+ggplot(vel_weekly, aes(x = YearType, y = mean_tide_vel_m, fill = YearType))+
   geom_boxplot(alpha = 0.7)+
   facet_grid(Season~station)+
   drt_color_pal_yrtype()+
-  ylab("mean tidal vel. (cfs)")+
+  ylab("mean tidal vel. (m/s)")+
   xlab("Year Type")+
   theme_bw()+
   scale_x_discrete(labels = c("C", "D", "B", "A", "W"))
 ```
 
 ### Maximum absolute velocity
-The maximum absolute velocity for each station by season may best be displayed by the beeswarm plots to explore when highest velocities are seaward or landward by different water year type. For the most part, this data display captures the same content as the earlier maximum absolute velocity data with outflow.  
+The maximum absolute velocity for each station by season may also be displayed by the beeswarm plots to explore when highest velocities are seaward or landward by different water year type. For the most part, this data display captures the same content as the earlier maximum absolute velocity data with outflow.  
 ```{r}
-ggplot(vel_weekly, aes(x=Season, y=max_abs_vel, color = YearType, shape = sign))+
+ggplot(vel_weekly, aes(x=Season, y=max_abs_vel_m, color = YearType, shape = sign))+
   facet_wrap(~station, scales="free")+
-  labs(y = "max. abs. vel (cfs)", xlab = "station", title = "Max. Abs. Velocity 2007 - 2021") +
+  labs(y = "max. abs. vel (m/s)", xlab = "station", title = "Max. Abs. Velocity 2007 - 2021") +
   theme_bw() +
   drt_color_pal_yrtype(aes = 'color')+
   geom_quasirandom(             
@@ -159,9 +182,9 @@ ggplot(vel_weekly, aes(x=Season, y=max_abs_vel, color = YearType, shape = sign))
   theme(text = element_text (size = 15), axis.text.x = element_text(angle = 90)) +
   scale_shape_manual(values = c(1, 3))
 
-ggplot(vel_weekly, aes(x=station, y=max_abs_vel, color = YearType, shape = sign))+
+ggplot(vel_weekly, aes(x=station, y=max_abs_vel_m, color = YearType, shape = sign))+
   facet_wrap(~Season, scales="free")+
-  labs(y = "max. abs. vel (cfs)", xlab = "station", title = "Max. Abs. Velocity 2007 - 2021") +
+  labs(y = "max. abs. vel (m/s)", xlab = "station", title = "Max. Abs. Velocity 2007 - 2021") +
   theme_bw() +
   drt_color_pal_yrtype(aes = 'color')+
   geom_quasirandom(                               
@@ -178,21 +201,21 @@ ggplot(vel_weekly, aes(x=station, y=max_abs_vel, color = YearType, shape = sign)
 Across all water years, mean net velocity is most always positive at Cache and Jersey but only positive in the wet seasons of wet years at the Middle and Old River stations. For much of the year, the export pumps create net landward velocities in Middle and Old Rivers that is demonstrated by negative velocities. Only during the wet season of wet years does increased freshwater flow overcome the effects of the pumps and create net positive velocities. 
 ```{r}
 vel_weekly %>%
-  ggplot(aes(x=wtr_day, y=mean_net_vel, color = YearType)) +
+  ggplot(aes(x=wtr_day, y=mean_net_vel_m, color = YearType)) +
   geom_smooth() +
   drt_color_pal_yrtype(aes = 'color') +
   facet_wrap(~station, scales = "fixed")+
   drt_color_pal_yrtype()+
-  labs(y = "mean net vel (cfs)", x = "WY day", title = "mean net vel (cfs) 2007 - 2021") +
+  labs(y = "mean net vel (m/s)", x = "WY day", title = "mean net vel 2007 - 2021") +
   geom_hline(yintercept=0, linetype='solid', col = 'black') +
   theme (text = element_text (size = 15))
 
 vel_weekly %>%
-  ggplot(aes(x=wtr_day, y=mean_tide_vel, color = YearType)) +
+  ggplot(aes(x=wtr_day, y=mean_tide_vel_m, color = YearType)) +
   geom_smooth() +
   drt_color_pal_yrtype(aes = 'color') +
   facet_wrap(~station, scales = "fixed")+
-  labs(y = "mean tidal vel (cfs)", x = "WY day", title = "mean tidal vel (cfs) 2007 - 2021") +
+  labs(y = "mean tidal vel (m/s)", x = "WY day", title = "mean tidal vel 2007 - 2021") +
   geom_hline(yintercept=0, linetype='solid', col = 'black') +
   theme (text = element_text (size = 15))
 
@@ -201,60 +224,79 @@ vel_weekly %>%
 ### Compare 2020 + 2021 to other years
 
 #### Mean net velocity
-Certainly, the highest mean and greatest range of net velocities occur in neutral years relative to drought years. The 2020 and 2021 net velocities compare well to previous drought years. Breaking the data down by season and individual stations show the same patterns as geom_smooth plots with Cache and Jersey net velocities most always seaward and Middle and Old Rivers most always landward except during the neutral drought classification.
+Certainly, the highest mean and greatest range of net velocities occur in neutral years relative to drought years. The 2020 and 2021 net velocities compare well to previous drought years. Breaking the data down by season and individual stations show the same patterns as geom_smooth plots with Cache and Jersey net velocities are most always seaward and Middle and Old Rivers most always landward except during the neutral drought classification.
 ```{r}
-
-ggplot(vel_weekly, aes(x= Drought_20_21, y=mean_net_vel, fill=Drought))+
+ggplot(vel_weekly, aes(x=YearType_20_21, y=mean_net_vel, fill=YearType))+
   geom_boxplot()+
-  drt_color_pal_drought(aes = 'fill') +
-  labs(x = "Drought", y = "mean net vel (cfs)", title = "mean net vel (cfs) 2007 - 2021") +
+  drt_color_pal_yrtype()+
+  labs(x = "YearType", y = "mean net vel (m/s)", title = "mean net vel 2007 - 2021") +
+  ylim(c(-0.75, 0.75))+
+  theme_bw()+
+  geom_hline(yintercept=0, linetype='solid', col = 'black') +
+  theme(axis.text.x = element_text(angle = 90)) 
+
+ggplot(vel_weekly, aes(x= YearType_20_21, y=mean_net_vel_m, fill=YearType))+
+  geom_boxplot()+
+  drt_color_pal_yrtype(aes = 'fill') +
+  labs(x = "YearType", y = "mean net vel (m/s)", title = "mean net vel 2007 - 2021") +
   theme_bw()+
   facet_wrap(~Season)+
-  geom_hline(yintercept=0, linetype='solid', col = 'black')
+  geom_hline(yintercept=0, linetype='solid', col = 'black') +
+  theme(axis.text.x = element_text(angle = 90)) 
 
-ggplot(vel_weekly, aes(x= Drought_20_21, y=mean_net_vel, fill=Drought))+
+ggplot(vel_weekly, aes(x= YearType_20_21, y=mean_net_vel_m, fill=YearType))+
   geom_boxplot()+
-  drt_color_pal_drought(aes = 'fill') +
-  labs(x = "Drought", y = "mean net vel (cfs)", title = "mean net vel (cfs) 2007 - 2021") +
+  drt_color_pal_yrtype(aes = 'fill') +
+  labs(x = "YearType", y = "mean net vel (m/s)", title = "mean net vel 2007 - 2021") +
   theme_bw()+
-  facet_wrap(~Season)+
-  ylim(c(0, 1)) +
-  geom_hline(yintercept=0, linetype='solid', col = 'black')
+  facet_wrap(~station)+
+  ylim(c(-0.5, 0.5)) +
+  geom_hline(yintercept=0, linetype='solid', col = 'black') +
+  theme(axis.text.x = element_text(angle = 90)) 
 
-ggplot(vel_weekly, aes(x=Drought_20_21, y=mean_net_vel, fill=Drought))+
+ggplot(vel_weekly, aes(x=YearType_20_21, y=mean_net_vel, fill=YearType))+
   geom_boxplot()+
-  drt_color_pal_drought()+
-  labs(x = "Drought", y = "mean net vel (cfs)", title = "mean net vel (cfs) 2007 - 2021") +
+  drt_color_pal_yrtype()+
+  labs(x = "YearType", y = "mean net vel (m/s)", title = "mean net vel 2007 - 2021") +
   ylim(c(-0.75, 0.75))+
   theme_bw()+
   facet_grid(station~Season)+
-  geom_hline(yintercept=0, linetype='solid', col = 'black')
+  geom_hline(yintercept=0, linetype='solid', col = 'black') +
+  theme(axis.text.x = element_text(angle = 90)) 
 
 ```
 
 ### Mean tidal velocity
 The mean tidal velocities in 2020 and 2021 are nearly identical to drought and neutral years. When data is faceted by season and station, fall 2020 tidal velocities at Jersey and Cache are landward relative to 2021 and other neutral and drought years. Spring 2021 seaward tidal velocities at Old River may reflect reduced export at the pumps.
 ```{r}
-
-ggplot(vel_weekly, aes(x= Drought_20_21, y=mean_tide_vel, fill=Drought))+
+ggplot(vel_weekly, aes(x=YearType_20_21, y=mean_tide_vel_m, fill=YearType))+
   geom_boxplot()+
-  drt_color_pal_drought(aes = 'fill') +
-  labs(x = "Drought", y = "mean tidal vel (cfs)", title = "mean tidal vel (cfs) 2007 - 2021") +
+  drt_color_pal_yrtype()+
+  labs(x = "YearType", y = "mean tide vel (m/s)", title = "mean tide vel 2007 - 2021") +
   theme_bw()+
-  geom_hline(yintercept=0, linetype='solid', col = 'black')
+  geom_hline(yintercept=0, linetype='solid', col = 'black') +
+  theme(axis.text.x = element_text(angle = 90))
 
-ggplot(vel_weekly, aes(x= Drought_20_21, y=mean_tide_vel, fill=Drought))+
+ggplot(vel_weekly, aes(x= YearType_20_21, y=mean_tide_vel_m, fill=YearType))+
   geom_boxplot()+
-  drt_color_pal_drought(aes = 'fill') +
-  labs(x = "Drought", y = "mean tidal vel (cfs)", title = "mean tidal vel (cfs) 2007 - 2021") +
+  drt_color_pal_yrtype(aes = 'fill') +
+  labs(x = "Drought", y = "mean tidal vel (m/s)", title = "mean tidal vel 2007 - 2021") +
   theme_bw()+
   facet_wrap(~Season)+
   geom_hline(yintercept=0, linetype='solid', col = 'black')
 
-ggplot(vel_weekly, aes(x=Drought_20_21, y=mean_tide_vel, fill=Drought))+
+ggplot(vel_weekly, aes(x= YearType_20_21, y=mean_tide_vel_m, fill=YearType))+
   geom_boxplot()+
-  drt_color_pal_drought()+
-  labs(x = "Drought", y = "mean tidal vel (cfs)", title = "mean tidal vel (cfs) 2007 - 2021") +
+  drt_color_pal_yrtype(aes = 'fill') +
+  labs(x = "Drought", y = "mean tidal vel (m/s)", title = "mean tidal vel 2007 - 2021") +
+  theme_bw()+
+  facet_wrap(~station)+
+  geom_hline(yintercept=0, linetype='solid', col = 'black')
+
+ggplot(vel_weekly, aes(x=YearType_20_21, y=mean_tide_vel_m, fill=YearType))+
+  geom_boxplot()+
+  drt_color_pal_yrtype()+
+  labs(x = "Drought", y = "mean tidal vel (m/s)", title = "mean tidal vel 2007 - 2021") +
   theme_bw()+
   facet_grid(station~Season)+
   geom_hline(yintercept=0, linetype='solid', col = 'black')
