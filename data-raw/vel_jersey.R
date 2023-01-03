@@ -8,6 +8,7 @@ library(ggplot2)
 library(lubridate)
 library(imputeTS)
 library(zoo)
+library(glue)
 
 siteNumbers <- c("11337190")
 
@@ -35,6 +36,8 @@ uvSJJ <- subset(uvSJJ, select = c(2:3))
 #write out to .rds
 
 write_rds(uvSJJ, glue("data-raw/Hydrology/uvSJJ.rds"))
+
+uvSJJ <- read_rds("uvSJJ.rds")
 
 #Godin filter
 
@@ -125,25 +128,28 @@ uvSJJ_c$ratio <- uvSJJ_c$amp/uvSJJ_c$vel_tf
 #write_rds(uvSJJ_c, glue("data-raw/Hydrology/SJJ_vel.rds"))
 
 #downstep to daily - add n column
-
 dvSJJ <- uvSJJ_c %>%
-  mutate(date = as.Date(dateTime_PST)) %>%
-  group_by(date) %>%
-  summarise(mean_ratio = mean(ratio), mean_tidal_vel = mean(tidal_vel), mean_net_vel = mean(vel_tf), max_abs_velocity = max(abs(velocity_ft_s), na.rm = TRUE), min_vel_ft_s = min(velocity_ft_s, na.rm = TRUE), max_vel_ft_s = max(velocity_ft_s, na.rm = TRUE), mean_vel_ft_s = mean(velocity_ft_s, na.rm = TRUE), mean_amp = mean(amp), n_vel = n())
+  mutate(Date = as.Date(dateTime_PST, format = "%Y-%m-%d", tz = "America/Los_Angeles")) %>%
+  group_by(Date) %>%
+  summarise(max_tidal_vel = max(tidal_vel, na.rm = TRUE),
+            min_tidal_vel = min(tidal_vel, na.rm = TRUE),
+            max_net_vel = max(vel_tf, na.rm = TRUE),
+            min_net_vel = min(vel_tf, na.rm = TRUE),
+            mean_net_vel = mean(vel_tf, na.rm = TRUE),
+            max_abs_tidal = max(abs(tidal_vel), na.rm = TRUE),
+            n_vel = n())
 
-continous.dates <- data.frame (x = 1:4201, date = seq(as.Date('2007-10-01'),as.Date('2019-04-01'), by='day'))
+continous.dates <- data.frame (x = 1:5175, Date = seq(as.Date('2007-10-01'),as.Date('2021-11-30'), by='day'))
 
-SJJ_vel_daily <- merge(continous.dates, dvSJJ, by = "date", all = TRUE)
-
-plot(SJJ_vel_daily$date, SJJ_vel_daily$n_vel)
-
-plot(SJJ_vel_daily$date, SJJ_vel_daily$mean_vel_ft_s)
+SJJ_vel_daily <- merge(continous.dates, dvSJJ, by = "Date", all = TRUE)
 
 #if n_flow is NA replace with 0
 
+#SJJ_vel_daily[is.nan(SJJ_vel_daily)]<-NA
+
 SJJ_vel_daily$n_vel[is.na(SJJ_vel_daily$n_vel)] <- 0
 
-sum(SJJ_vel_daily$n_vel<=91)#194 days with <95% of flow measurements
+sum(SJJ_vel_daily$n_vel<=91)#132 days with <95% of flow measurements
 
 #add column to identify if flow data is measured or will be imputed
 
@@ -151,65 +157,52 @@ SJJ_vel_daily$group <- ifelse(SJJ_vel_daily$n_vel>= 91, "measure", "impute")
 
 #if n_value is <91, change mean, max, and min velocity to NA
 
-SJJ_vel_daily$mean_final_vel <- ifelse(SJJ_vel_daily$n_vel>= 91, SJJ_vel_daily$mean_vel_ft_s, NA)
+SJJ_vel_daily$max_tidal_vel <- ifelse(SJJ_vel_daily$n_vel>= 91, SJJ_vel_daily$max_tidal_vel, NA)
 
-SJJ_vel_daily$max_final_vel <- ifelse(SJJ_vel_daily$n_vel>= 91, SJJ_vel_daily$max_vel_ft_s, NA)
+SJJ_vel_daily$min_tidal_vel <- ifelse(SJJ_vel_daily$n_vel>= 91, SJJ_vel_daily$min_tidal_vel, NA)
 
-SJJ_vel_daily$min_final_vel <- ifelse(SJJ_vel_daily$n_vel>= 91, SJJ_vel_daily$min_vel_ft_s, NA)
+SJJ_vel_daily$max_net_vel <- ifelse(SJJ_vel_daily$n_vel>= 91, SJJ_vel_daily$max_net_vel, NA)
 
-SJJ_vel_daily$max_abs_final_vel <- ifelse(SJJ_vel_daily$n_vel>= 91, SJJ_vel_daily$max_abs_velocity, NA)
+SJJ_vel_daily$min_net_vel <- ifelse(SJJ_vel_daily$n_vel>= 91, SJJ_vel_daily$min_net_vel, NA)
 
-SJJ_vel_daily$final_tidal_vel <- ifelse(SJJ_vel_daily$n_vel>= 91, SJJ_vel_daily$mean_tidal_vel, NA)
+SJJ_vel_daily$max_abs_tidal <- ifelse(SJJ_vel_daily$n_vel>= 91, SJJ_vel_daily$max_abs_tidal, NA)
 
-SJJ_vel_daily$final_net_vel <- ifelse(SJJ_vel_daily$n_vel>= 91, SJJ_vel_daily$mean_net_vel, NA)
-
-SJJ_vel_daily$final_ratio <- ifelse(SJJ_vel_daily$n_vel>= 91, SJJ_vel_daily$mean_ratio, NA)
-
-SJJ_vel_daily$final_amp <- ifelse(SJJ_vel_daily$n_vel>= 91, SJJ_vel_daily$mean_amp, NA)
-
+SJJ_vel_daily$mean_net_vel <- ifelse(SJJ_vel_daily$n_vel>= 91, SJJ_vel_daily$mean_net_vel, NA)
 #impute missing values
 
-SJJ_vel_daily$final_mean_vel_final <- na_ma(SJJ_vel_daily$mean_final_vel, k = 7, weighting = "exponential", maxgap = Inf)
+SJJ_vel_daily$final_max_tidal <- na_ma(SJJ_vel_daily$max_tidal_vel, k = 7, weighting = "exponential", maxgap = Inf)
 
-SJJ_vel_daily$final_max_vel_final <- na_ma(SJJ_vel_daily$max_final_vel, k = 7, weighting = "exponential", maxgap = Inf)
+SJJ_vel_daily$final_min_tidal <- na_ma(SJJ_vel_daily$min_tidal_vel, k = 7, weighting = "exponential", maxgap = Inf)
 
-SJJ_vel_daily$final_min_vel_final <- na_ma(SJJ_vel_daily$min_final_vel, k = 7, weighting = "exponential", maxgap = Inf)
+SJJ_vel_daily$final_max_net <- na_ma(SJJ_vel_daily$max_net_vel, k = 7, weighting = "exponential", maxgap = Inf)
 
-SJJ_vel_daily$final_max_abs_final <- na_ma(SJJ_vel_daily$max_abs_final_vel, k = 7, weighting = "exponential", maxgap = Inf)
+SJJ_vel_daily$final_min_net <- na_ma(SJJ_vel_daily$min_net_vel, k = 7, weighting = "exponential", maxgap = Inf)
 
-SJJ_vel_daily$final_ratio_final <- na_ma(SJJ_vel_daily$final_ratio, k = 7, weighting = "exponential", maxgap = Inf)
+SJJ_vel_daily$final_max_abs_tidal <- na_ma(SJJ_vel_daily$max_abs_tidal, k = 7, weighting = "exponential", maxgap = Inf)
 
-SJJ_vel_daily$final_tidal_vel_final <- na_ma(SJJ_vel_daily$final_tidal_vel, k = 7, weighting = "exponential", maxgap = Inf)
+SJJ_vel_daily$final_mean_net <- na_ma(SJJ_vel_daily$mean_net_vel, k = 7, weighting = "exponential", maxgap = Inf)
 
-SJJ_vel_daily$final_net_vel_final <- na_ma(SJJ_vel_daily$final_net_vel, k = 7, weighting = "exponential", maxgap = Inf)
-
-SJJ_vel_daily$final_amp_final <- na_ma(SJJ_vel_daily$final_amp, k = 7, weighting = "exponential", maxgap = Inf)
+summary(SJJ_vel_daily)
 
 SJJ_vel_daily <- SJJ_vel_daily %>%
-  rename(mean_vel = final_mean_vel_final,
-         max_vel = final_max_vel_final,
-         min_vel = final_min_vel_final,
-         max_abs_vel = final_max_abs_final,
-         mean_tide_vel = final_tidal_vel_final,
-         ratio_mean = final_ratio_final,
-         net_vel_mean = final_net_vel_final,
-         amp = final_amp_final)
+  rename(max_tidal = final_max_tidal,
+         min_tidal = final_min_tidal,
+         max_net = final_max_net,
+         min_net = final_min_net,
+         maxabs_tidal = final_max_abs_tidal,
+         mean_net = final_mean_net)
 
+SJJ_vel_daily <- subset(SJJ_vel_daily, select = c(1, 11:16))
 
-#subset
-
-SJJ_vel_daily <- subset(SJJ_vel_daily, select = c(1, 21:28))
-
-SJJ_vel_daily <- rename(SJJ_vel_daily, Date = date)
+SJJ_vel_daily$station <- "SJJ"
 
 #create column to assign sign for max abs velocity column
 
 SJJ_vel_daily <- SJJ_vel_daily %>%
-  mutate(sign=case_when(abs(min_vel) > max_vel ~ "-", abs(min_vel) < max_vel ~ "+"))
+  mutate(net_sign=case_when(abs(min_net) > max_net ~ "-", abs(min_net) < max_net ~ "+"),
+         tide_sign=case_when(abs(min_tidal) > max_tidal ~ "-", abs(min_tidal) < max_tidal ~ "+"))
 
-SJJ_vel_daily$station <- "Jersey"
-
-write_rds(SJJ_vel_daily, glue("data-raw/Hydrolgy/dv_jersey.rds"))
+write_rds(SJJ_vel_daily, glue("dv_jersey.rds"))
 
 
 

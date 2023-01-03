@@ -35,6 +35,8 @@ uvMDM <- uvMDM %>%
 
 write_rds(uvMDM, glue("data-raw/Hydrology/uvMDM.rds"))
 
+uvMDM <- read_rds("uvMDM.rds")
+
 #Godin filter
 
 Tgodinfn<-function(tint,xint) {
@@ -83,8 +85,9 @@ uvMDM$tidal_vel <- uvMDM$velocity_ft_s - uvMDM$vel_tf
 #plot(uvMDM$dateTime_PST, uvMDM$velocity_ft_s)
 #lines(uvMDM$dateTime_PST, uvMDM$tidal_vel, col = 3)
 #lines(uvMDM$dateTime_PST, uvMDM$vel_tf, col = 2)
+#legend("topright", legend = c("velocity", "tidal_vel", "net_vel"), col = c(1:3), lwd = 2)
 
-#calculate amplitude - first break df in two
+#calculate amplitude- first break df in two
 uvMDM_a <- subset(uvMDM, select = c(1, 2, 3))
 uvMDM_b <- subset(uvMDM, select = c(2, 4))
 
@@ -96,10 +99,11 @@ uvMDM_b$roll_min <- rollapply(uvMDM_b$tidal_vel, 120, min, by = 1, partial = TRU
 uvMDM_b$amp <- (uvMDM_b$roll_max + abs(uvMDM_b$roll_min))/2
 
 #plots - take a minute to load
-#plot(MDM_vel_b$dateTime_PST, MDM_vel_b$tidal_vel, col = 1, ylim = c(-5, 5)) #xlim = c(as.POSIXct('2020-10-01 17:30:00', format="%Y-%m-%d %H:%M:%S"), as.POSIXct('2020-10-15 17:30:00', format="%Y-%m-%d %H:%M:%S")))
-#lines(MDM_vel_b$dateTime_PST, MDM_vel_b$roll_max, col = 2)
-#lines(MDM_vel_b$dateTime_PST, MDM_vel_b$roll_min, col = 3)
-#lines(MDM_vel_b$dateTime_PST, MDM_vel_b$amp, col = 5)
+#plot(uvMDM_b$dateTime_PST, uvMDM_b$tidal_vel, col = 1, ylim = c(-5, 5), xlim = c(as.POSIXct('2020-10-01 17:30:00', format="%Y-%m-%d %H:%M:%S"), as.POSIXct('2020-10-15 17:30:00', format="%Y-%m-%d %H:%M:%S")))
+#lines(uvMDM_b$dateTime_PST, uvMDM_b$roll_max, col = 2)
+#lines(uvMDM_b$dateTime_PST, uvMDM_b$roll_min, col = 3)
+#lines(uvMDM_b$dateTime_PST, uvMDM_b$amp, col = 5)
+#legend("top", inset = c(-0.45, 0), legend = c("tidal_vel", "env_max", "env_min", "amp"), col = c(1:3, 5), lwd = 2)
 
 #merge two dfs back together
 
@@ -115,31 +119,35 @@ uvMDM_c$ratio <- uvMDM_c$amp/uvMDM_c$vel_tf
 
 #>1 tidal influence, <1 river influence
 
-#plot(MDM_vel_c$dateTime_PST, MDM_vel_c$ratio, ylim = c(-1000, 1000))
+#plot(uvMDM_c$dateTime_PST, uvMDM_c$ratio, ylim = c(-1000, 1000))
 
-#wrote out .rds
+#write out to .rds
 
 #write_rds(uvMDM_c, glue("data-raw/Hydrology/MDM_vel.rds"))
 
 #downstep to daily - add n column
 dvMDM <- uvMDM_c %>%
-  mutate(date = as.Date(dateTime_PST)) %>%
-  group_by(date) %>%
-  summarise(mean_ratio = mean(ratio), mean_tidal_vel = mean(tidal_vel), mean_net_vel = mean(vel_tf), max_abs_vel_ft_s = max(abs(velocity_ft_s), na.rm = TRUE), min_vel_ft_s = min(velocity_ft_s, na.rm = TRUE), max_vel_ft_s = max(velocity_ft_s, na.rm = TRUE), mean_vel_ft_s = mean(velocity_ft_s, na.rm = TRUE), mean_amp = mean(amp), n_vel = n())
+  mutate(Date = as.Date(dateTime_PST, format = "%Y-%m-%d", tz = "America/Los_Angeles")) %>%
+  group_by(Date) %>%
+  summarise(max_tidal_vel = max(tidal_vel, na.rm = TRUE),
+            min_tidal_vel = min(tidal_vel, na.rm = TRUE),
+            max_net_vel = max(vel_tf, na.rm = TRUE),
+            min_net_vel = min(vel_tf, na.rm = TRUE),
+            mean_net_vel = mean(vel_tf, na.rm = TRUE),
+            max_abs_tidal = max(abs(tidal_vel), na.rm = TRUE),
+            n_vel = n())
 
-continous.dates <- data.frame (x = 1:5418, date = seq(as.Date('2007-10-01'),as.Date('2022-07-31'), by='day'))
+continous.dates <- data.frame (x = 1:5175, Date = seq(as.Date('2007-10-01'),as.Date('2021-11-30'), by='day'))
 
-MDM_vel_daily <- merge(continous.dates, dvMDM, by = "date", all = TRUE)
-
-plot(MDM_vel_daily$date, MDM_vel_daily$n_vel)
-
-plot(MDM_vel_daily$date, MDM_vel_daily$mean_vel_ft_s)
+MDM_vel_daily <- merge(continous.dates, dvMDM, by = "Date", all = TRUE)
 
 #if n_flow is NA replace with 0
 
+#MDM_vel_daily[is.nan(MDM_vel_daily)]<-NA
+
 MDM_vel_daily$n_vel[is.na(MDM_vel_daily$n_vel)] <- 0
 
-sum(MDM_vel_daily$n_vel<=91)#201 days with <95% of flow measurements
+sum(MDM_vel_daily$n_vel<=91)#132 days with <95% of flow measurements
 
 #add column to identify if flow data is measured or will be imputed
 
@@ -147,65 +155,49 @@ MDM_vel_daily$group <- ifelse(MDM_vel_daily$n_vel>= 91, "measure", "impute")
 
 #if n_value is <91, change mean, max, and min velocity to NA
 
-MDM_vel_daily$mean_final_vel <- ifelse(MDM_vel_daily$n_vel>= 91, MDM_vel_daily$mean_vel_ft_s, NA)
+MDM_vel_daily$max_tidal_vel <- ifelse(MDM_vel_daily$n_vel>= 91, MDM_vel_daily$max_tidal_vel, NA)
 
-MDM_vel_daily$max_final_vel <- ifelse(MDM_vel_daily$n_vel>= 91, MDM_vel_daily$max_vel_ft_s, NA)
+MDM_vel_daily$min_tidal_vel <- ifelse(MDM_vel_daily$n_vel>= 91, MDM_vel_daily$min_tidal_vel, NA)
 
-MDM_vel_daily$min_final_vel <- ifelse(MDM_vel_daily$n_vel>= 91, MDM_vel_daily$min_vel_ft_s, NA)
+MDM_vel_daily$max_net_vel <- ifelse(MDM_vel_daily$n_vel>= 91, MDM_vel_daily$max_net_vel, NA)
 
-MDM_vel_daily$max_abs_final_vel <- ifelse(MDM_vel_daily$n_vel>= 91, MDM_vel_daily$max_abs_vel_ft_s, NA)
+MDM_vel_daily$min_net_vel <- ifelse(MDM_vel_daily$n_vel>= 91, MDM_vel_daily$min_net_vel, NA)
 
-MDM_vel_daily$final_tidal_vel <- ifelse(MDM_vel_daily$n_vel>= 91, MDM_vel_daily$mean_tidal_vel, NA)
+MDM_vel_daily$max_abs_tidal <- ifelse(MDM_vel_daily$n_vel>= 91, MDM_vel_daily$max_abs_tidal, NA)
 
-MDM_vel_daily$final_net_vel <- ifelse(MDM_vel_daily$n_vel>= 91, MDM_vel_daily$mean_net_vel, NA)
-
-MDM_vel_daily$final_ratio <- ifelse(MDM_vel_daily$n_vel>= 91, MDM_vel_daily$mean_ratio, NA)
-
-MDM_vel_daily$final_amp <- ifelse(MDM_vel_daily$n_vel>= 91, MDM_vel_daily$mean_amp, NA)
-
+MDM_vel_daily$mean_net_vel <- ifelse(MDM_vel_daily$n_vel>= 91, MDM_vel_daily$mean_net_vel, NA)
 #impute missing values
 
-MDM_vel_daily$final_mean_vel_final <- na_ma(MDM_vel_daily$mean_final_vel, k = 7, weighting = "exponential", maxgap = Inf)
+MDM_vel_daily$final_max_tidal <- na_ma(MDM_vel_daily$max_tidal_vel, k = 7, weighting = "exponential", maxgap = Inf)
 
-MDM_vel_daily$final_max_vel_final <- na_ma(MDM_vel_daily$max_final_vel, k = 7, weighting = "exponential", maxgap = Inf)
+MDM_vel_daily$final_min_tidal <- na_ma(MDM_vel_daily$min_tidal_vel, k = 7, weighting = "exponential", maxgap = Inf)
 
-MDM_vel_daily$final_min_vel_final <- na_ma(MDM_vel_daily$min_final_vel, k = 7, weighting = "exponential", maxgap = Inf)
+MDM_vel_daily$final_max_net <- na_ma(MDM_vel_daily$max_net_vel, k = 7, weighting = "exponential", maxgap = Inf)
 
-MDM_vel_daily$final_max_abs_final <- na_ma(MDM_vel_daily$max_abs_final_vel, k = 7, weighting = "exponential", maxgap = Inf)
+MDM_vel_daily$final_min_net <- na_ma(MDM_vel_daily$min_net_vel, k = 7, weighting = "exponential", maxgap = Inf)
 
-MDM_vel_daily$final_ratio_final <- na_ma(MDM_vel_daily$final_ratio, k = 7, weighting = "exponential", maxgap = Inf)
+MDM_vel_daily$final_max_abs_tidal <- na_ma(MDM_vel_daily$max_abs_tidal, k = 7, weighting = "exponential", maxgap = Inf)
 
-MDM_vel_daily$final_tidal_vel_final <- na_ma(MDM_vel_daily$final_tidal_vel, k = 7, weighting = "exponential", maxgap = Inf)
+MDM_vel_daily$final_mean_net <- na_ma(MDM_vel_daily$mean_net_vel, k = 7, weighting = "exponential", maxgap = Inf)
 
-MDM_vel_daily$final_net_vel_final <- na_ma(MDM_vel_daily$final_net_vel, k = 7, weighting = "exponential", maxgap = Inf)
-
-MDM_vel_daily$final_amp_final <- na_ma(MDM_vel_daily$final_amp, k = 7, weighting = "exponential", maxgap = Inf)
-
-#summary(MDM_vel_daily)
-
-#plot(MDM_vel_daily$date, MDM_vel_daily$final_max_abs_final, ylim = c(-0.6, 2))
-#lines(MDM_vel_daily$date, MDM_vel_daily$final_tidal_vel_final, col = 2)
-#lines(MDM_vel_daily$date, MDM_vel_daily$final_net_vel_final, col = 3)
+summary(MDM_vel_daily)
 
 MDM_vel_daily <- MDM_vel_daily %>%
-  rename(mean_vel = final_mean_vel_final,
-         max_vel = final_max_vel_final,
-         min_vel = final_min_vel_final,
-         max_abs_vel = final_max_abs_final,
-         mean_tide_vel = final_tidal_vel_final,
-         ratio_mean = final_ratio_final,
-         net_vel_mean = final_net_vel_final,
-         amp = final_amp_final)
+  rename(max_tidal = final_max_tidal,
+         min_tidal = final_min_tidal,
+         max_net = final_max_net,
+         min_net = final_min_net,
+         maxabs_tidal = final_max_abs_tidal,
+         mean_net = final_mean_net)
 
-MDM_vel_daily <- subset(MDM_vel_daily, select = c(1, 21:28))
+MDM_vel_daily <- subset(MDM_vel_daily, select = c(1, 11:16))
 
-MDM_vel_daily <- rename(MDM_vel_daily, Date = date)
-
-MDM_vel_daily$station <- "Middle"
+MDM_vel_daily$station <- "MDM"
 
 #create column to assign sign for max abs velocity column
 
 MDM_vel_daily <- MDM_vel_daily %>%
-  mutate(sign=case_when(abs(min_vel) > max_vel ~ "-", abs(min_vel) < max_vel ~ "+"))
+  mutate(net_sign=case_when(abs(min_net) > max_net ~ "-", abs(min_net) < max_net ~ "+"),
+         tide_sign=case_when(abs(min_tidal) > max_tidal ~ "-", abs(min_tidal) < max_tidal ~ "+"))
 
-write_rds(MDM_vel_daily, glue("data-raw/Hydrology/dv_middle.rds"))
+write_rds(MDM_vel_daily, glue("dv_middle.rds"))
