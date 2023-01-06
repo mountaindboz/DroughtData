@@ -39,7 +39,7 @@ write_rds(uvRYI, glue("data-raw/Hydrology/uvRYI.rds"))
 
 #read .rds
 
-uvRYI <- read_rds("uvRYI.rds")
+uvRYI <- read_rds("data-raw/Hydrology/uvRYI.rds")
 
 #Godin filter
 
@@ -204,11 +204,13 @@ RYI_vel_daily <- RYI_vel_daily %>%
   mutate(net_sign=case_when(abs(min_net) > max_net ~ "-", abs(min_net) < max_net ~ "+"),
          tide_sign=case_when(abs(min_tidal) > max_tidal ~ "-", abs(min_tidal) < max_tidal ~ "+"))
 
-write_rds(RYI_vel_daily, glue("dv_RYI.rds"))
+write_rds(RYI_vel_daily, glue("data-raw/Hydrology/dv_RYI.rds"))
+
+dvRYI <- read_rds("data-raw/Hydrology/dv_RYI.rds")
 
 #repeat for RYF----------------------
 
-siteNumbers <- c("11455385")  # 2018-07-03 	2022-07-17
+siteNumbers <- c("11455385")  # 2018-07-03 	- present
 
 startDate <- ""
 
@@ -233,7 +235,7 @@ uvRYF <- uvRYF %>%
 
 write_rds(uvRYF, glue("data-raw/Hydrology/uvRYF.rds"))
 
-uvRYF <- read_rds("uvRYF.rds")
+uvRYF <- read_rds("data-raw/Hydrology/uvRYF.rds")
 
 #apply godin filter------------------------
 uvRYF$vel_tf <- Tgodinfn(uvRYF$dateTime_PST, uvRYF$velocity_ft_s)
@@ -298,7 +300,7 @@ dvRYF <- uvRYF_c %>%
             max_abs_tidal = max(abs(tidal_vel), na.rm = TRUE),
             n_vel = n())
 
-continous.dates <- data.frame (x = 1:1246, Date = seq(as.Date('2018-07-04'),as.Date('2021-11-30'), by='day'))
+continous.dates <- data.frame (x = 1:1611, Date = seq(as.Date('2018-07-04'),as.Date('2022-11-30'), by='day'))
 
 RYF_vel_daily <- merge(continous.dates, dvRYF, by = "Date", all = TRUE)
 
@@ -308,7 +310,7 @@ RYF_vel_daily <- merge(continous.dates, dvRYF, by = "Date", all = TRUE)
 
 RYF_vel_daily$n_vel[is.na(RYF_vel_daily$n_vel)] <- 0
 
-sum(RYF_vel_daily$n_vel<=91)#132 days with <95% of flow measurements
+sum(RYF_vel_daily$n_vel<=91)#26 days with <95% of flow measurements
 
 #add column to identify if flow data is measured or will be imputed
 
@@ -351,6 +353,8 @@ RYF_vel_daily <- RYF_vel_daily %>%
          maxabs_tidal = final_max_abs_tidal,
          mean_net = final_mean_net)
 
+
+
 RYF_vel_daily <- subset(RYF_vel_daily, select = c(1, 11:16))
 
 RYF_vel_daily$station <- "RYF"
@@ -361,7 +365,9 @@ RYF_vel_daily <- RYF_vel_daily %>%
   mutate(net_sign=case_when(abs(min_net) > max_net ~ "-", abs(min_net) < max_net ~ "+"),
          tide_sign=case_when(abs(min_tidal) > max_tidal ~ "-", abs(min_tidal) < max_tidal ~ "+"))
 
-write_rds(RYF_vel_daily, glue("dv_RYF.rds"))
+write_rds(RYF_vel_daily, glue("data-raw/Hydrology/dv_RYF.rds"))
+
+dvRYF <- read_rds("data-raw/Hydrology/dv_RYF.rds")
 
 #merge RYI and RYF datasets---------------------
 #first rename columns
@@ -370,7 +376,7 @@ write_rds(RYF_vel_daily, glue("dv_RYF.rds"))
 
 #RYI_vel_daily <- read_rds("data-raw/Hydrology/RYI_vel_daily.rds")
 
-RYI_vel_daily <- dv_RYI %>%
+RYI_vel_daily <- dvRYI %>%
   rename(RYI_max_tidal_vel = max_tidal,
          RYI_min_tidal_vel = min_tidal,
          RYI_max_net_vel = max_net,
@@ -379,7 +385,7 @@ RYI_vel_daily <- dv_RYI %>%
          RYI_mean_net = mean_net
   )
 
-RYF_vel_daily <- dv_RYF %>%
+RYF_vel_daily <- dvRYF %>%
   rename(RYF_max_tidal_vel = max_tidal,
          RYF_min_tidal_vel = min_tidal,
          RYF_max_net_vel = max_net,
@@ -421,7 +427,7 @@ RYI_RYF$station <- "Cache"
 
 #write to .rds
 
-write_rds(RYI_RYF, "dv_cache.rds")
+write_rds(RYI_RYF, "data-raw/Hydrology/dv_cache.rds")
 
 
 

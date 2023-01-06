@@ -37,7 +37,7 @@ uvSJJ <- subset(uvSJJ, select = c(2:3))
 
 write_rds(uvSJJ, glue("data-raw/Hydrology/uvSJJ.rds"))
 
-uvSJJ <- read_rds("uvSJJ.rds")
+uvSJJ <- read_rds("data-raw/Hydrology/uvSJJ.rds")
 
 #Godin filter
 
@@ -139,7 +139,7 @@ dvSJJ <- uvSJJ_c %>%
             max_abs_tidal = max(abs(tidal_vel), na.rm = TRUE),
             n_vel = n())
 
-continous.dates <- data.frame (x = 1:5175, Date = seq(as.Date('2007-10-01'),as.Date('2021-11-30'), by='day'))
+continous.dates <- data.frame (x = 1:5540, Date = seq(as.Date('2007-10-01'),as.Date('2022-11-30'), by='day'))
 
 SJJ_vel_daily <- merge(continous.dates, dvSJJ, by = "Date", all = TRUE)
 
@@ -202,7 +202,7 @@ SJJ_vel_daily <- SJJ_vel_daily %>%
   mutate(net_sign=case_when(abs(min_net) > max_net ~ "-", abs(min_net) < max_net ~ "+"),
          tide_sign=case_when(abs(min_tidal) > max_tidal ~ "-", abs(min_tidal) < max_tidal ~ "+"))
 
-write_rds(SJJ_vel_daily, glue("dv_jersey.rds"))
+write_rds(SJJ_vel_daily, glue("data-raw/Hydrology/dv_jersey.rds"))
 
 
 

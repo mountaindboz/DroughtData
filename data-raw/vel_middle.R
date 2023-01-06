@@ -12,7 +12,7 @@ library(zoo)
 
 #data retrieval pull through NWIS web services
 
-siteNumbers <- c("11312676")  #(2007-10-01 - 2019-04-01)
+siteNumbers <- c("11312676")
 
 startDate <- ""
 
@@ -35,7 +35,7 @@ uvMDM <- uvMDM %>%
 
 write_rds(uvMDM, glue("data-raw/Hydrology/uvMDM.rds"))
 
-uvMDM <- read_rds("uvMDM.rds")
+uvMDM <- read_rds("data-raw/Hydrology/uvMDM.rds")
 
 #Godin filter
 
@@ -137,7 +137,7 @@ dvMDM <- uvMDM_c %>%
             max_abs_tidal = max(abs(tidal_vel), na.rm = TRUE),
             n_vel = n())
 
-continous.dates <- data.frame (x = 1:5175, Date = seq(as.Date('2007-10-01'),as.Date('2021-11-30'), by='day'))
+continous.dates <- data.frame (x = 1:5540, Date = seq(as.Date('2007-10-01'),as.Date('2022-11-30'), by='day'))
 
 MDM_vel_daily <- merge(continous.dates, dvMDM, by = "Date", all = TRUE)
 
@@ -200,4 +200,4 @@ MDM_vel_daily <- MDM_vel_daily %>%
   mutate(net_sign=case_when(abs(min_net) > max_net ~ "-", abs(min_net) < max_net ~ "+"),
          tide_sign=case_when(abs(min_tidal) > max_tidal ~ "-", abs(min_tidal) < max_tidal ~ "+"))
 
-write_rds(MDM_vel_daily, glue("dv_middle.rds"))
+write_rds(MDM_vel_daily, glue("data-raw/Hydrology/dv_middle.rds"))

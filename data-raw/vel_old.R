@@ -33,7 +33,7 @@ uvOLD <- uvOLD %>%
 
 write_rds(uvOLD,glue("data-raw/Hydrology/uvOLD.rds"))
 
-uvOLD <- read_rds("uvOLD.rds")
+uvOLD <- read_rds("data-raw/Hydrology/uvOLD.rds")
 
 #plot(uvOLD$dateTime_PST, uvOLD$velocity_ft_s)
 
@@ -137,7 +137,7 @@ dvOLD <- uvOLD_c %>%
             max_abs_tidal = max(abs(tidal_vel), na.rm = TRUE),
             n_vel = n())
 
-continous.dates <- data.frame (x = 1:5175, Date = seq(as.Date('2007-10-01'),as.Date('2021-11-30'), by='day'))
+continous.dates <- data.frame (x = 1:5540, Date = seq(as.Date('2007-10-01'),as.Date('2022-11-30'), by='day'))
 
 OLD_vel_daily <- merge(continous.dates, dvOLD, by = "Date", all = TRUE)
 
@@ -147,7 +147,7 @@ OLD_vel_daily <- merge(continous.dates, dvOLD, by = "Date", all = TRUE)
 
 OLD_vel_daily$n_vel[is.na(OLD_vel_daily$n_vel)] <- 0
 
-sum(OLD_vel_daily$n_vel<=91)#132 days with <95% of flow measurements
+sum(OLD_vel_daily$n_vel<=91)#133 days with <95% of flow measurements
 
 #add column to identify if flow data is measured or will be imputed
 
@@ -200,7 +200,7 @@ OLD_vel_daily <- OLD_vel_daily %>%
   mutate(net_sign=case_when(abs(min_net) > max_net ~ "-", abs(min_net) < max_net ~ "+"),
          tide_sign=case_when(abs(min_tidal) > max_tidal ~ "-", abs(min_tidal) < max_tidal ~ "+"))
 
-write_rds(OLD_vel_daily, glue("dv_old.rds"))
+write_rds(OLD_vel_daily, glue("data-raw/Hydrology/dv_old.rds"))
 
 
 
