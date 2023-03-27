@@ -5,7 +5,7 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/mountaindboz/DroughtData/workflows/R-CMD-check/badge.svg)](https://github.com/mountaindboz/DroughtData/actions)
+[![R-CMD-check](https://github.com/mountaindboz/DroughtData/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mountaindboz/DroughtData/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 An R data package containing data sets used in the Drought Synthesis
