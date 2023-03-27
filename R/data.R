@@ -85,14 +85,14 @@
 #'   <https://github.com/sbashevkin/discretewq/tree/dbb2638e800e637f3f2c70d47c9faad68f95db07>
 "lt_avg_wq"
 
-#' @title Raw daily values of hydrology and LSZ metrics for 1975-2021
+#' @title Raw daily values of hydrology and LSZ metrics for 1975-2022
 #' @description A data set containing raw daily values of the hydrology and Low
-#'   Salinity Zone (LSZ) metrics for 1975-2021 in the upper San Francisco
+#'   Salinity Zone (LSZ) metrics for 1975-2022 in the upper San Francisco
 #'   Estuary (Delta). Seasonal averages of the `Outflow`, `Export`, and `X2`
 #'   data are in the [`lt_avg_hydro`] data set. Used in the analyses for the
 #'   Drought Synthesis.
 #'
-#' @format data frame with 17,167 rows and 12 columns
+#' @format data frame with 17,532 rows and 12 columns
 #' \describe{
 #'   \item{YearAdj}{Adjusted calendar year - December-November, with December of
 #'     the previous calendar year included with the following year. For example,
@@ -101,29 +101,32 @@
 #'     (Sept-Nov)}
 #'   \item{Date}{Calendar date of the value in yyyy-mm-dd}
 #'   \item{InflowSacR}{Sacramento River inflow to the Delta in cubic feet per
-#'     second (cfs). Data from WY 1975-2021 is from Dayflow.}
+#'     second (cfs). Data from WY 1975-2022 is from Dayflow. The values for
+#'     October through November 2022 are from the Sacramento River at Freeport
+#'     station (11447650) accessed through the USGS National Water Information
+#'     System.}
 #'   \item{InflowYolo}{Yolo Bypass inflow to the Delta in cubic feet per
-#'     second (cfs). Data from WY 1975-2021 is from Dayflow.}
+#'     second (cfs). Data from WY 1975-2022 is from Dayflow.}
 #'   \item{InflowEast}{Eastern Delta inflow in cubic feet per second (cfs).
 #'     Includes inflows from the San Joaquin, Cosumnes and Mokelumne Rivers, and
 #'     miscellaneous streams from the northeast, east, and southeast. Data from WY
-#'     1975-2021 is from Dayflow.}
+#'     1975-2022 is from Dayflow.}
 #'   \item{InflowTotal}{Total Delta inflow in cubic feet per second (cfs). Data
-#'     from WY 1975-2021 is from Dayflow.}
+#'     from WY 1975-2022 is from Dayflow.}
 #'   \item{Outflow}{Net Delta outflow in cubic feet per second (cfs) at Chipps
-#'     Island. Data from WY 1975-2021 is from Dayflow. The values for October
-#'     through November 2021 are estimated by data from the USBR Delta Outflow
+#'     Island. Data from WY 1975-2022 is from Dayflow. The values for October
+#'     through November 2022 are estimated by data from the USBR Delta Outflow
 #'     Computation reports.}
 #'   \item{Export}{Total amount of water diverted from the Delta by the Federal
 #'     and State governments to meet water agreements and contracts, expressed in
-#'     cubic feet per second (cfs). Data from WY 1975-2021 is from Dayflow. The
-#'     values for October through November 2021 are estimated by data from the
+#'     cubic feet per second (cfs). Data from WY 1975-2022 is from Dayflow. The
+#'     values for October through November 2022 are estimated by data from the
 #'     USBR Delta Outflow Computation reports.}
 #'   \item{X2}{The distance from the Golden Gate Bridge to the point where daily
 #'     average salinity is 2 parts per thousand at a depth of 1 meter off the
 #'     bottom, expressed in kilometers. From Hutton et al. (2017) for WY
-#'     1975-1996, from Dayflow for WY 1997-2021, and estimated using the
-#'     Autoregressive Lag Model from Dayflow for October through November 2021.}
+#'     1975-1996, from Dayflow for WY 1997-2022, and estimated using the
+#'     Autoregressive Lag Model from Dayflow for October through November 2022.}
 #'   \item{TotalUSGSOutflow}{Daily averages of combined tidally-filtered flow
 #'     data in cubic feet per second (cfs) from four USGS stations: Sacramento
 #'     River at Rio Vista CA (11455420), San Joaquin River at Jersey Point CA
@@ -149,7 +152,7 @@
 #'   Hydrological Processes **31**(14): 2500-2515. <https://doi.org/10.1002/hyp.11201>.
 #' * USGS National Water Information System (NWIS):
 #'   <https://nwis.waterdata.usgs.gov/nwis>
-"raw_hydro_1975_2021"
+"raw_hydro_1975_2022"
 
 #' @title Raw values of water quality measurements for 1975-2021
 #' @description A data set containing raw values of three water quality
