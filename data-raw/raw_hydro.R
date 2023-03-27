@@ -108,8 +108,8 @@ if (download_usbr == TRUE) {
 }
 
 # If it hasn't been done already, download and save local copies of the daily
-  # average tidally-filtered flow data collected by USGS using the `dataRetrieval`
-  # package since some of the data is provisional and may change
+  # average flow data collected by USGS using the `dataRetrieval` package since
+  # some of the data is provisional and may change
 
 # Set download_usgs to TRUE if need to download and save USGS flow data
 download_usgs <- FALSE
@@ -147,12 +147,23 @@ if (download_usgs == TRUE) {
     endDate = "2022-11-30"
   )
 
+  # 11303500 - San Joaquin River near Vernalis CA:
+  # Download daily average flow data in cfs (#00060) collected by USGS using the
+    # `readNWISdv` function. Download data for Oct - Nov 2022.
+  df_q_sjr_tmp <- readNWISdv(
+    "11303500",
+    "00060",
+    startDate = "2022-10-01",
+    endDate = "2022-11-30"
+  )
+
   # Save data as .csv files in the "data-raw/Hydrology" folder
   df_tfq_out_cache_tmp %>% write_csv("data-raw/Hydrology/usgs_daily_avg_tf_flow_1994-2021.csv")
   df_tfq_sac_tmp %>% write_csv("data-raw/Hydrology/usgs_daily_avg_tf_flow_sac_oct-nov2022.csv")
+  df_q_sjr_tmp %>% write_csv("data-raw/Hydrology/usgs_daily_avg_flow_sjr_oct-nov2022.csv")
 
   # Clean up
-  rm(site_numb, df_tfq_out_cache_tmp, df_tfq_sac_tmp)
+  rm(site_numb, df_tfq_out_cache_tmp, df_tfq_sac_tmp, df_q_sjr_tmp)
 }
 
 # Define file path for raw hydrology data
@@ -175,11 +186,13 @@ df_hutton_x2 <-
     sheet = "Daily"
   )
 
-# Import daily average tidally-filtered flow data collected by USGS
+# Import daily average flow data collected by USGS
 # Data for unofficial outflow stations and Cache Slough:
 df_usgs_out_cache <- read_csv(file.path(fp_hydro, "usgs_daily_avg_tf_flow_1994-2021.csv"))
 # Sacramento River at Freeport:
 df_usgs_sac <- read_csv(file.path(fp_hydro, "usgs_daily_avg_tf_flow_sac_oct-nov2022.csv"))
+# San Joaquin River near Vernalis:
+df_usgs_sjr <- read_csv(file.path(fp_hydro, "usgs_daily_avg_flow_sjr_oct-nov2022.csv"))
 
 
 # 2. Clean and Combine Data -----------------------------------------------
@@ -191,6 +204,7 @@ df_dayflow_v1 <- ls_dayflow_1970_2022 %>%
       .x,
       Date,
       InflowSacR = SAC,
+      InflowSJR = SJR,
       InflowTotal = TOT,
       Export = contains("EXPORT"),
       Outflow = OUT,
@@ -221,12 +235,20 @@ df_usbr_2022_c <- df_usbr_2022 %>% mutate(Date = mdy(Date))
   # combined with DAYFLOW data
 df_usgs_sac_c <- df_usgs_sac %>% select(Date, InflowSacR = X_72137_00003)
 
+# Prepare Oct - Nov 2022 USGS San Joaquin River near Vernalis flow data to be
+  # combined with DAYFLOW data
+df_usgs_sjr_c <- df_usgs_sjr %>% select(Date, InflowSJR = X_00060_00003)
+
 # Add USBR Delta Export and Outflow data and USGS Sacramento River at Freeport
-  # flow data to the DAYFLOW data
+  # and San Joaquin River near Vernalis flow data to the DAYFLOW data
 df_dayflow_v3 <-
   bind_rows(
     df_dayflow_v2,
-    full_join(df_usbr_2022_c, df_usgs_sac_c, by = join_by(Date))
+    reduce(
+      list(df_usbr_2022_c, df_usgs_sac_c, df_usgs_sjr_c),
+      full_join,
+      by = join_by(Date)
+    )
   ) %>%
   arrange(Date)
 
@@ -310,6 +332,7 @@ raw_hydro_1975_2022 <- raw_hydro_1975_2022_v1 %>%
     Season,
     Date,
     InflowSacR,
+    InflowSJR,
     InflowTotal,
     Outflow,
     Export,

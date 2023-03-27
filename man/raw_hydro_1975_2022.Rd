@@ -5,7 +5,7 @@
 \alias{raw_hydro_1975_2022}
 \title{Raw daily values of hydrology and LSZ metrics for 1975-2022}
 \format{
-data frame with 17,532 rows and 10 columns
+data frame with 17,532 rows and 11 columns
 \describe{
 \item{YearAdj}{Adjusted calendar year - December-November, with December of
 the previous calendar year included with the following year. For example,
@@ -18,6 +18,11 @@ second (cfs). Data from WY 1975-2022 is from Dayflow. The values for
 October through November 2022 are from the Sacramento River at Freeport
 station (11447650) accessed through the USGS National Water Information
 System.}
+\item{InflowSJR}{San Joaquin River inflow to the Delta in cubic feet per
+second (cfs). Data from WY 1975-2022 is from Dayflow. The values for
+October through November 2022 are from the San Joaquin River near
+Vernalis station (11303500) accessed through the USGS National Water
+Information System.}
 \item{InflowTotal}{Total Delta inflow in cubic feet per second (cfs). Data
 from WY 1975-2022 is from Dayflow.}
 \item{Outflow}{Net Delta outflow in cubic feet per second (cfs) at Chipps
