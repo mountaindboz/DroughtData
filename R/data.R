@@ -92,7 +92,7 @@
 #'   data are in the [`lt_avg_hydro`] data set. Used in the analyses for the
 #'   Drought Synthesis.
 #'
-#' @format data frame with 17,532 rows and 12 columns
+#' @format data frame with 17,532 rows and 10 columns
 #' \describe{
 #'   \item{YearAdj}{Adjusted calendar year - December-November, with December of
 #'     the previous calendar year included with the following year. For example,
@@ -105,12 +105,6 @@
 #'     October through November 2022 are from the Sacramento River at Freeport
 #'     station (11447650) accessed through the USGS National Water Information
 #'     System.}
-#'   \item{InflowYolo}{Yolo Bypass inflow to the Delta in cubic feet per
-#'     second (cfs). Data from WY 1975-2022 is from Dayflow.}
-#'   \item{InflowEast}{Eastern Delta inflow in cubic feet per second (cfs).
-#'     Includes inflows from the San Joaquin, Cosumnes and Mokelumne Rivers, and
-#'     miscellaneous streams from the northeast, east, and southeast. Data from WY
-#'     1975-2022 is from Dayflow.}
 #'   \item{InflowTotal}{Total Delta inflow in cubic feet per second (cfs). Data
 #'     from WY 1975-2022 is from Dayflow.}
 #'   \item{Outflow}{Net Delta outflow in cubic feet per second (cfs) at Chipps
