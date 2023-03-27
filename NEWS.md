@@ -1,5 +1,8 @@
 # DroughtData (development version)
 
+* Updated `raw_hydro_1975_2022` with recently released 2022 Dayflow data.
+* Added Dayflow inflow metric for the San Joaquin River to `raw_hydro_1975_2022`, and removed inflow metrics for the Yolo Bypass and Eastern Inflows from `raw_hydro_1975_2022`.
+
 # DroughtData 2.0.0
 
 * Added the new data set `raw_chla_1975_2021` which contains raw values of discrete chlorophyll-a water concentrations from 1975-2021 within the Delta

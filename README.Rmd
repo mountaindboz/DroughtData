@@ -25,7 +25,7 @@ This package provides the following data tables:
 
 * `lt_avg_hydro`: long-term (1975-2021) data set containing seasonal averages of three hydrology parameters (Delta Outflow, Delta Exports, X2)
 * `lt_avg_wq`: long-term (1975-2021) data set containing seasonal-regional averages of three water quality parameters (water temperature, salinity, and secchi depth) within the the upper San Francisco Estuary (Delta)
-* `raw_hydro_1975_2021`: a data set containing raw daily values of the hydrology and Low Salinity Zone (LSZ) metrics for 1975-2021 in the Delta
+* `raw_hydro_1975_2022`: a data set containing raw daily values of the hydrology and Low Salinity Zone (LSZ) metrics for 1975-2022 in the Delta
 * `raw_wq_1975_2021`: a data set containing raw values of three water quality parameters (water temperature, salinity, and secchi depth) for 1975-2021 within the Delta
 * `raw_nutr_1975_2021`: a long-term data set containing raw values of three nutrient parameters (Dissolved Ammonia, Dissolved Nitrate + Nitrite, and Dissolved Ortho-phosphate) for 1975-2021 within the Delta
 * `raw_nutr_2013_2021`: a short-term data set containing raw values of three nutrient parameters (Dissolved Ammonia, Dissolved Nitrate + Nitrite, and Dissolved Ortho-phosphate) for 2013-2021 within the Delta

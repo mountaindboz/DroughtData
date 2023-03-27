@@ -15,45 +15,43 @@ helper functions.
 
 This package provides the following data tables:
 
--   `lt_avg_hydro`: long-term (1975-2021) data set containing seasonal
-    averages of three hydrology parameters (Delta Outflow, Delta
-    Exports, X2)
--   `lt_avg_wq`: long-term (1975-2021) data set containing
-    seasonal-regional averages of three water quality parameters (water
-    temperature, salinity, and secchi depth) within the the upper San
-    Francisco Estuary (Delta)
--   `raw_hydro_1975_2021`: a data set containing raw daily values of the
-    hydrology and Low Salinity Zone (LSZ) metrics for 1975-2021 in the
-    Delta
--   `raw_wq_1975_2021`: a data set containing raw values of three water
-    quality parameters (water temperature, salinity, and secchi depth)
-    for 1975-2021 within the Delta
--   `raw_nutr_1975_2021`: a long-term data set containing raw values of
-    three nutrient parameters (Dissolved Ammonia, Dissolved Nitrate +
-    Nitrite, and Dissolved Ortho-phosphate) for 1975-2021 within the
-    Delta
--   `raw_nutr_2013_2021`: a short-term data set containing raw values of
-    three nutrient parameters (Dissolved Ammonia, Dissolved Nitrate +
-    Nitrite, and Dissolved Ortho-phosphate) for 2013-2021 within the
-    Delta
--   `cont_do_daily`: A data set containing daily average values of
-    continuous dissolved oxygen data from 2014-2021 at a few locations
-    in the Delta
--   `raw_chla_1975_2021`: a long-term data set containing raw values of
-    discrete chlorophyll-a water concentrations for 1975-2021 within the
-    Delta
+- `lt_avg_hydro`: long-term (1975-2021) data set containing seasonal
+  averages of three hydrology parameters (Delta Outflow, Delta Exports,
+  X2)
+- `lt_avg_wq`: long-term (1975-2021) data set containing
+  seasonal-regional averages of three water quality parameters (water
+  temperature, salinity, and secchi depth) within the the upper San
+  Francisco Estuary (Delta)
+- `raw_hydro_1975_2022`: a data set containing raw daily values of the
+  hydrology and Low Salinity Zone (LSZ) metrics for 1975-2022 in the
+  Delta
+- `raw_wq_1975_2021`: a data set containing raw values of three water
+  quality parameters (water temperature, salinity, and secchi depth) for
+  1975-2021 within the Delta
+- `raw_nutr_1975_2021`: a long-term data set containing raw values of
+  three nutrient parameters (Dissolved Ammonia, Dissolved Nitrate +
+  Nitrite, and Dissolved Ortho-phosphate) for 1975-2021 within the Delta
+- `raw_nutr_2013_2021`: a short-term data set containing raw values of
+  three nutrient parameters (Dissolved Ammonia, Dissolved Nitrate +
+  Nitrite, and Dissolved Ortho-phosphate) for 2013-2021 within the Delta
+- `cont_do_daily`: A data set containing daily average values of
+  continuous dissolved oxygen data from 2014-2021 at a few locations in
+  the Delta
+- `raw_chla_1975_2021`: a long-term data set containing raw values of
+  discrete chlorophyll-a water concentrations for 1975-2021 within the
+  Delta
 
 This package also contains the following helper functions specific to
 the Drought Synthesis project:
 
--   `drt_avg_data()`: Calculates seasonal and/or regional averages
--   `drt_add_yr_assign()`: Adds year assignment information to a data
-    frame. The year assignment information is used in the analyses for
-    the Drought Synthesis.
--   `drt_replace_rl()`: Replaces values measured below the analytical
-    reporting limit with a random number
--   `drt_color_pal_drought()` and `drt_color_pal_yrtype()`: Apply custom
-    color palettes to the figures used in the Drought Synthesis report
+- `drt_avg_data()`: Calculates seasonal and/or regional averages
+- `drt_add_yr_assign()`: Adds year assignment information to a data
+  frame. The year assignment information is used in the analyses for the
+  Drought Synthesis.
+- `drt_replace_rl()`: Replaces values measured below the analytical
+  reporting limit with a random number
+- `drt_color_pal_drought()` and `drt_color_pal_yrtype()`: Apply custom
+  color palettes to the figures used in the Drought Synthesis report
 
 ## Installation
 
